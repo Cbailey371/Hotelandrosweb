@@ -60,4 +60,31 @@ class GalleryController extends Controller
 
         return redirect()->back()->with('success', 'Visibilidad en carrusel actualizada.');
     }
+
+    public function bulkUpdateCarousel(Request $request)
+    {
+        $request->validate([
+            'image_ids' => 'required|array',
+            'image_ids.*' => 'exists:galleries,id'
+        ]);
+
+        $selectedIds = $request->input('image_ids');
+
+        // Desactivar todos los que no estén seleccionados (si se desea sincronización total)
+        // O simplemente marcar como activos los seleccionados.
+        // El usuario pidió "cargar de one shot", así que asumiremos que lo seleccionado es lo que debe estar activo.
+
+        // Ponemos todos en 0 primero
+        Gallery::where('show_in_carousel', true)->update(['show_in_carousel' => false, 'carousel_order' => 0]);
+
+        // Activamos los seleccionados
+        foreach ($selectedIds as $index => $id) {
+            Gallery::where('id', $id)->update([
+                'show_in_carousel' => true,
+                'carousel_order' => $index + 1
+            ]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Carrusel actualizado con éxito.']);
+    }
 }

@@ -57,40 +57,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('content', [\App\Http\Controllers\Admin\ContentController::class, 'index'])->name('content.index');
         Route::post('content', [\App\Http\Controllers\Admin\ContentController::class, 'update'])->name('content.update');
 
-        // Ruta temporal para sincronizar galería
-        Route::get('sync-gallery', function () {
-            try {
-                $galleryPath = storage_path('app/public/gallery');
-                if (!file_exists($galleryPath)) {
-                    return "❌ La carpeta storage/app/public/gallery no existe.";
-                }
-
-                $files = array_diff(scandir($galleryPath), ['.', '..', '.DS_Store']);
-                $count = 0;
-
-                foreach ($files as $file) {
-                    $relativePath = '/storage/gallery/' . $file;
-
-                    // Solo creamos si no existe ya en la base de datos
-                    $exists = \App\Models\Gallery::where('image_path', $relativePath)->exists();
-
-                    if (!$exists) {
-                        \App\Models\Gallery::create([
-                            'image_path' => $relativePath,
-                            'title_es' => $file,
-                            'title_en' => $file,
-                            'order' => \App\Models\Gallery::max('order') + 1,
-                            'show_in_carousel' => 0
-                        ]);
-                        $count++;
-                    }
-                }
-
-                return "✅ Sincronización completada. Se añadieron $count imágenes nuevas a la base de datos.";
-            } catch (\Exception $e) {
-                return "❌ Error: " . $e->getMessage();
-            }
-        })->name('sync-gallery');
+        // Gestión de Galería
+        Route::post('gallery/bulk-carousel', [\App\Http\Controllers\Admin\GalleryController::class, 'bulkUpdateCarousel'])->name('gallery.bulk-carousel');
+        Route::get('gallery/{gallery}/toggle-carousel', [\App\Http\Controllers\Admin\GalleryController::class, 'toggleCarousel'])->name('gallery.toggleCarousel');
 
         Route::get('settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
         Route::post('settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
