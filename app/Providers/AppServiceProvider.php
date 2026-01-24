@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
+use App\Models\Setting;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        Schema::defaultStringLength(191);
+
+        // Aplicar configuración SMTP y compartir settings con todas las vistas
+        if (!app()->runningInConsole() && Schema::hasTable('settings')) {
+            $settings = Setting::all()->pluck('value', 'key');
+            view()->share('settings', $settings);
+
+            if (isset($settings['mail_host']) && !empty($settings['mail_host'])) {
+                $enc = $settings['mail_encryption'] ?? 'tls';
+                $encryptionValue = ($enc === 'null' || !$enc) ? null : $enc;
+
+                config([
+                    'mail.default' => 'smtp',
+                    'mail.mailers.smtp.transport' => 'smtp',
+                    'mail.mailers.smtp.host' => $settings['mail_host'],
+                    'mail.mailers.smtp.port' => $settings['mail_port'] ?? 587,
+                    'mail.mailers.smtp.username' => $settings['mail_username'] ?? '',
+                    'mail.mailers.smtp.password' => $settings['mail_password'] ?? '',
+                    'mail.mailers.smtp.encryption' => $encryptionValue,
+                    'mail.from.address' => $settings['mail_from_address'] ?? 'no-reply@hotel.com',
+                    'mail.from.name' => $settings['mail_from_name'] ?? ($settings['hotel_name'] ?? 'Hotel Andros'),
+                ]);
+            }
+        }
+    }
+}

@@ -1,0 +1,441 @@
+@extends('layouts.admin')
+
+@section('header', 'Configuración General')
+
+@section('content')
+    <div class="max-w-4xl mx-auto">
+        <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data" class="space-y-8"
+            id="settings-form">
+            @csrf
+
+            @if(session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6" role="alert">
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+            @endif
+
+            <!-- Theme & Branding Settings -->
+            <div
+                class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <div class="p-8 border-b border-slate-100 dark:border-slate-800">
+                    <h3 class="text-xl font-black text-slate-800 dark:text-white flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-xl">palette</span>
+                        Theme & Branding Settings
+                    </h3>
+                </div>
+
+                <div class="p-8 space-y-12">
+                    <!-- Base Website Theme -->
+                    <div class="space-y-6">
+                        <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest">Base Website Theme</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <label class="relative cursor-pointer group">
+                                <input type="radio" name="website_theme" value="light" class="peer hidden" {{ ($settings['website_theme'] ?? 'light') == 'light' ? 'checked' : '' }}>
+                                <div
+                                    class="p-6 rounded-2xl border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 peer-checked:border-primary peer-checked:bg-primary/5 transition-all peer-checked:[&_.radio-circle]:border-primary peer-checked:[&_.radio-dot]:opacity-100 peer-checked:[&_.radio-dot]:scale-100">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div
+                                            class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center text-orange-600">
+                                            <span class="material-symbols-outlined">light_mode</span>
+                                        </div>
+                                        <div
+                                            class="radio-circle w-6 h-6 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center bg-white dark:bg-slate-800 transition-all">
+                                            <div
+                                                class="radio-dot w-3 h-3 rounded-full bg-primary opacity-0 transition-all scale-50">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 class="font-bold text-slate-800 dark:text-white">Light Mode</h5>
+                                    <p class="text-xs text-slate-500">Standard bright interface</p>
+                                </div>
+                            </label>
+                            <label class="relative cursor-pointer group">
+                                <input type="radio" name="website_theme" value="dark" class="peer hidden" {{ ($settings['website_theme'] ?? 'light') == 'dark' ? 'checked' : '' }}>
+                                <div
+                                    class="p-6 rounded-2xl border-2 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 peer-checked:border-primary peer-checked:bg-primary/5 transition-all peer-checked:[&_.radio-circle]:border-primary peer-checked:[&_.radio-dot]:opacity-100 peer-checked:[&_.radio-dot]:scale-100">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div
+                                            class="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-center text-slate-600 dark:text-slate-300">
+                                            <span class="material-symbols-outlined">dark_mode</span>
+                                        </div>
+                                        <div
+                                            class="radio-circle w-6 h-6 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center bg-white dark:bg-slate-800 transition-all">
+                                            <div
+                                                class="radio-dot w-3 h-3 rounded-full bg-primary opacity-0 transition-all scale-50">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5 class="font-bold text-slate-800 dark:text-white">Dark Mode</h5>
+                                    <p class="text-xs text-slate-500">Elegant dark aesthetic</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Brand Colors -->
+                    <div class="space-y-6">
+                        <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest">Brand Colors</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Primary
+                                    Color</label>
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+                                        <input type="color" id="primary_picker"
+                                            value="{{ $settings['primary_color'] ?? '#1173d4' }}"
+                                            class="absolute inset-[-10px] w-[200%] h-[200%] cursor-pointer"
+                                            oninput="document.getElementById('primary_hex').value = this.value">
+                                    </div>
+                                    <input type="text" id="primary_hex" name="primary_color"
+                                        value="{{ $settings['primary_color'] ?? '#1173d4' }}"
+                                        class="flex-1 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-mono uppercase focus:ring-2 focus:ring-primary/50"
+                                        oninput="document.getElementById('primary_picker').value = this.value">
+                                </div>
+                                <p class="text-[10px] text-slate-400 mt-2">Used for buttons, active states, and accents.</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Secondary
+                                    Color</label>
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+                                        <input type="color" id="secondary_picker"
+                                            value="{{ $settings['secondary_color'] ?? '#0EA5E9' }}"
+                                            class="absolute inset-[-10px] w-[200%] h-[200%] cursor-pointer"
+                                            oninput="document.getElementById('secondary_hex').value = this.value">
+                                    </div>
+                                    <input type="text" id="secondary_hex" name="secondary_color"
+                                        value="{{ $settings['secondary_color'] ?? '#0EA5E9' }}"
+                                        class="flex-1 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-mono uppercase focus:ring-2 focus:ring-primary/50"
+                                        oninput="document.getElementById('secondary_picker').value = this.value">
+                                </div>
+                                <p class="text-[10px] text-slate-400 mt-2">Used for highlights and supplementary icons.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Accessibility & Contrast -->
+                    <div class="space-y-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+                        <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest">Accessibility & Contrast
+                        </h4>
+                        <div class="space-y-8">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h5 class="font-bold text-slate-800 dark:text-white text-sm">High Contrast Text</h5>
+                                    <p class="text-xs text-slate-500">Forces darker text for better readability</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="hidden" name="high_contrast" value="0">
+                                    <input type="checkbox" name="high_contrast" value="1" class="sr-only peer" {{ ($settings['high_contrast'] ?? '0') == '1' ? 'checked' : '' }}>
+                                    <div
+                                        class="w-11 h-6 bg-slate-200 dark:bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <h5 class="font-bold text-slate-800 dark:text-white text-sm">Text Contrast Level</h5>
+                                    <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Subtle —
+                                        Strong</span>
+                                </div>
+                                <input type="range" name="text_contrast_level" min="0" max="100"
+                                    value="{{ $settings['text_contrast_level'] ?? '50' }}"
+                                    class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Identity Visual (Logos) -->
+            <div
+                class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 space-y-6">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">id_card</span>
+                    Visual Assets
+                </h3>
+                <div class="grid grid-cols-1 gap-8">
+                    <div>
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Nombre del Hotel</label>
+                        <input type="text" name="hotel_name" value="{{ $settings['hotel_name'] ?? '' }}"
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50">
+                    </div>
+                </div>
+
+                <!-- SEO Settings -->
+                <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-6">
+                    <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest">SEO & Meta Tags</h4>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Meta
+                                Descripción</label>
+                            <textarea name="website_description" rows="2"
+                                class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                placeholder="Breve descripción para buscadores...">{{ $settings['website_description'] ?? '' }}</textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Keywords (Separadas
+                                por coma)</label>
+                            <input type="text" name="website_keywords" value="{{ $settings['website_keywords'] ?? '' }}"
+                                class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                placeholder="hotel, colon, panama, hospedaje">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Logo Hotel</label>
+                        <div class="relative group aspect-square">
+                            <img src="{{ $settings['hotel_logo'] ?? '/images/branding/logo.png' }}" id="logo-preview"
+                                class="w-full h-full object-contain rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50">
+                            <label
+                                class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-xl">
+                                <span class="text-white text-[10px] font-bold">Cambiar Logo</span>
+                                <input type="file" name="hotel_logo" class="hidden"
+                                    onchange="previewImage(this, 'logo-preview')">
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Favicon</label>
+                        <div class="relative group aspect-square">
+                            <img src="{{ $settings['hotel_favicon'] ?? '/favicon.ico' }}" id="favicon-preview"
+                                class="w-full h-full object-contain rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50">
+                            <label
+                                class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-xl">
+                                <span class="text-white text-[10px] font-bold">Cambiar</span>
+                                <input type="file" name="hotel_favicon" class="hidden"
+                                    onchange="previewImage(this, 'favicon-preview')">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SMTP Configuration -->
+            <div
+                class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 space-y-6">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-lg font-bold flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">mail</span>
+                        Configuración de Correo (SMTP)
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <input type="email" id="test-email-address" placeholder="Email para prueba"
+                            class="bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-1.5 text-xs w-48">
+                        <button type="button" onclick="sendTestEmail()" id="test-btn"
+                            class="px-4 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold hover:bg-slate-200 transition-all">
+                            Probar Envío
+                        </button>
+                    </div>
+                </div>
+
+                <div id="test-result" class="hidden text-xs p-3 rounded-lg mb-4"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-[#4c739a] mb-2">Servidor SMTP (Host)</label>
+                        <input type="text" name="mail_host" value="{{ $settings['mail_host'] ?? '' }}"
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#4c739a] mb-2">Puerto</label>
+                        <input type="text" name="mail_port" value="{{ $settings['mail_port'] ?? '587' }}"
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#4c739a] mb-2">Encriptación</label>
+                        <select name="mail_encryption"
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                            <option value="tls" {{ ($settings['mail_encryption'] ?? '') == 'tls' ? 'selected' : '' }}>TLS
+                            </option>
+                            <option value="ssl" {{ ($settings['mail_encryption'] ?? '') == 'ssl' ? 'selected' : '' }}>SSL
+                            </option>
+                            <option value="null" {{ ($settings['mail_encryption'] ?? '') == 'null' ? 'selected' : '' }}>
+                                Ninguna</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#4c739a] mb-2">Usuario SMTP</label>
+                        <input type="text" name="mail_username" value="{{ $settings['mail_username'] ?? '' }}"
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#4c739a] mb-2">Contraseña SMTP</label>
+                        <input type="password" name="mail_password" value="{{ $settings['mail_password'] ?? '' }}"
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#4c739a] mb-2">Email Remitente (From)</label>
+                        <input type="email" name="mail_from_address" value="{{ $settings['mail_from_address'] ?? '' }}"
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#4c739a] mb-2">Nombre Remitente</label>
+                        <input type="text" name="mail_from_name" value="{{ $settings['mail_from_name'] ?? '' }}"
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div
+                class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 space-y-6">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">contact_phone</span>
+                    Información de Contacto Pública
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">WhatsApp (Sin +)</label>
+                        <input type="text" name="hotel_whatsapp" value="{{ $settings['hotel_whatsapp'] ?? '' }}"
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Email de Reservas</label>
+                        <input type="email" name="hotel_email" value="{{ $settings['hotel_email'] ?? '' }}"
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit"
+                    class="px-10 py-3 rounded-lg bg-primary text-white font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">
+                    Guardar Todas las Configuraciones
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function previewImage(input, previewId) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById(previewId).src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Live Preview for Accessibility, Contrast, Theme & Colors
+        document.addEventListener('DOMContentLoaded', () => {
+            const contrastSlider = document.querySelector('input[name="text_contrast_level"]');
+            const highContrastToggle = document.querySelector('input[name="high_contrast"]');
+            const primaryPicker = document.getElementById('primary_picker');
+            const primaryHex = document.getElementById('primary_hex');
+            const secondaryPicker = document.getElementById('secondary_picker');
+            const secondaryHex = document.getElementById('secondary_hex');
+            const themeRadios = document.querySelectorAll('input[name="website_theme"]');
+
+            // Theme Preview
+            themeRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    if (e.target.value === 'dark') {
+                        document.documentElement.classList.add('dark');
+                        document.documentElement.classList.remove('light');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                        document.documentElement.classList.add('light');
+                    }
+                });
+            });
+
+            // Color Preview
+            if (primaryPicker) {
+                primaryPicker.addEventListener('input', (e) => {
+                    document.documentElement.style.setProperty('--primary-color', e.target.value);
+                });
+            }
+            if (primaryHex) {
+                primaryHex.addEventListener('input', (e) => {
+                    if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                        document.documentElement.style.setProperty('--primary-color', e.target.value);
+                    }
+                });
+            }
+            if (secondaryPicker) {
+                secondaryPicker.addEventListener('input', (e) => {
+                    document.documentElement.style.setProperty('--secondary-color', e.target.value);
+                });
+            }
+            if (secondaryHex) {
+                secondaryHex.addEventListener('input', (e) => {
+                    if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                        document.documentElement.style.setProperty('--secondary-color', e.target.value);
+                    }
+                });
+            }
+
+            // Contrast Preview
+            if (contrastSlider) {
+                contrastSlider.addEventListener('input', (e) => {
+                    const value = e.target.value / 100;
+                    document.documentElement.style.setProperty('--contrast-level', value);
+                });
+            }
+
+            if (highContrastToggle) {
+                highContrastToggle.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        document.documentElement.style.setProperty('--contrast-level', '1');
+                    } else {
+                        const val = contrastSlider ? contrastSlider.value / 100 : 0.5;
+                        document.documentElement.style.setProperty('--contrast-level', val);
+                    }
+                });
+            }
+        });
+
+        async function sendTestEmail() {
+            const btn = document.getElementById('test-btn');
+            const resultDiv = document.getElementById('test-result');
+            const testEmail = document.getElementById('test-email-address').value;
+
+            if (!testEmail) {
+                alert('Por favor, ingresa un email para la prueba.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = 'Enviando...';
+            resultDiv.classList.add('hidden');
+
+            // Recopilamos datos actuales del form para la prueba sin necesidad de guardar primero
+            const formData = new FormData(document.getElementById('settings-form'));
+            formData.append('test_email', testEmail);
+
+            try {
+                const response = await fetch("{{ route('admin.settings.test-email') }}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                });
+
+                const data = await response.json();
+
+                resultDiv.classList.remove('hidden');
+                if (data.success) {
+                    resultDiv.className = 'text-xs p-3 rounded-lg mb-4 bg-green-100 text-green-700 border border-green-200';
+                    resultDiv.innerHTML = '✅ ' + data.message;
+                } else {
+                    resultDiv.className = 'text-xs p-3 rounded-lg mb-4 bg-red-100 text-red-700 border border-red-200';
+                    resultDiv.innerHTML = '❌ ' + data.message;
+                }
+            } catch (error) {
+                resultDiv.classList.remove('hidden');
+                resultDiv.className = 'text-xs p-3 rounded-lg mb-4 bg-red-100 text-red-700 border border-red-200';
+                resultDiv.innerHTML = '❌ Error de conexión: ' + error.message;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Probar Envío';
+            }
+        }
+    </script>
+@endsection
