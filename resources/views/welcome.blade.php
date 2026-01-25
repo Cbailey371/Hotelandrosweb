@@ -95,7 +95,7 @@
         </div>
 
         <!-- Space for the bar overlap -->
-        <div class="h-16 md:h-24"></div>
+        <div class="h-64 md:h-24"></div>
 
         <!-- Habitaciones Section -->
         <section id="habitaciones" class="scroll-mt-32 mb-24">
@@ -382,23 +382,23 @@
         <div id="booking-modal"
             class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
             <div
-                class="bg-white dark:bg-[#0b0c11] w-full max-w-xl rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in duration-300 border border-white/20">
+                class="bg-white dark:bg-[#0b0c11] w-full max-w-xl rounded-[2.5rem] flex flex-col max-h-[92vh] overflow-hidden shadow-2xl animate-in zoom-in duration-300 border border-white/20">
                 <div
-                    class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-primary text-white">
+                    class="p-6 md:p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-primary text-white shrink-0">
                     <div>
-                        <h3 class="text-2xl font-black uppercase tracking-tight" id="modal-title">
+                        <h3 class="text-xl md:text-2xl font-black uppercase tracking-tight" id="modal-title">
                             {{ __('Confirmar Solicitud') }}
                         </h3>
-                        <p class="text-white/80 text-xs font-bold mt-1 uppercase tracking-widest">
+                        <p class="text-white/80 text-[10px] font-bold mt-1 uppercase tracking-widest leading-none">
                             {{ __('Enviando datos a recepción') }}
                         </p>
                     </div>
                     <button onclick="closeBookingModal()"
                         class="w-10 h-10 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/30 transition-all">
-                        <span class="material-symbols-outlined">close</span>
+                        <span class="material-symbols-outlined text-lg">close</span>
                     </button>
                 </div>
-                <div class="p-10">
+                <div class="p-6 md:p-10 overflow-y-auto custom-scrollbar">
                     <form action="{{ route('bookings.store') }}" method="POST" class="space-y-6">
                         @csrf
                         <input type="hidden" name="room_id" id="modal-room-id">
