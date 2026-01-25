@@ -34,6 +34,12 @@
                     '{check_in}' => \Carbon\Carbon::parse($booking->check_in)->format('d/m/Y'),
                     '{check_out}' => \Carbon\Carbon::parse($booking->check_out)->format('d/m/Y'),
                     '{huespedes}' => $booking->guests,
+                    '{referencia}' => '#BK-' . str_pad($booking->id, 5, '0', STR_PAD_LEFT),
+                    '{email}' => $booking->email,
+                    '{telefono}' => $booking->phone ?? 'N/A',
+                    '{pais}' => $booking->country ?? 'N/A',
+                    '{mensaje}' => $booking->message ?? '',
+                    '{hotel}' => \App\Models\Setting::where('key', 'hotel_name')->value('value') ?? 'Hotel Andros',
                 ];
 
                 $body = str_replace(array_keys($placeholders), array_values($placeholders), $body);

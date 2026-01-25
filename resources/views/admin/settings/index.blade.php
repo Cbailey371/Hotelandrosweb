@@ -313,7 +313,7 @@
                         Puedes usar estas etiquetas que se reemplazarán automáticamente:
                     </p>
                     <div class="flex flex-wrap gap-2 mt-3">
-                        @foreach(['{cliente}', '{habitacion}', '{check_in}', '{check_out}', '{huespedes}'] as $tag)
+                        @foreach(['{cliente}', '{habitacion}', '{check_in}', '{check_out}', '{huespedes}', '{referencia}', '{email}', '{telefono}', '{pais}', '{mensaje}', '{hotel}'] as $tag)
                             <span
                                 class="px-2 py-1 bg-white dark:bg-slate-800 rounded-md text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">{{ $tag }}</span>
                         @endforeach
