@@ -24,10 +24,24 @@
 
         <!-- Content -->
         <div style="padding: 40px;">
+            @php
+                $body = \App\Models\Setting::where('key', 'mail_processed_body')->value('value')
+                    ?? 'Es un placer informarte que tu solicitud de reserva ha sido procesada y confirmada por nuestro equipo de recepción. A continuación encontrarás los detalles finales de tu estancia:';
+
+                $placeholders = [
+                    '{cliente}' => $booking->customer_name,
+                    '{habitacion}' => $booking->room->name_es,
+                    '{check_in}' => \Carbon\Carbon::parse($booking->check_in)->format('d/m/Y'),
+                    '{check_out}' => \Carbon\Carbon::parse($booking->check_out)->format('d/m/Y'),
+                    '{huespedes}' => $booking->guests,
+                ];
+
+                $body = str_replace(array_keys($placeholders), array_values($placeholders), $body);
+                $footerLocation = \App\Models\Setting::where('key', 'mail_footer_location')->value('value') ?? 'Panamá, Colon';
+            @endphp
+
             <p style="font-size: 16px; margin-top: 0;">Hola <strong>{{ $booking->customer_name }}</strong>,</p>
-            <p style="font-size: 16px;">Es un placer informarte que tu solicitud de reserva ha sido **procesada y
-                confirmada** por nuestro equipo de recepción. A continuación encontrarás los detalles finales de tu
-                estancia:</p>
+            <p style="font-size: 16px;">{!! nl2br(e($body)) !!}</p>
 
             <div
                 style="background-color: #f8fafc; padding: 30px; border-radius: 20px; margin: 30px 0; border: 1px solid #e2e8f0;">
@@ -96,7 +110,7 @@
         <!-- Footer -->
         <div style="background-color: #f8fafc; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0;">
             <p style="margin: 0; font-weight: 700; color: #0f172a; font-size: 16px;">Hotel Andros</p>
-            <p style="margin: 5px 0 0; font-size: 13px; color: #64748b; font-weight: 500;">Panamá, Colon</p>
+            <p style="margin: 5px 0 0; font-size: 13px; color: #64748b; font-weight: 500;">{{ $footerLocation }}</p>
             <div style="margin-top: 20px;">
                 <p style="margin: 0; font-size: 12px; color: #94a3b8;">&copy; {{ date('Y') }} Hotel Andros. Todos los
                     derechos reservados.</p>

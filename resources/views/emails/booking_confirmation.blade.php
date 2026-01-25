@@ -14,8 +14,23 @@
                     Andros</strong>.</p>
         </div>
 
-        <p>Gracias por elegirnos. A continuación te presentamos el resumen de tu solicitud. Nos pondremos en contacto
-            contigo a la brevedad para confirmar la disponibilidad y finalizar tu reserva.</p>
+        @php
+            $body = \App\Models\Setting::where('key', 'mail_confirmation_body')->value('value')
+                ?? 'Gracias por elegirnos. A continuación te presentamos el resumen de tu solicitud. Nos pondremos en contacto contigo a la brevedad para confirmar la disponibilidad y finalizar tu reserva.';
+
+            $placeholders = [
+                '{cliente}' => $booking->customer_name,
+                '{habitacion}' => $booking->room->name_es,
+                '{check_in}' => $booking->check_in,
+                '{check_out}' => $booking->check_out,
+                '{huespedes}' => $booking->guests,
+            ];
+
+            $body = str_replace(array_keys($placeholders), array_values($placeholders), $body);
+            $footerLocation = \App\Models\Setting::where('key', 'mail_footer_location')->value('value') ?? 'Panamá, Colon';
+        @endphp
+
+        <p>{!! nl2br(e($body)) !!}</p>
 
         <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <h3 style="margin-top: 0; color: #1e293b; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">Detalles
@@ -45,7 +60,7 @@
 
         <div style="margin-top: 30px; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px;">
             <p style="margin: 0; font-weight: bold; color: #1e293b;">Hotel Andros</p>
-            <p style="margin: 5px 0 0; font-size: 12px; color: #94a3b8;">Panamá, Colon</p>
+            <p style="margin: 5px 0 0; font-size: 12px; color: #94a3b8;">{{ $footerLocation }}</p>
         </div>
     </div>
 </body>

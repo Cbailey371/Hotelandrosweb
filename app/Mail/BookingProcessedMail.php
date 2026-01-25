@@ -29,8 +29,11 @@ class BookingProcessedMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        $subject = \App\Models\Setting::where('key', 'mail_processed_subject')->value('value')
+            ?? 'Reserva Confirmada - Hotel Andros';
+
         return new Envelope(
-            subject: 'Reserva Confirmada - Hotel Andros',
+            subject: $subject,
         );
     }
 

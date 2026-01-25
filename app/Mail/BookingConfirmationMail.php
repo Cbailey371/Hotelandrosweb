@@ -28,8 +28,11 @@ class BookingConfirmationMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        $subject = \App\Models\Setting::where('key', 'mail_confirmation_subject')->value('value')
+            ?? 'Confirmación de solicitud de reserva - Hotel Andros';
+
         return new Envelope(
-            subject: 'Confirmación de solicitud de reserva - Hotel Andros',
+            subject: $subject,
         );
     }
 

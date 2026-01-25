@@ -299,6 +299,90 @@
                 </div>
             </div>
 
+            <!-- Email Templates -->
+            <div
+                class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 space-y-8">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">edit_note</span>
+                    Personalización de Correos Electrónicos
+                </h3>
+
+                <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800">
+                    <p class="text-xs text-blue-700 dark:text-blue-300 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">info</span>
+                        Puedes usar estas etiquetas que se reemplazarán automáticamente:
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        @foreach(['{cliente}', '{habitacion}', '{check_in}', '{check_out}', '{huespedes}'] as $tag)
+                            <span
+                                class="px-2 py-1 bg-white dark:bg-slate-800 rounded-md text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">{{ $tag }}</span>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="space-y-10">
+                    <!-- Confirmación de Solicitud -->
+                    <div class="space-y-6">
+                        <h4
+                            class="text-xs font-black text-slate-400 uppercase tracking-widest border-l-4 border-primary pl-3">
+                            1. Correo de Recibo de Solicitud (Inmediato)</h4>
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Asunto del
+                                    Correo</label>
+                                <input type="text" name="mail_confirmation_subject"
+                                    value="{{ $settings['mail_confirmation_subject'] ?? 'Confirmación de solicitud de reserva - Hotel Andros' }}"
+                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Mensaje del
+                                    Cuerpo</label>
+                                <textarea name="mail_confirmation_body" rows="4"
+                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                    placeholder="Gracias por elegirnos...">{!! $settings['mail_confirmation_body'] ?? 'Gracias por elegirnos. A continuación te presentamos el resumen de tu solicitud. Nos pondremos en contacto contigo a la brevedad para confirmar la disponibilidad y finalizar tu reserva.' !!}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirmación de Reserva (Procesada) -->
+                    <div class="space-y-6">
+                        <h4
+                            class="text-xs font-black text-slate-400 uppercase tracking-widest border-l-4 border-green-500 pl-3">
+                            2. Correo de Reserva Confirmada (Desde el Panel)</h4>
+                        <div class="grid grid-cols-1 gap-6">
+                            <div>
+                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Asunto del
+                                    Correo</label>
+                                <input type="text" name="mail_processed_subject"
+                                    value="{{ $settings['mail_processed_subject'] ?? 'Reserva Confirmada - Hotel Andros' }}"
+                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Mensaje del
+                                    Cuerpo</label>
+                                <textarea name="mail_processed_body" rows="4"
+                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                    placeholder="Es un placer informarte...">{!! $settings['mail_processed_body'] ?? 'Es un placer informarte que tu solicitud de reserva ha sido procesada y confirmada por nuestro equipo de recepción. A continuación encontrarás los detalles finales de tu estancia:' !!}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Común -->
+                    <div class="space-y-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+                        <div>
+                            <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Pie de Página de los
+                                Correos (Ubicación)</label>
+                            <input type="text" name="mail_footer_location"
+                                value="{{ $settings['mail_footer_location'] ?? 'Panamá, Colon' }}"
+                                class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm"
+                                placeholder="Ciudad, País">
+                            <p class="text-[10px] text-slate-400 mt-2 italic">Esto reemplazará la ubicación fija en todos
+                                los correos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Contact Information -->
             <div
                 class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 space-y-6">
