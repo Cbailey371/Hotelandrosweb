@@ -21,17 +21,23 @@
     <style>
         .dark body,
         .dark .min-h-screen {
-            background-color: #06070a !important;
+            background-color:
+                {{ $settings['dark_mode_color'] ?? '#06070a' }}
+                !important;
         }
 
         .dark .bg-white {
-            background-color: #0b0c11 !important;
+            background-color: color-mix(in srgb,
+                    {{ $settings['dark_mode_color'] ?? '#06070a' }}
+                    , white 5%) !important;
         }
     </style>
 </head>
 
-<body class="font-sans text-gray-900 antialiased">
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-[#06070a]">
+<body class="font-sans text-gray-900 antialiased"
+    style="--dark-bg-color: {{ $settings['dark_mode_color'] ?? '#06070a' }}">
+    <div
+        class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-[var(--dark-bg-color)]">
         <div>
             <a href="/">
                 <x-application-logo class="w-20 h-20 fill-current text-gray-500" />

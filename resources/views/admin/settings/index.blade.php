@@ -112,6 +112,24 @@
                                 </div>
                                 <p class="text-[10px] text-slate-400 mt-2">Used for highlights and supplementary icons.</p>
                             </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Dark Mode
+                                    Background</label>
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+                                        <input type="color" id="dark_mode_picker"
+                                            value="{{ $settings['dark_mode_color'] ?? '#06070a' }}"
+                                            class="absolute inset-[-10px] w-[200%] h-[200%] cursor-pointer"
+                                            oninput="document.getElementById('dark_mode_hex').value = this.value">
+                                    </div>
+                                    <input type="text" id="dark_mode_hex" name="dark_mode_color"
+                                        value="{{ $settings['dark_mode_color'] ?? '#06070a' }}"
+                                        class="flex-1 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm font-mono uppercase focus:ring-2 focus:ring-primary/50"
+                                        oninput="document.getElementById('dark_mode_picker').value = this.value">
+                                </div>
+                                <p class="text-[10px] text-slate-400 mt-2">The core background color for Dark Mode.</p>
+                            </div>
                         </div>
                     </div>
 
@@ -367,6 +385,30 @@
                 secondaryHex.addEventListener('input', (e) => {
                     if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
                         document.documentElement.style.setProperty('--secondary-color', e.target.value);
+                    }
+                });
+            }
+
+            // Dark Mode Color Preview
+            const darkModePicker = document.getElementById('dark_mode_picker');
+            const darkModeHex = document.getElementById('dark_mode_hex');
+
+            if (darkModePicker) {
+                darkModePicker.addEventListener('input', (e) => {
+                    document.documentElement.style.setProperty('--dark-bg-color', e.target.value);
+                    // Update immediate styles if dark mode is active
+                    if (document.documentElement.classList.contains('dark')) {
+                        document.body.style.backgroundColor = e.target.value;
+                    }
+                });
+            }
+            if (darkModeHex) {
+                darkModeHex.addEventListener('input', (e) => {
+                    if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                        document.documentElement.style.setProperty('--dark-bg-color', e.target.value);
+                        if (document.documentElement.classList.contains('dark')) {
+                            document.body.style.backgroundColor = e.target.value;
+                        }
                     }
                 });
             }

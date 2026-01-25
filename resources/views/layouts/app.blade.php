@@ -51,6 +51,9 @@
             --contrast-level:
                 {{ ($settings['text_contrast_level'] ?? 50) / 100 }}
             ;
+            --dark-bg-color:
+                {{ $settings['dark_mode_color'] ?? '#06070a' }}
+            ;
         }
 
         @if(($settings['high_contrast'] ?? '0') == '1')
@@ -120,25 +123,11 @@
         @endif
 
         /* Theme backgrounds */
-        .dark body {
-            background-color: #06070a !important;
-        }
-
-        .dark header {
-            background-color: rgba(6, 7, 10, 0.8) !important;
-        }
-
-        .dark .bg-white {
-            background-color: #0b0c11 !important;
-        }
-
-        .dark .bg-slate-50 {
-            background-color: #0b0c11 !important;
-        }
-
-        .dark .border-slate-100 {
-            border-color: #1a1a1a !important;
-        }
+        .dark body { background-color: var(--dark-bg-color) !important; }
+        .dark header { background-color: var(--dark-bg-color) !important; opacity: 0.95; }
+        .dark .bg-white { background-color: color-mix(in srgb, var(--dark-bg-color), white 5%) !important; }
+        .dark .bg-slate-50 { background-color: color-mix(in srgb, var(--dark-bg-color), white 5%) !important; }
+        .dark .border-slate-100 { border-color: color-mix(in srgb, var(--dark-bg-color), white 10%) !important; }
     </style>
 
     <script>
@@ -151,7 +140,8 @@
     </script>
 </head>
 
-<body class="bg-[#f6f7f8] dark:bg-[#06070a] text-[#0d141b] dark:text-slate-50 min-h-screen">
+<body class="dark:bg-[#06070a] text-[#0d141b] dark:text-slate-50 min-h-screen"
+    style="--dark-bg-color: {{ $settings['dark_mode_color'] ?? '#06070a' }}">
     @include('partials.header')
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

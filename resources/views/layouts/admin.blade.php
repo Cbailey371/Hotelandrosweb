@@ -33,6 +33,7 @@
             --primary-color: {{ $settings['primary_color'] ?? '#137fec' }};
             --secondary-color: {{ $settings['secondary_color'] ?? '#4c739a' }};
             --contrast-level: {{ ($settings['text_contrast_level'] ?? 50) / 100 }};
+            --dark-bg-color: {{ $settings['dark_mode_color'] ?? '#06070a' }};
         }
 
         @if(($settings['high_contrast'] ?? '0') == '1')
@@ -66,12 +67,12 @@
         @endif
 
         /* Theme backgrounds */
-        .dark body, .dark main { background-color: #06070a !important; }
-        .dark header { background-color: rgba(6, 7, 10, 0.8) !important; }
-        .dark aside { background-color: #0b0c11 !important; }
-        .dark .bg-white { background-color: #0b0c11 !important; }
-        .dark .border-slate-200 { border-color: #1a1a1a !important; }
-        .dark .border-[#e7edf3] { border-color: #1a1a1a !important; }
+        .dark body, .dark main { background-color: var(--dark-bg-color) !important; }
+        .dark header { background-color: var(--dark-bg-color) !important; opacity: 0.95; }
+        .dark aside { background-color: color-mix(in srgb, var(--dark-bg-color), white 5%) !important; }
+        .dark .bg-white { background-color: color-mix(in srgb, var(--dark-bg-color), white 5%) !important; }
+        .dark .border-slate-200 { border-color: color-mix(in srgb, var(--dark-bg-color), white 10%) !important; }
+        .dark .border-[#e7edf3] { border-color: color-mix(in srgb, var(--dark-bg-color), white 10%) !important; }
 
         /* Smooth transitions */
         html, body, p, span, h1, h2, h3, h4, h5, h6, div, article, aside, section {
@@ -81,7 +82,7 @@
     @stack('styles')
 </head>
 
-<body class="bg-[#f6f7f8] dark:bg-[#06070a] text-[#0d141b] dark:text-slate-50">
+<body class="bg-[#f6f7f8] dark:bg-[#06070a] text-[#0d141b] dark:text-slate-50" style="--dark-bg-color: {{ $settings['dark_mode_color'] ?? '#06070a' }}">
     <div class="flex h-screen overflow-hidden">
         @include('admin.partials.sidebar')
 
