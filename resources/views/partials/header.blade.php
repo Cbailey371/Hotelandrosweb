@@ -23,7 +23,7 @@
         <div class="flex items-center gap-4">
             <!-- Theme Toggle -->
             <button id="theme-toggle"
-                class="p-2 rounded-full text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-800 transition-all mr-2">
+                class="p-2 rounded-full text-slate-400 hover:text-primary hover:bg-slate-100 dark:hover:bg-slate-900 transition-all mr-2">
                 <span class="material-symbols-outlined hidden dark:block">light_mode</span>
                 <span class="material-symbols-outlined block dark:hidden">dark_mode</span>
             </button>

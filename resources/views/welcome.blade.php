@@ -36,7 +36,7 @@
         <!-- Availability Bar (MOVE OUTSIDE overflow-hidden) -->
         <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex justify-center translate-y-1/2 z-20">
             <div
-                class="bg-white dark:bg-slate-900 w-full max-w-5xl rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 p-4 md:p-6 grid grid-cols-1 md:grid-cols-4 gap-4 md:divide-x divide-slate-100 dark:divide-slate-800">
+                class="bg-white dark:bg-[#0b0c11] w-full max-w-5xl rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 p-4 md:p-6 grid grid-cols-1 md:grid-cols-4 gap-4 md:divide-x divide-slate-100 dark:divide-slate-800">
                 <div class="flex flex-col px-4">
                     <label
                         class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2">
@@ -101,7 +101,7 @@
         <div class="flex flex-wrap justify-center gap-8">
             @foreach($rooms as $room)
                 <div
-                    class="w-full max-w-[400px] bg-white dark:bg-slate-900 rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 group flex flex-col transition-all hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-2">
+                    class="w-full max-w-[400px] bg-white dark:bg-[#0b0c11] rounded-[2.5rem] overflow-hidden shadow-sm border border-slate-100 dark:border-slate-800 group flex flex-col transition-all hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-2">
                     <div class="h-72 overflow-hidden relative">
                         <div class="w-full h-full bg-center bg-cover transition-transform duration-1000 group-hover:scale-110"
                             style='background-image: url("{{ $room->image }}");' loading="lazy"></div>
@@ -203,7 +203,7 @@
                 </p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     <div
-                        class="flex items-start gap-4 p-6 bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800">
+                        class="flex items-start gap-4 p-6 bg-white dark:bg-[#0b0c11] rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800">
                         <div class="w-12 h-12 shrink-0 bg-primary/10 rounded-xl flex items-center justify-center">
                             <span
                                 class="material-symbols-outlined text-primary text-2xl">{{ $settings['cafe_feature1_icon'] ?? 'coffee' }}</span>
@@ -218,7 +218,7 @@
                         </div>
                     </div>
                     <div
-                        class="flex items-start gap-4 p-6 bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800">
+                        class="flex items-start gap-4 p-6 bg-white dark:bg-[#0b0c11] rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800">
                         <div class="w-12 h-12 shrink-0 bg-amber-100 rounded-xl flex items-center justify-center">
                             <span
                                 class="material-symbols-outlined text-amber-600 text-2xl">{{ $settings['cafe_feature2_icon'] ?? 'restaurant' }}</span>
@@ -339,7 +339,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach($attractions as $attraction)
                 <div
-                    class="bg-white dark:bg-slate-900 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all group">
+                    class="bg-white dark:bg-[#0b0c11] rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all group">
                     <div class="h-64 overflow-hidden relative">
                         <img src="{{ $attraction->image_path }}"
                             class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
@@ -365,7 +365,7 @@
     <div id="booking-modal"
         class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
         <div
-            class="bg-white dark:bg-slate-900 w-full max-w-xl rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in duration-300 border border-white/20">
+            class="bg-white dark:bg-[#0b0c11] w-full max-w-xl rounded-[2.5rem] overflow-hidden shadow-2xl animate-in zoom-in duration-300 border border-white/20">
             <div
                 class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-primary text-white">
                 <div>

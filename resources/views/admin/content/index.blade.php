@@ -41,13 +41,13 @@
         }
 
         .dark .ql-toolbar.ql-snow {
-            border-color: #334155;
-            background-color: #0f172a;
+            border-color: #1a1a1a;
+            background-color: #0b0c11;
         }
 
         .dark .ql-container.ql-snow {
-            border-color: #334155;
-            background-color: #1e293b;
+            border-color: #1a1a1a;
+            background-color: #121212;
             color: #f8fafc;
         }
 
@@ -56,8 +56,8 @@
         }
 
         .dark .ql-snow .ql-picker-options {
-            background-color: #1e293b !important;
-            border-color: #334155 !important;
+            background-color: #121212 !important;
+            border-color: #1a1a1a !important;
         }
 
         .section-nav-item {
@@ -79,7 +79,7 @@
         }
 
         .dark .section-nav-item:hover {
-            background-color: rgba(30, 41, 59, 1);
+            background-color: rgba(26, 26, 26, 1);
         }
 
         .dark .section-nav-item.active {
@@ -91,10 +91,10 @@
 @endpush
 
 @section('content')
-    <div class="h-[calc(100vh-120px)] -m-8 flex flex-col overflow-hidden bg-[#f0f2f5] dark:bg-slate-950">
+    <div class="h-[calc(100vh-120px)] -m-8 flex flex-col overflow-hidden bg-[#f0f2f5] dark:bg-black">
         <!-- Site Builder Header -->
         <div
-            class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-8 py-4 flex justify-between items-center shrink-0">
+            class="bg-white dark:bg-[#0b0c11] border-b border-slate-200 dark:border-slate-800 px-8 py-4 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-4">
                 <nav class="flex items-center text-xs font-bold text-slate-400">
                     <span class="hover:text-primary cursor-pointer">Landing Page</span>
@@ -120,7 +120,7 @@
         <div class="flex flex-1 overflow-hidden">
             <!-- Sidebar: Component Navigation -->
             <aside
-                class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
+                class="w-64 bg-white dark:bg-[#0b0c11] border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
                 <div class="p-6">
                     <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Components</h3>
                     <nav class="space-y-1">
@@ -197,7 +197,7 @@
                     <div class="space-y-10">
                         <!-- Media Card -->
                         <div
-                            class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+                            class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
                             <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm">image</span>
                                 Media Assets
@@ -205,7 +205,7 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div
-                                    class="relative group aspect-[16/9] rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                                    class="relative group aspect-[16/9] rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-black">
                                     <img src="{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"
                                         id="hero-preview" class="w-full h-full object-cover">
                                     <div
@@ -234,7 +234,7 @@
 
                         <!-- Content Card -->
                         <div
-                            class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+                            class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
                             <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm">description</span>
                                 Content Settings
@@ -295,7 +295,7 @@
                     <div class="space-y-10">
                         <!-- Content Card -->
                         <div
-                            class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+                            class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
                             <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm">description</span>
                                 Rooms Section Content
@@ -382,7 +382,7 @@
                     <div class="space-y-10">
                         <!-- Media Card -->
                         <div
-                            class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+                            class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
                             <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm">image</span>
                                 Media Assets
@@ -390,7 +390,7 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div
-                                    class="relative group aspect-video rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950">
+                                    class="relative group aspect-video rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-black">
                                     <img src="{{ $settings['cafe_image'] ?? '/images/gallery/bar.png' }}" id="cafe-preview"
                                         class="w-full h-full object-cover">
                                     <div
@@ -418,7 +418,7 @@
 
                         <!-- Content Card -->
                         <div
-                            class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+                            class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
                             <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm">description</span>
                                 Content Settings
@@ -545,7 +545,7 @@
 
                         <!-- Features Card -->
                         <div
-                            class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+                            class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
                             <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm">view_carousel</span>
                                 Feature Cards
@@ -554,7 +554,7 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                                 <!-- Feature 1 -->
                                 <div
-                                    class="p-8 rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/30 flex flex-col gap-6">
+                                    class="p-8 rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-[#0b0c11]/30 flex flex-col gap-6">
                                     <div class="flex items-center gap-4 shrink-0">
                                         <div
                                             class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
@@ -621,7 +621,7 @@
 
                                 <!-- Feature 2 -->
                                 <div
-                                    class="p-8 rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/30 flex flex-col gap-6">
+                                    class="p-8 rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/30 dark:bg-[#0b0c11]/30 flex flex-col gap-6">
                                     <div class="flex items-center gap-4 shrink-0">
                                         <div
                                             class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
@@ -703,7 +703,7 @@
                     </div>
 
                     <div
-                        class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+                        class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
                         <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                             <span class="material-symbols-outlined text-sm">description</span>
                             Carousel Headers
@@ -815,7 +815,7 @@
                     </div>
 
                     <div
-                        class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+                        class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
                         <div class="flex flex-wrap items-center justify-between gap-4">
                             <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm">photo_library</span>
@@ -877,7 +877,7 @@
                     </div>
                     <div class="space-y-10">
                         <div
-                            class="bg-white dark:bg-slate-900 rounded-3xl p-8 pb-16 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8 h-auto">
+                            class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 pb-16 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8 h-auto">
                             <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm">map</span>
                                 Map & Connectivity
@@ -989,7 +989,7 @@
                         <p class="text-sm text-slate-500">Manage points of interest around your hotel.</p>
                     </div>
                     <div
-                        class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+                        class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
                         <div
                             class="flex justify-between items-center text-xs font-black text-slate-400 uppercase tracking-widest">
                             <span class="flex items-center gap-2"><span
@@ -1061,18 +1061,18 @@
                                         class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all z-20">
                                         <button type="button"
                                             onclick='editAttraction({
-                                                                                                                                                                                                                                    id: "{{ $attraction->id }}",
-                                                                                                                                                                                                                                    title_es: "{{ addslashes($attraction->title_es) }}",
-                                                                                                                                                                                                                                    title_en: "{{ addslashes($attraction->title_en) }}",
-                                                                                                                                                                                                                                    description_es: "{{ addslashes($attraction->description_es) }}",
-                                                                                                                                                                                                                                    description_en: "{{ addslashes($attraction->description_en) }}",
-                                                                                                                                                                                                                                    image_path: "{{ $attraction->image_path }}"
-                                                                                                                                                                                                                                })'
-                                            class="text-blue-500 hover:text-blue-700 p-2 bg-white dark:bg-slate-900 rounded-full shadow-sm">
+                                                                                                                                                                                                                                            id: "{{ $attraction->id }}",
+                                                                                                                                                                                                                                            title_es: "{{ addslashes($attraction->title_es) }}",
+                                                                                                                                                                                                                                            title_en: "{{ addslashes($attraction->title_en) }}",
+                                                                                                                                                                                                                                            description_es: "{{ addslashes($attraction->description_es) }}",
+                                                                                                                                                                                                                                            description_en: "{{ addslashes($attraction->description_en) }}",
+                                                                                                                                                                                                                                            image_path: "{{ $attraction->image_path }}"
+                                                                                                                                                                                                                                        })'
+                                            class="text-blue-500 hover:text-blue-700 p-2 bg-white dark:bg-[#0b0c11] rounded-full shadow-sm">
                                             <span class="material-symbols-outlined text-sm font-bold">edit</span>
                                         </button>
                                         <button type="button" onclick="confirmDeleteAttraction('{{ $attraction->id }}', event)"
-                                            class="text-red-500 hover:text-red-700 p-2 bg-white dark:bg-slate-900 rounded-full shadow-sm">
+                                            class="text-red-500 hover:text-red-700 p-2 bg-white dark:bg-[#0b0c11] rounded-full shadow-sm">
                                             <span class="material-symbols-outlined text-sm font-bold">delete</span>
                                         </button>
                                     </div>
@@ -1094,7 +1094,7 @@
                     <div class="space-y-10">
                         <!-- Brand Description -->
                         <div
-                            class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+                            class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
                             <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                 <span class="material-symbols-outlined text-sm">description</span>
                                 Brand Description
@@ -1126,7 +1126,7 @@
                                         <label class="block text-[11px] font-black text-slate-400 uppercase mb-2">Políticas
                                             (ES)</label>
                                         <div id="footer_policies_es_editor"
-                                            class="rounded-xl border border-slate-100 dark:border-slate-800 h-80 bg-white dark:bg-slate-950 overflow-hidden">
+                                            class="rounded-xl border border-slate-100 dark:border-slate-800 h-80 bg-white dark:bg-black overflow-hidden">
                                             {!! $settings['footer_policies_es'] ?? '' !!}
                                         </div>
                                         <input type="hidden" name="footer_policies_es" id="footer_policies_es">
@@ -1135,7 +1135,7 @@
                                         <label class="block text-[11px] font-black text-slate-400 uppercase mb-2">Policies
                                             (EN)</label>
                                         <div id="footer_policies_en_editor"
-                                            class="rounded-xl border border-slate-100 dark:border-slate-800 h-80 bg-white dark:bg-slate-950 overflow-hidden">
+                                            class="rounded-xl border border-slate-100 dark:border-slate-800 h-80 bg-white dark:bg-black overflow-hidden">
                                             {!! $settings['footer_policies_en'] ?? '' !!}
                                         </div>
                                         <input type="hidden" name="footer_policies_en" id="footer_policies_en">
@@ -1147,7 +1147,7 @@
                         <!-- Social Media -->
                         <div <!-- Social Media Links (Dynamic) -->
                             <div
-                                class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+                                class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
                                 <div class="flex justify-between items-center">
                                     <h3
                                         class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
@@ -1169,7 +1169,7 @@
 
                             <!-- Contact & Copyright -->
                             <div
-                                class="bg-white dark:bg-slate-900 rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+                                class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
                                 <h3
                                     class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                     <span class="material-symbols-outlined text-sm">contact_support</span>
@@ -1295,7 +1295,7 @@
     <div id="media-library-modal" class="fixed inset-0 z-[110] hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeMediaLibrary()"></div>
         <div
-            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[80vh] bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden">
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[80vh] bg-white dark:bg-[#0b0c11] rounded-[2.5rem] shadow-2xl flex flex-col overflow-hidden">
             <div
                 class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
                 <div>
@@ -1339,7 +1339,7 @@
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
             onclick="document.getElementById('attraction-form-modal').classList.add('hidden')"></div>
         <div
-            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg p-8 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl">
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg p-8 bg-white dark:bg-[#0b0c11] rounded-3xl shadow-2xl">
             <h3 class="text-xl font-black text-slate-800 dark:text-white mb-6" id="attraction-modal-title">New Local
                 Attraction</h3>
             <form id="attraction-form" action="{{ route('admin.attractions.store') }}" method="POST"
@@ -1368,7 +1368,7 @@
                 <div>
                     <label class="block text-[11px] font-black text-slate-400 uppercase mb-2">Image</label>
                     <div
-                        class="relative group aspect-video rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 mb-2">
+                        class="relative group aspect-video rounded-xl overflow-hidden border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-black mb-2">
                         <img src="/images/branding/placeholder.png" id="attraction-preview"
                             class="w-full h-full object-cover">
                         <div
@@ -1402,7 +1402,7 @@
     <div id="delete-confirmation-modal" class="fixed inset-0 z-[120] hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeDeleteConfirmation()"></div>
         <div
-            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm p-8 bg-white dark:bg-slate-900 rounded-3xl shadow-2xl text-center">
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm p-8 bg-white dark:bg-[#0b0c11] rounded-3xl shadow-2xl text-center">
             <div
                 class="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span class="material-symbols-outlined text-3xl">warning</span>
@@ -1683,37 +1683,37 @@
                     const row = document.createElement('div');
                     row.className = 'flex flex-col md:flex-row items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800';
                     row.innerHTML = `
-                                                                                                        <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                                                                            <div>
-                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Platform</label>
-                                                                                                                <select onchange="updateSocialLink(${index}, 'platform', this.value)" class="w-full bg-white dark:bg-slate-900 border-none rounded-xl px-4 py-2 text-sm">
-                                                                                                                    <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
-                                                                                                                    <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
-                                                                                                                    <option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
-                                                                                                                    <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option>
-                                                                                                                    <option value="tiktok" ${link.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
-                                                                                                                    <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
-                                                                                                                    <option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
-                                                                                                                </select>
-                                                                                                            </div>
-                                                                                                            <div>
-                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">URL</label>
-                                                                                                                <input type="text" value="${link.url}" placeholder="https://..." onchange="updateSocialLink(${index}, 'url', this.value)" class="w-full bg-white dark:bg-slate-900 border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20">
-                                                                                                            </div>
-                                                                                                        </div>
-                                                                                                        <div class="flex items-center gap-4">
-                                                                                                            <label class="flex items-center gap-2 cursor-pointer group">
-                                                                                                                <div class="relative">
-                                                                                                                    <input type="checkbox" ${link.active ? 'checked' : ''} onchange="updateSocialLink(${index}, 'active', this.checked)" class="sr-only peer">
-                                                                                                                    <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                                                                                                <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                                                                    <div>
+                                                                                                                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Platform</label>
+                                                                                                                        <select onchange="updateSocialLink(${index}, 'platform', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm">
+                                                                                                                            <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
+                                                                                                                            <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
+                                                                                                                            <option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+                                                                                                                            <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option>
+                                                                                                                            <option value="tiktok" ${link.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
+                                                                                                                            <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
+                                                                                                                            <option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
+                                                                                                                        </select>
+                                                                                                                    </div>
+                                                                                                                    <div>
+                                                                                                                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">URL</label>
+                                                                                                                        <input type="text" value="${link.url}" placeholder="https://..." onchange="updateSocialLink(${index}, 'url', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20">
+                                                                                                                    </div>
                                                                                                                 </div>
-                                                                                                                <span class="text-[10px] font-black text-slate-400 uppercase group-hover:text-primary transition-colors">Active</span>
-                                                                                                            </label>
-                                                                                                            <button type="button" onclick="removeSocialLink(${index})" class="text-slate-400 hover:text-red-500 transition-colors">
-                                                                                                                <span class="material-symbols-outlined text-sm">delete</span>
-                                                                                                            </button>
-                                                                                                        </div>
-                                                                                                    `;
+                                                                                                                <div class="flex items-center gap-4">
+                                                                                                                    <label class="flex items-center gap-2 cursor-pointer group">
+                                                                                                                        <div class="relative">
+                                                                                                                            <input type="checkbox" ${link.active ? 'checked' : ''} onchange="updateSocialLink(${index}, 'active', this.checked)" class="sr-only peer">
+                                                                                                                            <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                                                                                                        </div>
+                                                                                                                        <span class="text-[10px] font-black text-slate-400 uppercase group-hover:text-primary transition-colors">Active</span>
+                                                                                                                    </label>
+                                                                                                                    <button type="button" onclick="removeSocialLink(${index})" class="text-slate-400 hover:text-red-500 transition-colors">
+                                                                                                                        <span class="material-symbols-outlined text-sm">delete</span>
+                                                                                                                    </button>
+                                                                                                                </div>
+                                                                                                            `;
                     container.appendChild(row);
                 });
                 syncSocialsJson();
@@ -1809,9 +1809,9 @@
     <div id="carousel-gallery-modal"
         class="fixed inset-0 z-[120] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
         <div
-            class="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            class="bg-white dark:bg-[#0b0c11] w-full max-w-4xl rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
             <div
-                class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-950">
+                class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-black">
                 <div>
                     <h3 class="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight">Galería Global
                     </h3>
@@ -1860,7 +1860,7 @@
             </style>
 
             <div
-                class="p-8 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 flex justify-between items-center">
+                class="p-8 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-black flex justify-between items-center">
                 <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest italic">
                     Selecciona todas las que desees y presiona "Guardar"
                 </p>

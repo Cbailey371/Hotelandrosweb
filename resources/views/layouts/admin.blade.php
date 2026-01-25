@@ -73,13 +73,13 @@
     @stack('styles')
 </head>
 
-<body class="bg-[#f6f7f8] dark:bg-[#101922] text-[#0d141b] dark:text-slate-50">
+<body class="bg-[#f6f7f8] dark:bg-[#06070a] text-[#0d141b] dark:text-slate-50">
     <div class="flex h-screen overflow-hidden">
         @include('admin.partials.sidebar')
 
-        <main class="flex-1 overflow-y-auto bg-[#f6f7f8] dark:bg-[#101922]">
+        <main class="flex-1 overflow-y-auto bg-[#f6f7f8] dark:bg-[#06070a]">
             <header
-                class="sticky top-0 z-10 flex items-center justify-between border-b border-[#e7edf3] dark:border-slate-800 bg-white/80 dark:bg-[#101922]/80 backdrop-blur-md px-8 py-4">
+                class="sticky top-0 z-10 flex items-center justify-between border-b border-[#e7edf3] dark:border-slate-800 bg-white/80 dark:bg-[#06070a]/80 backdrop-blur-md px-8 py-4">
                 <h2 class="text-[#0d141b] dark:text-white text-xl font-bold tracking-tight">@yield('header')</h2>
                 <div class="flex items-center gap-4">
                     <div class="flex items-center gap-3">
