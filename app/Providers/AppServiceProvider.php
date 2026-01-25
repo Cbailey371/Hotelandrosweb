@@ -21,8 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (config('app.env') !== 'local') {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
+        // Forzamos HTTPS para evitar Mixed Content
+        \Illuminate\Support\Facades\URL::forceScheme('https');
+
+        // Forzamos el estado de HTTPS en el servidor
+        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+            $_SERVER['HTTPS'] = 'on';
         }
 
         Schema::defaultStringLength(191);

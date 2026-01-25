@@ -54,8 +54,30 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('gallery/{gallery}/toggle-carousel', [\App\Http\Controllers\Admin\GalleryController::class, 'toggleCarousel'])->name('gallery.toggleCarousel');
         Route::resource('attractions', \App\Http\Controllers\Admin\AttractionController::class);
 
-        Route::get('content', [\App\Http\Controllers\Admin\ContentController::class, 'index'])->name('content.index');
-        Route::post('content', [\App\Http\Controllers\Admin\ContentController::class, 'update'])->name('content.update');
+        // Ruta de reparación maestra para SSL y Diseño
+        Route::get('repair-ssl', function () {
+            try {
+                $hotFile = public_path('hot');
+                $deletedHot = false;
+                if (file_exists($hotFile)) {
+                    unlink($hotFile);
+                    $deletedHot = true;
+                }
+
+                \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+
+                $msg = "✅ Reparación completada con éxito.<br>";
+                if ($deletedHot) {
+                    $msg .= "• Se eliminó el archivo de conflicto 'hot'.<br>";
+                }
+                $msg .= "• Toda la caché del servidor ha sido limpiada.<br><br>";
+                $msg .= "<b>Por favor, abre el sitio ahora en una VENTANA DE INCÓGNITO.</b>";
+
+                return $msg;
+            } catch (\Exception $e) {
+                return "❌ Error durante la reparación: " . $e->getMessage();
+            }
+        });
 
         // Gestión de Galería
         Route::post('gallery/bulk-carousel', [\App\Http\Controllers\Admin\GalleryController::class, 'bulkUpdateCarousel'])->name('gallery.bulk-carousel');
