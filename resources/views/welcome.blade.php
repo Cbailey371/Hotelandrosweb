@@ -30,7 +30,7 @@
         <!-- Hero Section -->
         <div class="relative pt-8 mb-32" id="inicio">
             <!-- Container with overflow-hidden for the background image -->
-            <div class="relative w-full rounded-3xl overflow-hidden bg-cover bg-top flex flex-col justify-center"
+            <div class="relative w-full rounded-3xl overflow-hidden bg-cover bg-center flex flex-col justify-center"
                 style='min-height: 90vh !important; background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 60%), url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}");'>
                 <div class="p-10 md:p-20 text-center">
                     <div
@@ -380,9 +380,9 @@
 
         <!-- Booking Modal (Premium Responsive) -->
         <div id="booking-modal"
-            class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+            class="fixed inset-0 z-[100] hidden flex items-start md:items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md overflow-y-auto">
             <div
-                class="bg-white dark:bg-[#0b0c11] w-full max-w-xl rounded-[2.5rem] flex flex-col max-h-[92vh] overflow-hidden shadow-2xl animate-in zoom-in duration-300 border border-white/20">
+                class="bg-white dark:bg-[#0b0c11] w-full max-w-xl rounded-[2.5rem] flex flex-col max-h-[92vh] md:max-h-[85vh] overflow-hidden shadow-2xl animate-in zoom-in duration-300 border border-white/20 mt-4 md:mt-0">
                 <div
                     class="p-6 md:p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-primary text-white shrink-0">
                     <div>
@@ -398,7 +398,7 @@
                         <span class="material-symbols-outlined text-lg">close</span>
                     </button>
                 </div>
-                <div class="p-6 md:p-10 overflow-y-auto custom-scrollbar">
+                <div class="p-6 md:p-10 overflow-y-auto flex-1 custom-scrollbar">
                     <form action="{{ route('bookings.store') }}" method="POST" class="space-y-6">
                         @csrf
                         <input type="hidden" name="room_id" id="modal-room-id">
