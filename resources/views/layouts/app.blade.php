@@ -123,11 +123,26 @@
         @endif
 
         /* Theme backgrounds */
-        .dark body { background-color: var(--dark-bg-color) !important; }
-        .dark header { background-color: var(--dark-bg-color) !important; opacity: 0.95; }
-        .dark .bg-white { background-color: color-mix(in srgb, var(--dark-bg-color), white 5%) !important; }
-        .dark .bg-slate-50 { background-color: color-mix(in srgb, var(--dark-bg-color), white 5%) !important; }
-        .dark .border-slate-100 { border-color: color-mix(in srgb, var(--dark-bg-color), white 10%) !important; }
+        .dark body {
+            background-color: var(--dark-bg-color) !important;
+        }
+
+        .dark header {
+            background-color: var(--dark-bg-color) !important;
+            opacity: 0.95;
+        }
+
+        .dark .bg-white {
+            background-color: color-mix(in srgb, var(--dark-bg-color), white 5%) !important;
+        }
+
+        .dark .bg-slate-50 {
+            background-color: color-mix(in srgb, var(--dark-bg-color), white 5%) !important;
+        }
+
+        .dark .border-slate-100 {
+            border-color: color-mix(in srgb, var(--dark-bg-color), white 10%) !important;
+        }
     </style>
 
     <script>
@@ -144,7 +159,7 @@
     style="--dark-bg-color: {{ $settings['dark_mode_color'] ?? '#06070a' }}">
     @include('partials.header')
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main>
         @yield('content')
     </main>
 

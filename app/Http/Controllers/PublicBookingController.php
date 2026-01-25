@@ -14,19 +14,32 @@ class PublicBookingController extends Controller
 {
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'country' => 'nullable|string|max:100',
-            'phone' => 'nullable|string|max:20',
-            'room_id' => 'required|exists:rooms,id',
-            'check_in' => 'required|date|after_or_equal:today',
-            'check_out' => 'required|date|after:check_in',
-            'guests' => 'required|integer|min:1|max:10',
-            'message' => 'nullable|string|max:1000',
-        ]);
+        \Log::info('Intento de reserva recibido:', $request->all());
 
-        $booking = Booking::create($validated);
+        try {
+            $validated = $request->validate([
+                'customer_name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'country' => 'nullable|string|max:100',
+                'phone' => 'nullable|string|max:50', // Aumentado de 20 a 50
+                'room_id' => 'required|exists:rooms,id',
+                'check_in' => 'required|date', // Eliminado after_or_equal:today temporalmente para evitar problemas de zona horaria
+                'check_out' => 'required|date|after:check_in',
+                'guests' => 'required|integer|min:1|max:10',
+                'message' => 'nullable|string|max:1000',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            \Log::warning('Fallo de validación en reserva:', $e->errors());
+            throw $e;
+        }
+
+        try {
+            $booking = Booking::create($validated);
+            \Log::info('Reserva creada con éxito ID: ' . $booking->id);
+        } catch (\Exception $e) {
+            \Log::error('ERROR FATAL al crear reserva en BD: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Hubo un problema al guardar tu reserva. Inténtalo de nuevo.'])->withInput();
+        }
 
         // Envío de correos
         $adminEmail = Setting::where('key', 'hotel_email')->value('value') ?? config('mail.from.address');
@@ -37,7 +50,7 @@ class PublicBookingController extends Controller
 
             // Correo para el cliente (Confirmación)
             Mail::to($booking->email)->send(new BookingConfirmationMail($booking));
-
+            \Log::info('Correos de reserva enviados con éxito.');
         } catch (\Exception $e) {
             \Log::error('Error enviando correos de reserva: ' . $e->getMessage());
         }
