@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         // Aplicar configuración SMTP y compartir settings con todas las vistas
-        if (!app()->runningInConsole() && Schema::hasTable('settings')) {
+        if (Schema::hasTable('settings')) {
             $settings = Setting::all()->pluck('value', 'key');
             view()->share('settings', $settings);
 
@@ -51,6 +51,12 @@ class AppServiceProvider extends ServiceProvider
                     'mail.from.address' => $settings['mail_from_address'] ?? 'no-reply@hotel.com',
                     'mail.from.name' => $settings['mail_from_name'] ?? ($settings['hotel_name'] ?? 'Hotel Andros'),
                 ]);
+
+                // Forzamos a Laravel a olvidar cualquier instancia previa del mailer para que use la nueva config
+                \Illuminate\Support\Facades\Mail::purge('smtp');
+                if (config('mail.default') === 'smtp') {
+                    \Illuminate\Support\Facades\Mail::purge();
+                }
             }
         }
     }
