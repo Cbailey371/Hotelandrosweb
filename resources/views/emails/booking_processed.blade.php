@@ -48,28 +48,32 @@
                             style="padding: 10px 0; color: #64748b; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
                             Habitación:</td>
                         <td style="padding: 10px 0; color: #0f172a; font-weight: 700; text-align: right;">
-                            {{ $booking->room->name_es }}</td>
+                            {{ $booking->room->name_es }}
+                        </td>
                     </tr>
                     <tr>
                         <td
                             style="padding: 10px 0; color: #64748b; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
                             Huéspedes:</td>
                         <td style="padding: 10px 0; color: #0f172a; font-weight: 700; text-align: right;">
-                            {{ $booking->guests }} Persona(s)</td>
+                            {{ $booking->guests }} Persona(s)
+                        </td>
                     </tr>
                     <tr>
                         <td
                             style="padding: 10px 0; color: #64748b; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
                             Check-in:</td>
                         <td style="padding: 10px 0; color: #0f172a; font-weight: 700; text-align: right;">
-                            {{ \Carbon\Carbon::parse($booking->check_in)->format('d/m/Y') }}</td>
+                            {{ \Carbon\Carbon::parse($booking->check_in)->format('d/m/Y') }}
+                        </td>
                     </tr>
                     <tr>
                         <td
                             style="padding: 10px 0; color: #64748b; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
                             Check-out:</td>
                         <td style="padding: 10px 0; color: #0f172a; font-weight: 700; text-align: right;">
-                            {{ \Carbon\Carbon::parse($booking->check_out)->format('d/m/Y') }}</td>
+                            {{ \Carbon\Carbon::parse($booking->check_out)->format('d/m/Y') }}
+                        </td>
                     </tr>
                 </table>
             </div>
@@ -92,8 +96,7 @@
         <!-- Footer -->
         <div style="background-color: #f8fafc; padding: 30px; text-align: center; border-top: 1px solid #e2e8f0;">
             <p style="margin: 0; font-weight: 700; color: #0f172a; font-size: 16px;">Hotel Andros</p>
-            <p style="margin: 5px 0 0; font-size: 13px; color: #64748b; font-weight: 500;">Ave. Herrera, Colón, Panamá
-            </p>
+            <p style="margin: 5px 0 0; font-size: 13px; color: #64748b; font-weight: 500;">Panamá, Colon</p>
             <div style="margin-top: 20px;">
                 <p style="margin: 0; font-size: 12px; color: #94a3b8;">&copy; {{ date('Y') }} Hotel Andros. Todos los
                     derechos reservados.</p>

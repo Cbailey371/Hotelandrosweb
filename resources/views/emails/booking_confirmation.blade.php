@@ -45,8 +45,7 @@
 
         <div style="margin-top: 30px; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px;">
             <p style="margin: 0; font-weight: bold; color: #1e293b;">Hotel Andros</p>
-            <p style="margin: 5px 0 0; font-size: 12px; color: #94a3b8;">Ubicación: Tierras Altas, Volcan, Chiriquí,
-                Panamá</p>
+            <p style="margin: 5px 0 0; font-size: 12px; color: #94a3b8;">Panamá, Colon</p>
         </div>
     </div>
 </body>
