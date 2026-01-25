@@ -54,6 +54,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('gallery/{gallery}/toggle-carousel', [\App\Http\Controllers\Admin\GalleryController::class, 'toggleCarousel'])->name('gallery.toggleCarousel');
         Route::resource('attractions', \App\Http\Controllers\Admin\AttractionController::class);
 
+        Route::get('content', [\App\Http\Controllers\Admin\ContentController::class, 'index'])->name('content.index');
+        Route::post('content', [\App\Http\Controllers\Admin\ContentController::class, 'update'])->name('content.update');
+
         // Ruta de reparación maestra para SSL y Diseño
         Route::get('repair-ssl', function () {
             try {
@@ -81,7 +84,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
         // Gestión de Galería
         Route::post('gallery/bulk-carousel', [\App\Http\Controllers\Admin\GalleryController::class, 'bulkUpdateCarousel'])->name('gallery.bulk-carousel');
-        Route::get('gallery/{gallery}/toggle-carousel', [\App\Http\Controllers\Admin\GalleryController::class, 'toggleCarousel'])->name('gallery.toggleCarousel');
 
         Route::get('settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
         Route::post('settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
