@@ -17,6 +17,17 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        .dark body,
+        .dark .min-h-screen {
+            background-color: #06070a !important;
+        }
+
+        .dark .bg-white {
+            background-color: #0b0c11 !important;
+        }
+    </style>
 </head>
 
 <body class="font-sans text-gray-900 antialiased">

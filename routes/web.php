@@ -57,6 +57,16 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('content', [\App\Http\Controllers\Admin\ContentController::class, 'index'])->name('content.index');
         Route::post('content', [\App\Http\Controllers\Admin\ContentController::class, 'update'])->name('content.update');
 
+        // Rutas de Mantenimiento y Caché
+        Route::get('clear-cache', function () {
+            try {
+                \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+                return "✅ Caché del servidor limpiada con éxito. Por favor, refresca la página.";
+            } catch (\Exception $e) {
+                return "❌ Error: " . $e->getMessage();
+            }
+        });
+
         // Ruta de reparación maestra para SSL y Diseño
         Route::get('repair-ssl', function () {
             try {

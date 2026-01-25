@@ -65,6 +65,14 @@
             .dark .text-slate-400, .dark .text-slate-300, .dark .text-slate-50, .dark .text-white, .dark p, .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 { color: #fff !important; }
         @endif
 
+        /* Theme backgrounds */
+        .dark body, .dark main { background-color: #06070a !important; }
+        .dark header { background-color: rgba(6, 7, 10, 0.8) !important; }
+        .dark aside { background-color: #0b0c11 !important; }
+        .dark .bg-white { background-color: #0b0c11 !important; }
+        .dark .border-slate-200 { border-color: #1a1a1a !important; }
+        .dark .border-[#e7edf3] { border-color: #1a1a1a !important; }
+
         /* Smooth transitions */
         html, body, p, span, h1, h2, h3, h4, h5, h6, div, article, aside, section {
             transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);

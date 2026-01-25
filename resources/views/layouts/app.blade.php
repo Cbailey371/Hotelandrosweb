@@ -119,9 +119,25 @@
 
         @endif
 
-        /* Smooth transitions */
-        html, body, p, span, h1, h2, h3, h4, h5, h6, a, button {
-            transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Theme backgrounds */
+        .dark body {
+            background-color: #06070a !important;
+        }
+
+        .dark header {
+            background-color: rgba(6, 7, 10, 0.8) !important;
+        }
+
+        .dark .bg-white {
+            background-color: #0b0c11 !important;
+        }
+
+        .dark .bg-slate-50 {
+            background-color: #0b0c11 !important;
+        }
+
+        .dark .border-slate-100 {
+            border-color: #1a1a1a !important;
         }
     </style>
 

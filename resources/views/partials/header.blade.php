@@ -1,5 +1,5 @@
 <header
-    class="sticky top-0 z-50 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-solid border-slate-100 dark:border-slate-800">
+    class="sticky top-0 z-50 w-full bg-white/80 dark:bg-[#06070a]/80 backdrop-blur-md border-b border-solid border-slate-100 dark:border-slate-800">
     <div class="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
         <div class="flex items-center gap-3">
             <a href="{{ url('/') }}" class="h-10 md:h-12 text-primary flex items-center">
