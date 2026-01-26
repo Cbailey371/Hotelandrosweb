@@ -11,7 +11,7 @@
                 web.</p>
         </div>
         <div class="flex gap-3">
-            <a href="{{ route('gallery.sync') }}"
+            <a href="{{ route('admin.gallery.sync') }}"
                 class="flex min-w-[140px] cursor-pointer items-center justify-center gap-2 rounded-lg h-11 px-6 bg-slate-100 text-slate-600 text-sm font-bold hover:bg-slate-200 transition-all border border-slate-200">
                 <span class="material-symbols-outlined text-xl">sync</span>
                 <span>Sincronizar Manual</span>
