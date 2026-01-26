@@ -497,16 +497,18 @@
             <!-- Main Image -->
             <div class="flex-1 flex items-center justify-center p-4 md:p-10 relative">
                 <button onclick="prevImage()"
-                    class="absolute left-4 md:left-8 p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all z-10">
-                    <span class="material-symbols-outlined text-3xl">chevron_left</span>
+                    class="absolute left-4 md:left-8 p-4 rounded-full bg-black/50 hover:bg-white/20 text-white transition-all z-30 shadow-xl backdrop-blur-sm">
+                    <span class="material-symbols-outlined text-3xl font-bold">chevron_left</span>
                 </button>
 
-                <img id="gallery-main-image" src=""
-                    class="max-h-full max-w-full object-contain rounded-lg shadow-2xl animate-in fade-in zoom-in duration-300">
+                <div class="relative w-full h-full flex items-center justify-center overflow-hidden p-2">
+                    <img id="gallery-main-image" src=""
+                        class="max-h-[85vh] md:max-h-[75vh] w-auto max-w-full object-contain rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-500 border-4 border-white/10">
+                </div>
 
                 <button onclick="nextImage()"
-                    class="absolute right-4 md:right-8 p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all z-10">
-                    <span class="material-symbols-outlined text-3xl">chevron_right</span>
+                    class="absolute right-4 md:right-8 p-4 rounded-full bg-black/50 hover:bg-white/20 text-white transition-all z-30 shadow-xl backdrop-blur-sm">
+                    <span class="material-symbols-outlined text-3xl font-bold">chevron_right</span>
                 </button>
             </div>
 
