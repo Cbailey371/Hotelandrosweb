@@ -17,8 +17,12 @@ class ImageHelper
      * @param int|null $width
      * @return string
      */
-    public static function storeAsWebp($file, $directory = 'uploads', $quality = 80, $width = null)
+    public static function storeAsWebp($file, $directory = 'uploads', $quality = 100, $width = null)
     {
+        // Intentar aumentar recursos para procesar fotos pesadas
+        @ini_set('memory_limit', '512M');
+        @ini_set('max_execution_time', '300');
+
         $filename = Str::random(40) . '.webp';
         $path = $directory . '/' . $filename;
 

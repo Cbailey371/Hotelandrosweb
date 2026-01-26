@@ -70,6 +70,44 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
             }
         });
 
+        Route::get('check-php', function () {
+            return "<h3>Diagnóstico del Servidor</h3>" .
+                "• MEMORY LIMIT: " . ini_get('memory_limit') . "<br>" .
+                "• UPLOAD MAX SIZE: " . ini_get('upload_max_filesize') . "<br>" .
+                "• POST MAX SIZE: " . ini_get('post_max_size') . "<br>" .
+                "• MAX EXECUTION TIME: " . ini_get('max_execution_time') . "s<br><br>" .
+                "<i>Si el UPLOAD o MEMORY son bajos, las fotos pesadas fallarán con un error 503 o 500.</i>";
+        });
+
+        Route::get('sync-gallery', function () {
+            try {
+                $files = \Illuminate\Support\Facades\Storage::disk('public')->files('gallery');
+                $added = 0;
+                $maxOrder = \App\Models\Gallery::max('order') ?? 0;
+
+                foreach ($files as $file) {
+                    $publicPath = '/storage/' . $file;
+
+                    // Solo procesar si no existe en la base de datos y es imagen
+                    $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                    if (in_array($ext, ['webp', 'jpg', 'jpeg', 'png']) && !\App\Models\Gallery::where('image_path', $publicPath)->exists()) {
+                        \App\Models\Gallery::create([
+                            'image_path' => $publicPath,
+                            'title_es' => basename($file),
+                            'title_en' => basename($file),
+                            'order' => ++$maxOrder,
+                            'show_in_carousel' => 0
+                        ]);
+                        $added++;
+                    }
+                }
+
+                return "✅ Sincronización completada. Se añadieron $added nuevas imágenes encontradas en el servidor. <br><br><a href='" . route('admin.gallery.index') . "'>Volver a la Galería</a>";
+            } catch (\Exception $e) {
+                return "❌ Error: " . $e->getMessage();
+            }
+        })->name('gallery.sync');
+
         // Ruta de reparación maestra para SSL y Diseño
         Route::get('repair-ssl', function () {
             try {

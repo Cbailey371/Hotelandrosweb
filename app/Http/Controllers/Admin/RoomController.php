@@ -43,13 +43,13 @@ class RoomController extends Controller
             'capacity' => 'required|integer',
             'status' => 'required',
             'image_url' => 'nullable|url',
-            'image_file' => 'nullable|image|max:5120',
+            'image_file' => 'nullable|image|max:10240',
             'main_image_id' => 'nullable|exists:galleries,id',
             'amenities' => 'nullable|string',
             'gallery_ids' => 'nullable|array',
             'gallery_ids.*' => 'exists:galleries,id',
             'new_gallery_images' => 'nullable|array',
-            'new_gallery_images.*' => 'image|max:5120',
+            'new_gallery_images.*' => 'image|max:10240',
         ]);
 
         if ($request->hasFile('image_file')) {
