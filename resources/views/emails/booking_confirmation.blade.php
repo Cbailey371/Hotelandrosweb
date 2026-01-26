@@ -86,8 +86,11 @@
                 de Cargos / Price Breakdown</h3>
             <table style="width: 100%; border-collapse: collapse;">
                 <tr>
-                    <td style="padding: 8px 0; color: #475569;">Tarifa Base ({{ $booking->nights ?? 1 }} noches) / Base
-                        Rate:</td>
+                    <td style="padding: 8px 0; color: #475569;">Tarifa Base
+                        (${{ number_format($booking->base_price ?? $booking->room->price, 2) }} x
+                        {{ $booking->nights ?? 1 }} noches) / Base Rate
+                        (${{ number_format($booking->base_price ?? $booking->room->price, 2) }} x
+                        {{ $booking->nights ?? 1 }} nights):</td>
                     <td style="padding: 8px 0; text-align: right;">
                         ${{ number_format(($booking->base_price ?? $booking->room->price) * ($booking->nights ?? 1), 2) }}
                     </td>
@@ -101,7 +104,8 @@
                 @endif
                 <tr>
                     <td style="padding: 8px 0; color: #475569;">Impuestos (ITBMS
-                        {{ $booking->room->tax_percentage ?? 7 }}%) / Taxes:</td>
+                        {{ $booking->room->tax_percentage ?? 7 }}%) / Taxes:
+                    </td>
                     <td style="padding: 8px 0; text-align: right;">${{ number_format($booking->tax_amount ?? 0, 2) }}
                     </td>
                 </tr>

@@ -61,7 +61,10 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('clear-cache', function () {
             try {
                 \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-                return "✅ Caché del servidor limpiada con éxito. Por favor, refresca la página.";
+                \Illuminate\Support\Facades\Artisan::call('view:clear');
+                \Illuminate\Support\Facades\Artisan::call('config:clear');
+                \Illuminate\Support\Facades\Artisan::call('cache:clear');
+                return "✅ [V3] LIMPIEZA PROFUNDA COMPLETADA: Caché de vistas, configuración y optimización eliminada. Por favor, realiza una nueva prueba de reserva ahora.";
             } catch (\Exception $e) {
                 return "❌ Error: " . $e->getMessage();
             }

@@ -22,7 +22,8 @@
             <tr>
                 <td style="padding: 8px 0; font-weight: bold; border-bottom: 1px solid #f0f2f5;">País:</td>
                 <td style="padding: 8px 0; border-bottom: 1px solid #f0f2f5;">
-                    {{ $booking->country ?? 'No especificado' }}</td>
+                    {{ $booking->country ?? 'No especificado' }}
+                </td>
             </tr>
             <tr>
                 <td style="padding: 8px 0; font-weight: bold; border-bottom: 1px solid #f0f2f5;">Teléfono:</td>
@@ -46,10 +47,52 @@
                 <td style="padding: 8px 0; border-bottom: 1px solid #f0f2f5;">{{ $booking->check_out }}</td>
             </tr>
             <tr>
+                <td style="padding: 8px 0; font-weight: bold; border-bottom: 1px solid #f0f2f5;">Noches:</td>
+                <td style="padding: 8px 0; border-bottom: 1px solid #f0f2f5;">{{ $booking->nights ?? 1 }}</td>
+            </tr>
+            <tr>
                 <td style="padding: 8px 0; font-weight: bold;">Mensaje:</td>
                 <td style="padding: 8px 0;">{{ $booking->message ?? 'Sin mensaje' }}</td>
             </tr>
         </table>
+
+        <!-- Nuevo Desglose de Precios para el Hotel -->
+        <div
+            style="margin-top: 30px; padding: 20px; background-color: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <h3
+                style="margin-top: 0; color: #0f172a; font-size: 16px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 15px;">
+                Desglose Económico</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 6px 0; color: #64748b; font-size: 14px;">Tarifa Base
+                        (${{ number_format($booking->base_price ?? $booking->room->price, 2) }} x
+                        {{ $booking->nights ?? 1 }} noches):</td>
+                    <td style="padding: 6px 0; text-align: right; font-weight: bold;">
+                        ${{ number_format(($booking->base_price ?? $booking->room->price) * ($booking->nights ?? 1), 2) }}
+                    </td>
+                </tr>
+                @if(($booking->extra_person_total ?? 0) > 0)
+                    <tr>
+                        <td style="padding: 6px 0; color: #64748b; font-size: 14px;">Cargos Personas Extra:</td>
+                        <td style="padding: 6px 0; text-align: right; font-weight: bold;">
+                            ${{ number_format($booking->extra_person_total, 2) }}</td>
+                    </tr>
+                @endif
+                <tr>
+                    <td style="padding: 6px 0; color: #64748b; font-size: 14px;">Impuestos
+                        ({{ $booking->room->tax_percentage ?? 7 }}%):</td>
+                    <td style="padding: 6px 0; text-align: right; font-weight: bold;">
+                        ${{ number_format($booking->tax_amount ?? 0, 2) }}</td>
+                </tr>
+                <tr style="border-top: 2px solid #e2e8f0;">
+                    <td style="padding: 12px 0 0; font-weight: bold; color: #0f172a; font-size: 16px;">TOTAL A COBRAR:
+                    </td>
+                    <td
+                        style="padding: 12px 0 0; text-align: right; font-weight: bold; color: #137fec; font-size: 18px;">
+                        ${{ number_format($booking->total_amount ?? 0, 2) }}</td>
+                </tr>
+            </table>
+        </div>
 
         <div style="margin-top: 30px; text-align: center;">
             <a href="{{ url('/admin/bookings') }}"
