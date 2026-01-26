@@ -28,6 +28,12 @@ class ImageHelper
 
         $image = Image::read($file);
 
+        // Si la imagen es más ancha que 1920px y no se especificó un ancho, la bajamos a 1920px
+        // para ahorrar recursos y evitar desbordamientos.
+        if (!$width && $image->width() > 1920) {
+            $width = 1920;
+        }
+
         if ($width) {
             $image->scale(width: $width);
         }

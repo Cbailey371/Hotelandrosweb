@@ -501,9 +501,9 @@
                     <span class="material-symbols-outlined text-3xl font-black">chevron_left</span>
                 </button>
 
-                <div class="w-full h-full flex items-center justify-center overflow-hidden">
+                <div class="w-full h-full flex items-center justify-center overflow-hidden p-2">
                     <img id="gallery-main-image" src=""
-                        class="max-h-full max-w-full w-auto h-auto object-contain rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-500 border-2 border-white/20">
+                        class="max-h-[70vh] md:max-h-[75vh] w-auto max-w-[90vw] object-contain rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-500 border-2 border-white/20">
                 </div>
 
                 <button onclick="nextImage()"
