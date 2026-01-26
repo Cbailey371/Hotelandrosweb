@@ -12,6 +12,8 @@ class Room extends Model
         'description_es',
         'description_en',
         'price',
+        'tax_percentage',
+        'extra_person_charge',
         'capacity',
         'status',
         'amenities',

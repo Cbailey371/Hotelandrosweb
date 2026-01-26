@@ -326,20 +326,40 @@
                         <h4
                             class="text-xs font-black text-slate-400 uppercase tracking-widest border-l-4 border-primary pl-3">
                             1. Correo de Recibo de Solicitud (Inmediato)</h4>
-                        <div class="grid grid-cols-1 gap-6">
-                            <div>
-                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Asunto del
-                                    Correo</label>
-                                <input type="text" name="mail_confirmation_subject"
-                                    value="{{ $settings['mail_confirmation_subject'] ?? 'Confirmación de solicitud de reserva - Hotel Andros' }}"
-                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Versión Español -->
+                            <div class="space-y-4">
+                                <h5 class="text-[10px] font-black uppercase text-slate-400">Versión Español (ES)</h5>
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Asunto</label>
+                                    <input type="text" name="mail_confirmation_subject"
+                                        value="{{ $settings['mail_confirmation_subject'] ?? 'Confirmación de solicitud de reserva - Hotel Andros' }}"
+                                        class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Mensaje</label>
+                                    <textarea name="mail_confirmation_body" rows="4"
+                                        class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                        placeholder="Gracias por elegirnos...">{{ $settings['mail_confirmation_body'] ?? 'Gracias por elegirnos. A continuación te presentamos el resumen de tu solicitud. Nos pondremos en contacto contigo a la brevedad para confirmar la disponibilidad y finalizar tu reserva.' }}</textarea>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Mensaje del
-                                    Cuerpo</label>
-                                <textarea name="mail_confirmation_body" rows="4"
-                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
-                                    placeholder="Gracias por elegirnos...">{!! $settings['mail_confirmation_body'] ?? 'Gracias por elegirnos. A continuación te presentamos el resumen de tu solicitud. Nos pondremos en contacto contigo a la brevedad para confirmar la disponibilidad y finalizar tu reserva.' !!}</textarea>
+
+                            <!-- Versión Inglés -->
+                            <div class="space-y-4">
+                                <h5 class="text-[10px] font-black uppercase text-slate-400">English Version (EN)</h5>
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Subject</label>
+                                    <input type="text" name="mail_confirmation_subject_en"
+                                        value="{{ $settings['mail_confirmation_subject_en'] ?? 'Booking Request Confirmation - Hotel Andros' }}"
+                                        class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Body Message</label>
+                                    <textarea name="mail_confirmation_body_en" rows="4"
+                                        class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                        placeholder="Thank you for choosing us...">{{ $settings['mail_confirmation_body_en'] ?? 'Thank you for choosing us. Below is the summary of your request. Please note that availability is not confirmed until we contact you.' }}</textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -349,35 +369,73 @@
                         <h4
                             class="text-xs font-black text-slate-400 uppercase tracking-widest border-l-4 border-green-500 pl-3">
                             2. Correo de Reserva Confirmada (Desde el Panel)</h4>
-                        <div class="grid grid-cols-1 gap-6">
-                            <div>
-                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Asunto del
-                                    Correo</label>
-                                <input type="text" name="mail_processed_subject"
-                                    value="{{ $settings['mail_processed_subject'] ?? 'Reserva Confirmada - Hotel Andros' }}"
-                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Versión Español -->
+                            <div class="space-y-4">
+                                <h5 class="text-[10px] font-black uppercase text-slate-400">Versión Español (ES)</h5>
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Asunto</label>
+                                    <input type="text" name="mail_processed_subject"
+                                        value="{{ $settings['mail_processed_subject'] ?? 'Reserva Confirmada - Hotel Andros' }}"
+                                        class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Mensaje</label>
+                                    <textarea name="mail_processed_body" rows="4"
+                                        class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                        placeholder="Es un placer informarte...">{{ $settings['mail_processed_body'] ?? 'Es un placer informarte que tu solicitud de reserva ha sido procesada y confirmada por nuestro equipo de recepción. A continuación encontrarás los detalles finales de tu estancia:' }}</textarea>
+                                </div>
                             </div>
-                            <div>
-                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Mensaje del
-                                    Cuerpo</label>
-                                <textarea name="mail_processed_body" rows="4"
-                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
-                                    placeholder="Es un placer informarte...">{!! $settings['mail_processed_body'] ?? 'Es un placer informarte que tu solicitud de reserva ha sido procesada y confirmada por nuestro equipo de recepción. A continuación encontrarás los detalles finales de tu estancia:' !!}</textarea>
+
+                            <!-- Versión Inglés -->
+                            <div class="space-y-4">
+                                <h5 class="text-[10px] font-black uppercase text-slate-400">English Version (EN)</h5>
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Subject</label>
+                                    <input type="text" name="mail_processed_subject_en"
+                                        value="{{ $settings['mail_processed_subject_en'] ?? 'Booking Confirmed - Hotel Andros' }}"
+                                        class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Body Message</label>
+                                    <textarea name="mail_processed_body_en" rows="4"
+                                        class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                        placeholder="It is a pleasure to inform you...">{{ $settings['mail_processed_body_en'] ?? 'It is a pleasure to inform you that your booking request has been processed and confirmed by our reception team. Below you will find the final details of your stay:' }}</textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Footer Común -->
-                    <div class="space-y-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+                    <div class="pt-8 border-t border-slate-100 dark:border-slate-800 space-y-8">
+                        <h4
+                            class="text-xs font-black text-slate-400 uppercase tracking-widest border-l-4 border-slate-300 pl-3">
+                            3. Información Común (Pie de Página)</h4>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Nota de Contacto ES -->
+                            <div>
+                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Nota de Contacto (ES)</label>
+                                <textarea name="mail_footer_note" rows="2"
+                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm"
+                                    placeholder="Si tienes alguna duda...">{{ $settings['mail_footer_note'] ?? 'Si tienes alguna duda, puedes responder directamente a este correo o contactarnos por los canales oficiales del hotel.' }}</textarea>
+                            </div>
+                            <!-- Nota de Contacto EN -->
+                            <div>
+                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Contact Note (EN)</label>
+                                <textarea name="mail_footer_note_en" rows="2"
+                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm"
+                                    placeholder="If you have any questions...">{{ $settings['mail_footer_note_en'] ?? 'If you have any questions, you can reply directly to this email or contact us through the hotel official channels.' }}</textarea>
+                            </div>
+                        </div>
+
                         <div>
-                            <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Pie de Página de los
-                                Correos (Ubicación)</label>
+                            <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Ubicación / Location</label>
                             <input type="text" name="mail_footer_location"
                                 value="{{ $settings['mail_footer_location'] ?? 'Panamá, Colon' }}"
                                 class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm"
                                 placeholder="Ciudad, País">
-                            <p class="text-[10px] text-slate-400 mt-2 italic">Esto reemplazará la ubicación fija en todos
-                                los correos.</p>
                         </div>
                     </div>
                 </div>

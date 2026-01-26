@@ -19,13 +19,18 @@ class ContactController extends Controller
             'message' => 'required|string|max:2000',
         ]);
 
-        // Obtener el correo del remitente (donde llegarán los correos)
-        $adminEmail = Setting::where('key', 'mail_from_address')->value('value')
-            ?? Setting::where('key', 'hotel_email')->value('value')
+        // Forzar recarga de configuración (por si cambió recientemente en la sesión)
+        \Illuminate\Support\Facades\Mail::purge('smtp');
+
+        // Obtener el correo donde el hotel desea recibir las consultas
+        $recipientEmail = Setting::where('key', 'hotel_email')->value('value')
+            ?? Setting::where('key', 'mail_from_address')->value('value')
             ?? config('mail.from.address');
 
+        Log::info('Intentando enviar correo de contacto a: ' . $recipientEmail);
+
         try {
-            Mail::to($adminEmail)->send(new ContactMail($validated));
+            Mail::to($recipientEmail)->send(new ContactMail($validated));
 
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Tu mensaje ha sido enviado con éxito.']);

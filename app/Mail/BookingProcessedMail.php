@@ -29,11 +29,14 @@ class BookingProcessedMail extends Mailable
      */
     public function envelope(): Envelope
     {
-        $subject = \App\Models\Setting::where('key', 'mail_processed_subject')->value('value')
+        $subjectEs = \App\Models\Setting::where('key', 'mail_processed_subject')->value('value')
             ?? 'Reserva Confirmada - Hotel Andros';
 
+        $subjectEn = \App\Models\Setting::where('key', 'mail_processed_subject_en')->value('value')
+            ?? 'Booking Confirmed - Hotel Andros';
+
         return new Envelope(
-            subject: $subject,
+            subject: $subjectEs . ' / ' . $subjectEn,
         );
     }
 
@@ -43,7 +46,7 @@ class BookingProcessedMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.booking_processed',
+            view: 'emails.booking_processed',
         );
     }
 

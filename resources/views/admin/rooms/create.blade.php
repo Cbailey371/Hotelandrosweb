@@ -125,31 +125,37 @@
                         </label>
                         <span class="text-xs text-slate-500 font-medium">Fotos anexadas a esta habitación</span>
                     </div>
-                    
+
                     <div id="room-gallery-container" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
                         <!-- Action Card: Add from Global Gallery -->
-                        <button type="button" onclick="openGallerySelector('additional')" 
+                        <button type="button" onclick="openGallerySelector('additional')"
                             class="relative group aspect-square rounded-[1.5rem] border-2 border-dashed border-primary/30 hover:border-primary bg-primary/5 hover:bg-primary/10 flex flex-col items-center justify-center transition-all shadow-sm">
-                            <div class="w-12 h-12 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center mb-2 shadow-sm group-hover:scale-110 transition-transform">
+                            <div
+                                class="w-12 h-12 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center mb-2 shadow-sm group-hover:scale-110 transition-transform">
                                 <span class="material-symbols-outlined text-primary">add_photo_alternate</span>
                             </div>
                             <span class="text-[10px] font-black text-primary uppercase tracking-widest">Desde Galería</span>
                         </button>
 
                         <!-- Action Card: Upload New -->
-                        <label class="relative group cursor-pointer aspect-square rounded-[1.5rem] border-2 border-dashed border-green-600/30 hover:border-green-600 bg-green-50/50 dark:bg-green-900/10 flex flex-col items-center justify-center transition-all shadow-sm">
-                            <input type="file" name="new_gallery_images[]" multiple accept="image/*" class="hidden" onchange="previewNewImages(this)">
-                            <div class="w-12 h-12 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center mb-2 shadow-sm group-hover:scale-110 transition-transform">
+                        <label
+                            class="relative group cursor-pointer aspect-square rounded-[1.5rem] border-2 border-dashed border-green-600/30 hover:border-green-600 bg-green-50/50 dark:bg-green-900/10 flex flex-col items-center justify-center transition-all shadow-sm">
+                            <input type="file" name="new_gallery_images[]" multiple accept="image/*" class="hidden"
+                                onchange="previewNewImages(this)">
+                            <div
+                                class="w-12 h-12 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center mb-2 shadow-sm group-hover:scale-110 transition-transform">
                                 <span class="material-symbols-outlined text-green-600">cloud_upload</span>
                             </div>
-                            <span class="text-[10px] font-black text-green-600 uppercase tracking-widest">Subir Nuevas</span>
+                            <span class="text-[10px] font-black text-green-600 uppercase tracking-widest">Subir
+                                Nuevas</span>
                         </label>
                     </div>
 
                     <!-- Preview Container for New Uploads -->
                     <div id="new-uploads-preview" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 mt-6 hidden">
                         <div class="col-span-full border-t border-slate-100 dark:border-slate-800 pt-4">
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Fotos por subir (Temporal)</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Fotos por subir
+                                (Temporal)</p>
                         </div>
                     </div>
                 </div>
@@ -181,14 +187,27 @@
                 </div>
 
                 <!-- Specs -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div>
-                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Precio por Noche</label>
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Precio Base por
+                            Noche</label>
                         <input type="number" name="price" step="0.01" required
                             class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary/50">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Capacidad
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Impuesto (%) -
+                            ITBMS</label>
+                        <input type="number" name="tax_percentage" step="0.01" value="7.00" required
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Cargo Persona
+                            Extra</label>
+                        <input type="number" name="extra_person_charge" step="0.01" value="0.00" required
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Capacidad Base
                             (Personas)</label>
                         <input type="number" name="capacity" required
                             class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary/50">
@@ -274,13 +293,13 @@
             div.className = 'relative group aspect-square rounded-[1.5rem] overflow-hidden border-2 border-slate-100 dark:border-slate-800 shadow-sm animate-in zoom-in duration-300';
             div.id = `gallery-item-${id}`;
             div.innerHTML = `
-                    <input type="checkbox" name="gallery_ids[]" value="${id}" checked class="hidden">
-                    <img src="${path}" class="w-full h-full object-cover">
-                    <button type="button" onclick="removeGalleryItem('${id}')" 
-                        class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
-                        <span class="material-symbols-outlined text-sm">close</span>
-                    </button>
-                `;
+                        <input type="checkbox" name="gallery_ids[]" value="${id}" checked class="hidden">
+                        <img src="${path}" class="w-full h-full object-cover">
+                        <button type="button" onclick="removeGalleryItem('${id}')" 
+                            class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
+                            <span class="material-symbols-outlined text-sm">close</span>
+                        </button>
+                    `;
             container.appendChild(div);
         }
 
@@ -316,9 +335,9 @@
                         const div = document.createElement('div');
                         div.className = 'aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 relative';
                         div.innerHTML = `
-                                        <img src="${e.target.result}" class="w-full h-full object-cover">
-                                        <div class="absolute top-1 right-1 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm">Nueva</div>
-                                    `;
+                                            <img src="${e.target.result}" class="w-full h-full object-cover">
+                                            <div class="absolute top-1 right-1 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm">Nueva</div>
+                                        `;
                         container.appendChild(div);
                     }
                     reader.readAsDataURL(file);

@@ -206,14 +206,29 @@
                 </div>
 
                 <!-- Specs -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div>
-                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Precio por Noche</label>
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Precio Base por
+                            Noche</label>
                         <input type="number" name="price" step="0.01" value="{{ old('price', $room->price) }}" required
                             class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary/50">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Capacidad
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Impuesto (%) -
+                            ITBMS</label>
+                        <input type="number" name="tax_percentage" step="0.01"
+                            value="{{ old('tax_percentage', $room->tax_percentage) }}" required
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Cargo Persona
+                            Extra</label>
+                        <input type="number" name="extra_person_charge" step="0.01"
+                            value="{{ old('extra_person_charge', $room->extra_person_charge) }}" required
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Capacidad Base
                             (Personas)</label>
                         <input type="number" name="capacity" value="{{ old('capacity', $room->capacity) }}" required
                             class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary/50">
@@ -270,7 +285,7 @@
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
-            
+
             // Si es adicional, quizás queramos cambiar el título del modal o algo
             const title = modal.querySelector('h3');
             title.innerText = mode === 'main' ? 'Seleccionar Imagen Principal' : 'Añadir a Galería de Habitación';
@@ -302,13 +317,13 @@
             div.className = 'relative group aspect-square rounded-[1.5rem] overflow-hidden border-2 border-slate-100 dark:border-slate-800 shadow-sm animate-in zoom-in duration-300';
             div.id = `gallery-item-${id}`;
             div.innerHTML = `
-                <input type="checkbox" name="gallery_ids[]" value="${id}" checked class="hidden">
-                <img src="${path}" class="w-full h-full object-cover">
-                <button type="button" onclick="removeGalleryItem('${id}')" 
-                    class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
-                    <span class="material-symbols-outlined text-sm">close</span>
-                </button>
-            `;
+                    <input type="checkbox" name="gallery_ids[]" value="${id}" checked class="hidden">
+                    <img src="${path}" class="w-full h-full object-cover">
+                    <button type="button" onclick="removeGalleryItem('${id}')" 
+                        class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
+                        <span class="material-symbols-outlined text-sm">close</span>
+                    </button>
+                `;
             container.appendChild(div);
         }
 
@@ -345,9 +360,9 @@
                         const div = document.createElement('div');
                         div.className = 'aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 relative';
                         div.innerHTML = `
-                                <img src="${e.target.result}" class="w-full h-full object-cover">
-                                <div class="absolute top-1 right-1 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm">Nueva</div>
-                            `;
+                                    <img src="${e.target.result}" class="w-full h-full object-cover">
+                                    <div class="absolute top-1 right-1 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm">Nueva</div>
+                                `;
                         container.appendChild(div);
                     }
                     reader.readAsDataURL(file);
