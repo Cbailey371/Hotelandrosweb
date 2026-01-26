@@ -102,6 +102,49 @@
                 </div>
             </div>
 
+            <!-- Sección: Desglose de Costos (Editable) -->
+            <div
+                class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] p-8 shadow-sm">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center">
+                        <span class="material-symbols-outlined">payments</span>
+                    </div>
+                    <h2 class="text-xl font-black text-slate-800 dark:text-white uppercase tracking-tight">Desglose de
+                        Costos</h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Precio Base
+                            (Noche)</label>
+                        <input type="number" name="base_price" step="0.01"
+                            value="{{ old('base_price', $booking->base_price) }}" required
+                            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Extra Personas
+                            Total</label>
+                        <input type="number" name="extra_person_total" step="0.01"
+                            value="{{ old('extra_person_total', $booking->extra_person_total) }}" required
+                            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Impuestos
+                            (ITBMS)</label>
+                        <input type="number" name="tax_amount" step="0.01"
+                            value="{{ old('tax_amount', $booking->tax_amount) }}" required
+                            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Total
+                            General</label>
+                        <input type="number" name="total_amount" step="0.01"
+                            value="{{ old('total_amount', $booking->total_amount) }}" required
+                            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/50 border-primary/20 bg-primary/5">
+                    </div>
+                </div>
+            </div>
+
             <!-- Sección: Estado y Comentarios -->
             <div
                 class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] p-8 shadow-sm">
@@ -169,6 +212,15 @@
                             class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/50 resize-none">{{ old('message', $booking->message) }}</textarea>
                     </div>
                 </div>
+            </div>
+
+            <!-- Notificación -->
+            <div class="flex items-center gap-3 p-6 bg-primary/5 rounded-[1.5rem] border border-primary/10">
+                <input type="checkbox" name="send_update_email" id="send_update_email" value="1"
+                    class="w-5 h-5 rounded-lg border-slate-300 text-primary focus:ring-primary cursor-pointer">
+                <label for="send_update_email" class="text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer select-none">
+                    Enviar actualización de reserva por correo al cliente (con el nuevo desglose)
+                </label>
             </div>
 
             <div class="flex justify-end gap-4 p-4">

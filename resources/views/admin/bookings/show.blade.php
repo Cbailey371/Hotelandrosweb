@@ -80,10 +80,40 @@
                             </div>
                             <div>
                                 @php
-                                    $nights = \Carbon\Carbon::parse($booking->check_in)->diffInDays($booking->check_out);
+                                    $nights = \Carbon\Carbon::parse($booking->check_in)->diffInDays($booking->check_out) ?: 1;
                                 @endphp
                                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Duración</p>
                                 <p class="font-bold text-slate-800 dark:text-white">{{ $nights }} Noche(s)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen de Costos -->
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] overflow-hidden shadow-sm">
+                    <div class="p-8">
+                        <h3 class="text-lg font-black text-slate-800 dark:text-white uppercase tracking-tight mb-6 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-blue-600">payments</span>
+                            Resumen de Costos
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+                                <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest">Tarifa Base (${{ number_format($booking->base_price, 2) }} x {{ $nights }} noches)</p>
+                                <p class="font-bold text-slate-800 dark:text-white">${{ number_format($booking->base_price * $nights, 2) }}</p>
+                            </div>
+                            @if($booking->extra_person_total > 0)
+                            <div class="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+                                <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest">Cargos Extra Personas</p>
+                                <p class="font-bold text-slate-800 dark:text-white">${{ number_format($booking->extra_person_total, 2) }}</p>
+                            </div>
+                            @endif
+                            <div class="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-800">
+                                <p class="text-[11px] font-black text-slate-400 uppercase tracking-widest">Impuestos (ITBMS)</p>
+                                <p class="font-bold text-slate-800 dark:text-white">${{ number_format($booking->tax_amount, 2) }}</p>
+                            </div>
+                            <div class="flex justify-between items-center pt-2">
+                                <p class="text-sm font-black text-slate-800 dark:text-white uppercase tracking-tight">Total de la Reserva</p>
+                                <p class="text-2xl font-black text-primary">${{ number_format($booking->total_amount, 2) }}</p>
                             </div>
                         </div>
                     </div>
@@ -137,6 +167,10 @@
                             <input type="hidden" name="check_in" value="{{ $booking->check_in }}">
                             <input type="hidden" name="check_out" value="{{ $booking->check_out }}">
                             <input type="hidden" name="guests" value="{{ $booking->guests }}">
+                            <input type="hidden" name="base_price" value="{{ $booking->base_price }}">
+                            <input type="hidden" name="extra_person_total" value="{{ $booking->extra_person_total }}">
+                            <input type="hidden" name="tax_amount" value="{{ $booking->tax_amount }}">
+                            <input type="hidden" name="total_amount" value="{{ $booking->total_amount }}">
                             <button type="submit" class="w-full py-4 bg-green-600 hover:bg-green-700 rounded-xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg shadow-green-900/40">MARCAR COMO CONFIRMADA</button>
                         </form>
                         

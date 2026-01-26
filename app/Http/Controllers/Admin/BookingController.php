@@ -57,7 +57,7 @@ class BookingController extends Controller
         $validated = $request->validate([
             'customer_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'nullable|string|max:20',
+            'phone' => 'nullable|string|max:50',
             'country' => 'nullable|string|max:100',
             'room_id' => 'required|exists:rooms,id',
             'check_in' => 'required|date',
@@ -65,16 +65,29 @@ class BookingController extends Controller
             'guests' => 'required|integer|min:1',
             'status' => 'required|in:pending,confirmed,cancelled',
             'message' => 'nullable|string',
+            'base_price' => 'required|numeric|min:0',
+            'extra_person_total' => 'required|numeric|min:0',
+            'tax_amount' => 'required|numeric|min:0',
+            'total_amount' => 'required|numeric|min:0',
         ]);
 
         $booking->update($validated);
 
-        // Si el estado cambió a confirmado, enviamos el correo
-        if ($oldStatus !== Booking::STATUS_CONFIRMED && $booking->status === Booking::STATUS_CONFIRMED) {
+        // Si se solicitó enviar correo de actualización
+        if ($request->boolean('send_update_email')) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($booking->email)->send(new \App\Mail\BookingUpdatedMail($booking));
+                \Log::info('Correo de actualización enviado para reserva ID: ' . $booking->id);
+            } catch (\Exception $e) {
+                \Log::error('Error enviando correo de actualización (ID: ' . $booking->id . '): ' . $e->getMessage());
+            }
+        }
+        // Si el estado cambió a confirmado y no se envió actualización explícita, enviamos el procesado estándar
+        elseif ($oldStatus !== Booking::STATUS_CONFIRMED && $booking->status === Booking::STATUS_CONFIRMED) {
             try {
                 \Illuminate\Support\Facades\Mail::to($booking->email)->send(new \App\Mail\BookingProcessedMail($booking));
             } catch (\Exception $e) {
-                \Log::error('Error enviando correo de confirmación de reserva (ID: ' . $booking->id . '): ' . $e->getMessage());
+                \Log::error('Error enviando correo de confirmación estándar (ID: ' . $booking->id . '): ' . $e->getMessage());
             }
         }
 
