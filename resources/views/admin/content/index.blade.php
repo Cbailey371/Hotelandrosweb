@@ -782,18 +782,26 @@
                                         <img src="{{ $item->image_path }}" class="w-full h-full object-cover">
                                         <div
                                             class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-2">
-                                            <button type="button"
-                                                onclick="if(confirm('¿Remover del carrusel?')) { window.location.href='{{ route('admin.gallery.toggleCarousel', $item->id) }}'; }"
-                                                class="bg-white/90 text-amber-600 p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
-                                                title="Quitar del carrusel">
-                                                <span class="material-symbols-outlined text-sm font-bold">visibility_off</span>
-                                            </button>
-                                            <button type="button"
-                                                onclick="if(confirm('¿Eliminar esta imagen por completo?')) { document.getElementById('delete-gallery-{{ $item->id }}').submit(); }"
-                                                class="bg-white/90 text-red-600 p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
-                                                title="Eliminar permanentemente">
-                                                <span class="material-symbols-outlined text-sm font-bold">delete</span>
-                                            </button>
+                                            <form action="{{ route('admin.gallery.toggle-carousel', $item->id) }}"
+                                                method="POST">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="bg-white/90 text-amber-600 p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
+                                                    title="Quitar del carrusel">
+                                                    <span
+                                                        class="material-symbols-outlined text-sm font-bold">visibility_off</span>
+                                                </button>
+                                            </form>
+                                            <form action="{{ route('admin.gallery.destroy', $item->id) }}" method="POST"
+                                                onsubmit="return confirm('¿Eliminar esta imagen por completo?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="bg-white/90 text-red-600 p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
+                                                    title="Eliminar permanentemente">
+                                                    <span class="material-symbols-outlined text-sm font-bold">delete</span>
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 @empty
@@ -849,18 +857,25 @@
                                     <img src="{{ $item->image_path }}" class="w-full h-full object-cover">
                                     <div
                                         class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-2">
-                                        <a href="{{ route('admin.gallery.toggleCarousel', $item->id) }}"
-                                            class="bg-white/90 {{ $item->show_in_carousel ? 'text-amber-600' : 'text-slate-600' }} p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
-                                            title="{{ $item->show_in_carousel ? 'Quitar del carrusel' : 'Añadir al carrusel' }}">
-                                            <span
-                                                class="material-symbols-outlined text-sm font-bold">{{ $item->show_in_carousel ? 'visibility_off' : 'view_carousel' }}</span>
-                                        </a>
-                                        <button type="button"
-                                            onclick="if(confirm('¿Eliminar esta imagen por completo?')) { document.getElementById('delete-gallery-{{ $item->id }}').submit(); }"
-                                            class="bg-white/90 text-red-600 p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
-                                            title="Eliminar permanentemente">
-                                            <span class="material-symbols-outlined text-sm font-bold">delete</span>
-                                        </button>
+                                        <form action="{{ route('admin.gallery.toggle-carousel', $item->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit"
+                                                class="bg-white/90 {{ $item->show_in_carousel ? 'text-amber-600' : 'text-slate-600' }} p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
+                                                title="{{ $item->show_in_carousel ? 'Quitar del carrusel' : 'Añadir al carrusel' }}">
+                                                <span
+                                                    class="material-symbols-outlined text-sm font-bold">{{ $item->show_in_carousel ? 'visibility_off' : 'view_carousel' }}</span>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('admin.gallery.destroy', $item->id) }}" method="POST"
+                                            onsubmit="return confirm('¿Eliminar esta imagen por completo?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="bg-white/90 text-red-600 p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
+                                                title="Eliminar permanentemente">
+                                                <span class="material-symbols-outlined text-sm font-bold">delete</span>
+                                            </button>
+                                        </form>
                                     </div>
                                     @if($item->show_in_carousel)
                                         <div class="absolute top-2 left-2">
@@ -1073,13 +1088,13 @@
                                         class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all z-20">
                                         <button type="button"
                                             onclick='editAttraction({
-                                                                                                                                                                                                                                                            id: "{{ $attraction->id }}",
-                                                                                                                                                                                                                                                            title_es: "{{ addslashes($attraction->title_es) }}",
-                                                                                                                                                                                                                                                            title_en: "{{ addslashes($attraction->title_en) }}",
-                                                                                                                                                                                                                                                            description_es: "{{ addslashes($attraction->description_es) }}",
-                                                                                                                                                                                                                                                            description_en: "{{ addslashes($attraction->description_en) }}",
-                                                                                                                                                                                                                                                            image_path: "{{ $attraction->image_path }}"
-                                                                                                                                                                                                                                                        })'
+                                                                                                                                                                                                                                                                    id: "{{ $attraction->id }}",
+                                                                                                                                                                                                                                                                    title_es: "{{ addslashes($attraction->title_es) }}",
+                                                                                                                                                                                                                                                                    title_en: "{{ addslashes($attraction->title_en) }}",
+                                                                                                                                                                                                                                                                    description_es: "{{ addslashes($attraction->description_es) }}",
+                                                                                                                                                                                                                                                                    description_en: "{{ addslashes($attraction->description_en) }}",
+                                                                                                                                                                                                                                                                    image_path: "{{ $attraction->image_path }}"
+                                                                                                                                                                                                                                                                })'
                                             class="text-blue-500 hover:text-blue-700 p-2 bg-white dark:bg-[#0b0c11] rounded-full shadow-sm">
                                             <span class="material-symbols-outlined text-sm font-bold">edit</span>
                                         </button>
@@ -1695,199 +1710,199 @@
                     const row = document.createElement('div');
                     row.className = 'flex flex-col md:flex-row items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800';
                     row.innerHTML = `
-                                                                                                                                <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                                                                                                    <div>
-                                                                                                                                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Platform</label>
-                                                                                                                                        <select onchange="updateSocialLink(${index}, 'platform', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm">
-                                                                                                                                            <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
-                                                                                                                                            <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
-                                                                                                                                            <option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
-                                                                                                                                            <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option>
-                                                                                                                                            <option value="tiktok" ${link.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
-                                                                                                                                            <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
-                                                                                                                                            <option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
-                                                                                                                                        </select>
-                                                                                                                                    </div>
-                                                                                                                                    <div>
-                                                                                                                                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">URL</label>
-                                                                                                                                        <input type="text" value="${link.url}" placeholder="https://..." onchange="updateSocialLink(${index}, 'url', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20">
-                                                                                                                                    </div>
-                                                                                                                                </div>
-                                                                                                                                <div class="flex items-center gap-4">
-                                                                                                                                    <label class="flex items-center gap-2 cursor-pointer group">
-                                                                                                                                        <div class="relative">
-                                                                                                                                            <input type="checkbox" ${link.active ? 'checked' : ''} onchange="updateSocialLink(${index}, 'active', this.checked)" class="sr-only peer">
-                                                                                                                                            <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                                                                                                                        <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                                                                                            <div>
+                                                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Platform</label>
+                                                                                                                                                <select onchange="updateSocialLink(${index}, 'platform', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm">
+                                                                                                                                                    <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
+                                                                                                                                                    <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
+                                                                                                                                                    <option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+                                                                                                                                                    <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option>
+                                                                                                                                                    <option value="tiktok" ${link.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
+                                                                                                                                                    <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
+                                                                                                                                                    <option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
+                                                                                                                                                </select>
+                                                                                                                                            </div>
+                                                                                                                                            <div>
+                                                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">URL</label>
+                                                                                                                                                <input type="text" value="${link.url}" placeholder="https://..." onchange="updateSocialLink(${index}, 'url', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20">
+                                                                                                                                            </div>
                                                                                                                                         </div>
-                                                                                                                                        <span class="text-[10px] font-black text-slate-400 uppercase group-hover:text-primary transition-colors">Active</span>
-                                                                                                                                    </label>
-                                                                                                                                    <button type="button" onclick="removeSocialLink(${index})" class="text-slate-400 hover:text-red-500 transition-colors">
-                                                                                                                                        <span class="material-symbols-outlined text-sm">delete</span>
-                                                                                                                                    </button                                                                                                                                                                                                             >
-                                                                                                                                </div>
-                                                                                                                            `;
-                            container.appendChild(row);
-                        });
-                        syncSocialsJson();
+                                                                                                                                        <div class="flex items-center gap-4">
+                                                                                                                                            <label class="flex items-center gap-2 cursor-pointer group">
+                                                                                                                                                <div class="relative">
+                                                                                                                                                    <input type="checkbox" ${link.active ? 'checked' : ''} onchange="updateSocialLink(${index}, 'active', this.checked)" class="sr-only peer">
+                                                                                                                                                    <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                                                                                                                                </div>
+                                                                                                                                                <span class="text-[10px] font-black text-slate-400 uppercase group-hover:text-primary transition-colors">Active</span>
+                                                                                                                                            </label>
+                                                                                                                                            <button type="button" onclick="removeSocialLink(${index})" class="text-slate-400 hover:text-red-500 transition-colors">
+                                                                                                                                                <span class="material-symbols-outlined text-sm">delete</span>
+                                                                                                                                            </button                                                                                                                                                                                                             >
+                                                                                                                                        </div>
+                                                                                                                                    `;
+                    container.appendChild(row);
+                });
+                syncSocialsJson();
+            }
+
+            window.addSocialLink = function () { socialLinks.push({ platform: 'facebook', url: '#', active: true }); renderSocialLinks(); };
+            window.removeSocialLink = function (index) { socialLinks.splice(index, 1); renderSocialLinks(); };
+            window.updateSocialLink = function (index, field, value) { socialLinks[index][field] = value; syncSocialsJson(); };
+            window.syncSocialsJson = function () { const hiddenInput = document.getElementById('footer_socials_json'); if (hiddenInput) { hiddenInput.value = JSON.stringify(socialLinks); } };
+
+            window.openCarouselGalleryModal = function () {
+                document.getElementById('carousel-gallery-modal').classList.remove('hidden');
+                document.getElementById('carousel-gallery-modal').classList.add('flex');
+                document.body.style.overflow = 'hidden';
+
+                // Inicializar selección basada en lo que ya está en el carrusel
+                refreshCarouselSelectionUI();
+            };
+
+            function refreshCarouselSelectionUI() {
+                const modal = document.getElementById('carousel-gallery-modal');
+                modal.querySelectorAll('.gallery-item-selectable').forEach(item => {
+                    const isSelected = item.getAttribute('data-active') === '1';
+                    if (isSelected) {
+                        item.classList.add('selected', 'border-primary', 'ring-4', 'ring-primary/20');
+                        item.classList.remove('border-slate-100', 'dark:border-slate-800');
+                    } else {
+                        item.classList.remove('selected', 'border-primary', 'ring-4', 'ring-primary/20');
+                        item.classList.add('border-slate-100', 'dark:border-slate-800');
                     }
+                });
+            }
 
-                    window.addSocialLink = function () { socialLinks.push({ platform: 'facebook', url: '#', active: true }); renderSocialLinks(); };
-                    window.removeSocialLink = function (index) { socialLinks.splice(index, 1); renderSocialLinks(); };
-                    window.updateSocialLink = function (index, field, value) { socialLinks[index][field] = value; syncSocialsJson(); };
-                    window.syncSocialsJson = function () { const hiddenInput = document.getElementById('footer_socials_json'); if (hiddenInput) { hiddenInput.value = JSON.stringify(socialLinks); } };
+            window.toggleGallerySelection = function (element) {
+                const isActive = element.getAttribute('data-active') === '1';
+                if (isActive) {
+                    element.setAttribute('data-active', '0');
+                    element.classList.remove('selected', 'border-primary', 'ring-4', 'ring-primary/20');
+                    element.classList.add('border-slate-100', 'dark:border-slate-800');
+                } else {
+                    element.setAttribute('data-active', '1');
+                    element.classList.add('selected', 'border-primary', 'ring-4', 'ring-primary/20');
+                    element.classList.remove('border-slate-100', 'dark:border-slate-800');
+                }
+            };
 
-                    window.openCarouselGalleryModal = function () {
-                        document.getElementById('carousel-gallery-modal').classList.remove('hidden');
-                        document.getElementById('carousel-gallery-modal').classList.add('flex');
-                        document.body.style.overflow = 'hidden';
+            window.saveCarouselSelection = function () {
+                const selectedIds = [];
+                document.querySelectorAll('.gallery-item-selectable[data-active="1"]').forEach(item => {
+                    selectedIds.push(item.getAttribute('data-id'));
+                });
 
-                        // Inicializar selección basada en lo que ya está en el carrusel
-                        refreshCarouselSelectionUI();
-                    };
+                const btn = document.getElementById('save-carousel-btn');
+                const originalText = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Guardando...';
 
-                    function refreshCarouselSelectionUI() {
-                        const modal = document.getElementById('carousel-gallery-modal');
-                        modal.querySelectorAll('.gallery-item-selectable').forEach(item => {
-                            const isSelected = item.getAttribute('data-active') === '1';
-                            if (isSelected) {
-                                item.classList.add('selected', 'border-primary', 'ring-4', 'ring-primary/20');
-                                item.classList.remove('border-slate-100', 'dark:border-slate-800');
-                            } else {
-                                item.classList.remove('selected', 'border-primary', 'ring-4', 'ring-primary/20');
-                                item.classList.add('border-slate-100', 'dark:border-slate-800');
-                            }
-                        });
-                    }
-
-                    window.toggleGallerySelection = function (element) {
-                        const isActive = element.getAttribute('data-active') === '1';
-                        if (isActive) {
-                            element.setAttribute('data-active', '0');
-                            element.classList.remove('selected', 'border-primary', 'ring-4', 'ring-primary/20');
-                            element.classList.add('border-slate-100', 'dark:border-slate-800');
+                fetch('{{ route("admin.gallery.bulk-carousel") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ image_ids: selectedIds })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload(); // Recargamos para ver los cambios en el carrusel
                         } else {
-                            element.setAttribute('data-active', '1');
-                            element.classList.add('selected', 'border-primary', 'ring-4', 'ring-primary/20');
-                            element.classList.remove('border-slate-100', 'dark:border-slate-800');
+                            alert('Error al guardar: ' + (data.message || 'Error desconocido'));
+                            btn.disabled = false;
+                            btn.innerHTML = originalText;
                         }
-                    };
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error en la conexión con el servidor');
+                        btn.disabled = false;
+                        btn.innerHTML = originalText;
+                    });
+            };
 
-                    window.saveCarouselSelection = function () {
-                        const selectedIds = [];
-                        document.querySelectorAll('.gallery-item-selectable[data-active="1"]').forEach(item => {
-                            selectedIds.push(item.getAttribute('data-id'));
-                        });
-
-                        const btn = document.getElementById('save-carousel-btn');
-                        const originalText = btn.innerHTML;
-                        btn.disabled = true;
-                        btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Guardando...';
-
-                        fetch('{{ route("admin.gallery.bulk-carousel") }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({ image_ids: selectedIds })
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    location.reload(); // Recargamos para ver los cambios en el carrusel
-                                } else {
-                                    alert('Error al guardar: ' + (data.message || 'Error desconocido'));
-                                    btn.disabled = false;
-                                    btn.innerHTML = originalText;
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('Error en la conexión con el servidor');
-                                btn.disabled = false;
-                                btn.innerHTML = originalText;
-                            });
-                    };
-
-                    window.closeCarouselGalleryModal = function () {
-                        document.getElementById('carousel-gallery-modal').classList.add('hidden');
-                        document.getElementById('carousel-gallery-modal').classList.remove('flex');
-                        document.body.style.overflow = 'auto';
-                    };
-                </script>
+            window.closeCarouselGalleryModal = function () {
+                document.getElementById('carousel-gallery-modal').classList.add('hidden');
+                document.getElementById('carousel-gallery-modal').classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            };
+        </script>
     @endpush
 
-        <!-- Modal: Carousel Gallery Picker -->
-        <div id="carousel-gallery-modal"
-            class="fixed inset-0 z-[120] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <!-- Modal: Carousel Gallery Picker -->
+    <div id="carousel-gallery-modal"
+        class="fixed inset-0 z-[120] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div
+            class="bg-white dark:bg-[#0b0c11] w-full max-w-4xl rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
             <div
-                class="bg-white dark:bg-[#0b0c11] w-full max-w-4xl rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                <div
-                    class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-black">
-                    <div>
-                        <h3 class="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight">Galería Global
-                        </h3>
-                        <p class="text-slate-500 text-xs font-bold mt-1 uppercase tracking-widest">Selecciona las fotos que
-                            quieres mostrar en el carrusel</p>
-                    </div>
-                    <button onclick="closeCarouselGalleryModal()"
-                        class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 transition-all">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
+                class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-black">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight">Galería Global
+                    </h3>
+                    <p class="text-slate-500 text-xs font-bold mt-1 uppercase tracking-widest">Selecciona las fotos que
+                        quieres mostrar en el carrusel</p>
                 </div>
+                <button onclick="closeCarouselGalleryModal()"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 transition-all">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
 
-                <div class="flex-1 overflow-y-auto p-10 custom-scrollbar">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-                        @foreach($gallery as $item)
-                            <div class="gallery-item-selectable relative aspect-square rounded-2xl overflow-hidden border-4 group transition-all cursor-pointer"
-                                data-id="{{ $item->id }}" data-active="{{ $item->show_in_carousel ? '1' : '0' }}"
-                                onclick="toggleGallerySelection(this)">
+            <div class="flex-1 overflow-y-auto p-10 custom-scrollbar">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                    @foreach($gallery as $item)
+                        <div class="gallery-item-selectable relative aspect-square rounded-2xl overflow-hidden border-4 group transition-all cursor-pointer"
+                            data-id="{{ $item->id }}" data-active="{{ $item->show_in_carousel ? '1' : '0' }}"
+                            onclick="toggleGallerySelection(this)">
 
-                                <img src="{{ $item->image_path }}" class="w-full h-full object-cover">
+                            <img src="{{ $item->image_path }}" class="w-full h-full object-cover">
 
-                                <div
-                                    class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-white text-4xl">check_circle</span>
-                                </div>
-
-                                <!-- Checkbox visual indicator -->
-                                <div
-                                    class="absolute top-3 right-3 w-6 h-6 rounded-full border-2 border-white/50 bg-black/20 flex items-center justify-center transition-all check-indicator">
-                                    <span class="material-symbols-outlined text-white text-xs font-black hidden">check</span>
-                                </div>
+                            <div
+                                class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-4xl">check_circle</span>
                             </div>
-                        @endforeach
-                    </div>
+
+                            <!-- Checkbox visual indicator -->
+                            <div
+                                class="absolute top-3 right-3 w-6 h-6 rounded-full border-2 border-white/50 bg-black/20 flex items-center justify-center transition-all check-indicator">
+                                <span class="material-symbols-outlined text-white text-xs font-black hidden">check</span>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
+            </div>
 
-                <style>
-                    .gallery-item-selectable.selected .check-indicator {
-                        background-color: var(--primary-color);
-                        border-color: var(--primary-color);
-                    }
+            <style>
+                .gallery-item-selectable.selected .check-indicator {
+                    background-color: var(--primary-color);
+                    border-color: var(--primary-color);
+                }
 
-                    .gallery-item-selectable.selected .check-indicator span {
-                        display: block;
-                    }
-                </style>
+                .gallery-item-selectable.selected .check-indicator span {
+                    display: block;
+                }
+            </style>
 
-                <div
-                    class="p-8 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-black flex justify-between items-center">
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest italic">
-                        Selecciona todas las que desees y presiona "Guardar"
-                    </p>
-                    <div class="flex gap-4">
-                        <button onclick="closeCarouselGalleryModal()"
-                            class="px-8 py-3 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-slate-300 transition-all">
-                            Cancelar
-                        </button>
-                        <button id="save-carousel-btn" onclick="saveCarouselSelection()"
-                            class="bg-primary text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-sm">save</span>
-                            Guardar Selección
-                        </button>
-                    </div>
+            <div
+                class="p-8 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-black flex justify-between items-center">
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest italic">
+                    Selecciona todas las que desees y presiona "Guardar"
+                </p>
+                <div class="flex gap-4">
+                    <button onclick="closeCarouselGalleryModal()"
+                        class="px-8 py-3 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-slate-300 transition-all">
+                        Cancelar
+                    </button>
+                    <button id="save-carousel-btn" onclick="saveCarouselSelection()"
+                        class="bg-primary text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">save</span>
+                        Guardar Selección
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
 @endsection

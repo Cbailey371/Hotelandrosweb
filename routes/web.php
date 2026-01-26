@@ -51,7 +51,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::middleware('role:super_admin')->group(function () {
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
         Route::resource('gallery', \App\Http\Controllers\Admin\GalleryController::class);
-        Route::get('gallery/{gallery}/toggle-carousel', [\App\Http\Controllers\Admin\GalleryController::class, 'toggleCarousel'])->name('gallery.toggleCarousel');
+        Route::post('gallery/{gallery}/toggle-carousel', [\App\Http\Controllers\Admin\GalleryController::class, 'toggleCarousel'])->name('gallery.toggle-carousel');
         Route::resource('attractions', \App\Http\Controllers\Admin\AttractionController::class);
 
         Route::get('content', [\App\Http\Controllers\Admin\ContentController::class, 'index'])->name('content.index');
