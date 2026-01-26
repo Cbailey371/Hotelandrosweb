@@ -495,20 +495,20 @@
             </div>
 
             <!-- Main Image -->
-            <div class="flex-1 flex items-center justify-center p-4 md:p-10 relative">
+            <div class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-8 relative">
                 <button onclick="prevImage()"
-                    class="absolute left-4 md:left-8 p-4 rounded-full bg-black/50 hover:bg-white/20 text-white transition-all z-30 shadow-xl backdrop-blur-sm">
-                    <span class="material-symbols-outlined text-3xl font-bold">chevron_left</span>
+                    class="absolute left-4 md:left-8 p-4 rounded-full bg-black/60 hover:bg-white/20 text-white transition-all z-30 shadow-2xl backdrop-blur-md">
+                    <span class="material-symbols-outlined text-3xl font-black">chevron_left</span>
                 </button>
 
-                <div class="relative w-full h-full flex items-center justify-center overflow-hidden p-2">
+                <div class="w-full h-full flex items-center justify-center overflow-hidden">
                     <img id="gallery-main-image" src=""
-                        class="max-h-[85vh] md:max-h-[75vh] w-auto max-w-full object-contain rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-500 border-4 border-white/10">
+                        class="max-h-full max-w-full w-auto h-auto object-contain rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-500 border-2 border-white/20">
                 </div>
 
                 <button onclick="nextImage()"
-                    class="absolute right-4 md:right-8 p-4 rounded-full bg-black/50 hover:bg-white/20 text-white transition-all z-30 shadow-xl backdrop-blur-sm">
-                    <span class="material-symbols-outlined text-3xl font-bold">chevron_right</span>
+                    class="absolute right-4 md:right-8 p-4 rounded-full bg-black/60 hover:bg-white/20 text-white transition-all z-30 shadow-2xl backdrop-blur-md">
+                    <span class="material-symbols-outlined text-3xl font-black">chevron_right</span>
                 </button>
             </div>
 
