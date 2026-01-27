@@ -29,21 +29,39 @@
 
         <!-- Hero Section -->
         <div class="relative pt-8 mb-32" id="inicio">
-            <!-- Container with overflow-hidden for the background image -->
-            <div class="relative w-full rounded-3xl overflow-hidden bg-cover bg-center flex flex-col justify-center"
-                style='min-height: 90vh !important; background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 60%), url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}");'>
-                <div class="p-10 md:p-20 text-center">
+            <!-- Container with multi-layer background for portrait/landscape support -->
+            <div class="relative w-full rounded-[2.5rem] overflow-hidden bg-slate-900 shadow-2xl group"
+                style='min-height: 90vh !important;'>
+
+                <!-- 1. Background Layer (Blurred version to fill edges on desktop) -->
+                <div class="absolute inset-0 bg-cover bg-center blur-3xl opacity-50 scale-110 transition-transform duration-[5s] group-hover:scale-125"
+                    style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}");'>
+                </div>
+
+                <!-- 2. Main Picture Layer (Contain on desktop to see the whole building) -->
+                <div class="absolute inset-0 bg-cover md:bg-contain bg-center bg-no-repeat transition-all duration-1000"
+                    style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}");'>
+                </div>
+
+                <!-- 3. Dark Aesthetic Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
+
+                <!-- 4. Content Layer -->
+                <div class="relative h-full flex flex-col justify-center p-10 md:p-20 text-center z-10"
+                    style="min-height: 90vh;">
                     <div
-                        class="text-white text-5xl md:text-7xl font-black mb-6 tracking-tight drop-shadow-lg leading-tight hero-no-filter">
+                        class="text-white text-5xl md:text-8xl font-black mb-8 tracking-tighter drop-shadow-[0_10px_10px_rgba(0,0,0,0.5)] leading-[1.1] hero-no-filter">
                         {!! app()->getLocale() == 'es' ? ($settings['hero_title_es'] ?? '') : ($settings['hero_title_en'] ?? '') !!}
                     </div>
                     <div
-                        class="text-white text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed drop-shadow-md hero-no-filter">
+                        class="text-white text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed drop-shadow-lg hero-no-filter font-medium opacity-90">
                         {!! app()->getLocale() == 'es' ? ($settings['hero_subtitle_es'] ?? '') : ($settings['hero_subtitle_en'] ?? '') !!}
                     </div>
                     <div class="mt-12 flex justify-center gap-4">
                         <a href="#habitaciones"
-                            class="px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-xl shadow-primary/30 hover:bg-primary/90 transition-all scale-110 hover:scale-105">{{ __('Descubrir Habitaciones') }}</a>
+                            class="px-10 py-5 bg-primary text-white font-black rounded-2xl shadow-2xl shadow-primary/40 hover:bg-primary/90 transition-all scale-100 hover:scale-105 active:scale-95 uppercase tracking-widest text-sm">
+                            {{ __('Descubrir Habitaciones') }}
+                        </a>
                     </div>
                 </div>
             </div>
