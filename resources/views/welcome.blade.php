@@ -34,21 +34,27 @@
                 style='min-height: 90vh !important;'>
 
                 <!-- Layer 1: Background (Show as is - Cover) -->
-                <div class="absolute inset-0 opacity-80" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                   background-size: cover; 
-                                   background-position: center; 
-                                   background-repeat: no-repeat;'>
+                <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
+                                               background-size: cover; 
+                                               background-position: center; 
+                                               background-repeat: no-repeat;
+                                               opacity: {{ ($settings['hero_bg_opacity'] ?? 40) / 100 }};'>
                 </div>
 
                 <!-- Layer 2: Main Image (Centered and contained) -->
                 <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                   background-size: contain; 
-                                   background-position: center; 
-                                   background-repeat: no-repeat;'>
+                                               background-size: contain; 
+                                               background-position: center; 
+                                               background-repeat: no-repeat;'>
                 </div>
 
-                <!-- Layer 3: Contrast Overlay -->
-                <div class="absolute inset-0 bg-black/30 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <!-- Layer 3: Contrast Overlay (Dynamic) -->
+                <div class="absolute inset-0" style="background-color: {{ $settings['hero_overlay_color'] ?? '#000000' }}; 
+                                           opacity: {{ ($settings['hero_overlay_opacity'] ?? 50) / 100 }};">
+                </div>
+
+                <!-- Layer 4: Additional Bottom Gradient for readability -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 
                 <!-- Content -->
                 <div class="relative z-10 p-10 md:p-20 text-center">

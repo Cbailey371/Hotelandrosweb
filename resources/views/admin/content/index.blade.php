@@ -226,6 +226,58 @@
                             </div>
                         </div>
 
+                        <!-- Hero Design Settings Card -->
+                        <div
+                            class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
+                            <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">palette</span>
+                                Hero Design Settings
+                            </h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label
+                                        class="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-2">Overlay
+                                        Color (Shadow)</label>
+                                    <div class="flex items-center gap-3">
+                                        <input type="color" name="hero_overlay_color"
+                                            value="{{ $settings['hero_overlay_color'] ?? '#000000' }}"
+                                            class="w-12 h-12 bg-transparent border-none cursor-pointer p-0">
+                                        <input type="text" value="{{ $settings['hero_overlay_color'] ?? '#000000' }}"
+                                            class="flex-1 bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm font-mono focus:ring-2 focus:ring-primary/50"
+                                            readonly>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label
+                                        class="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-2">Overlay
+                                        Opacity ({{ $settings['hero_overlay_opacity'] ?? 50 }}%)</label>
+                                    <div class="flex items-center gap-4 py-3">
+                                        <input type="range" name="hero_overlay_opacity" min="0" max="100" step="5"
+                                            value="{{ $settings['hero_overlay_opacity'] ?? 50 }}"
+                                            class="w-full accent-primary h-2 bg-slate-100 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer"
+                                            oninput="this.closest('div').previousElementSibling.innerText = 'Overlay Opacity (' + this.value + '%)'">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label
+                                        class="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-2">Background
+                                        Layer Opacity ({{ $settings['hero_bg_opacity'] ?? 80 }}%)</label>
+                                    <div class="flex items-center gap-4 py-3">
+                                        <input type="range" name="hero_bg_opacity" min="0" max="100" step="5"
+                                            value="{{ $settings['hero_bg_opacity'] ?? 80 }}"
+                                            class="w-full accent-primary h-2 bg-slate-100 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer"
+                                            oninput="this.closest('div').previousElementSibling.innerText = 'Background Layer Opacity (' + this.value + '%)'">
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 mt-2">Controls the visibility of the "Side" images.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Content Card -->
                         <div
                             class="bg-white dark:bg-[#0b0c11] rounded-3xl p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-8">
@@ -994,13 +1046,13 @@
                                         class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all z-20">
                                         <button type="button"
                                             onclick='editAttraction({
-                                                                                                                                                                                                                                                                                            id: "{{ $attraction->id }}",
-                                                                                                                                                                                                                                                                                            title_es: "{{ addslashes($attraction->title_es) }}",
-                                                                                                                                                                                                                                                                                            title_en: "{{ addslashes($attraction->title_en) }}",
-                                                                                                                                                                                                                                                                                            description_es: "{{ addslashes($attraction->description_es) }}",
-                                                                                                                                                                                                                                                                                            description_en: "{{ addslashes($attraction->description_en) }}",
-                                                                                                                                                                                                                                                                                            image_path: "{{ $attraction->image_path }}"
-                                                                                                                                                                                                                                                                                        })'
+                                                                                                                                                                                                                                                                                                    id: "{{ $attraction->id }}",
+                                                                                                                                                                                                                                                                                                    title_es: "{{ addslashes($attraction->title_es) }}",
+                                                                                                                                                                                                                                                                                                    title_en: "{{ addslashes($attraction->title_en) }}",
+                                                                                                                                                                                                                                                                                                    description_es: "{{ addslashes($attraction->description_es) }}",
+                                                                                                                                                                                                                                                                                                    description_en: "{{ addslashes($attraction->description_en) }}",
+                                                                                                                                                                                                                                                                                                    image_path: "{{ $attraction->image_path }}"
+                                                                                                                                                                                                                                                                                                })'
                                             class="text-blue-500 hover:text-blue-700 p-2 bg-white dark:bg-[#0b0c11] rounded-full shadow-sm">
                                             <span class="material-symbols-outlined text-sm font-bold">edit</span>
                                         </button>
@@ -1641,37 +1693,37 @@
                     const row = document.createElement('div');
                     row.className = 'flex flex-col md:flex-row items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800';
                     row.innerHTML = `
-                                                                                                                                                                <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                                                                                                                                    <div>
-                                                                                                                                                                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Platform</label>
-                                                                                                                                                                        <select onchange="updateSocialLink(${index}, 'platform', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm">
-                                                                                                                                                                            <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
-                                                                                                                                                                            <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
-                                                                                                                                                                            <option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
-                                                                                                                                                                            <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option>
-                                                                                                                                                                            <option value="tiktok" ${link.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
-                                                                                                                                                                            <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
-                                                                                                                                                                            <option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
-                                                                                                                                                                        </select>
-                                                                                                                                                                    </div>
-                                                                                                                                                                    <div>
-                                                                                                                                                                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">URL</label>
-                                                                                                                                                                        <input type="text" value="${link.url}" placeholder="https://..." onchange="updateSocialLink(${index}, 'url', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20">
-                                                                                                                                                                    </div>
-                                                                                                                                                                </div>
-                                                                                                                                                                <div class="flex items-center gap-4">
-                                                                                                                                                                    <label class="flex items-center gap-2 cursor-pointer group">
-                                                                                                                                                                        <div class="relative">
-                                                                                                                                                                            <input type="checkbox" ${link.active ? 'checked' : ''} onchange="updateSocialLink(${index}, 'active', this.checked)" class="sr-only peer">
-                                                                                                                                                                            <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                                                                                                                                                        <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                                                                                                                            <div>
+                                                                                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Platform</label>
+                                                                                                                                                                                <select onchange="updateSocialLink(${index}, 'platform', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm">
+                                                                                                                                                                                    <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
+                                                                                                                                                                                    <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
+                                                                                                                                                                                    <option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+                                                                                                                                                                                    <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option>
+                                                                                                                                                                                    <option value="tiktok" ${link.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
+                                                                                                                                                                                    <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
+                                                                                                                                                                                    <option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
+                                                                                                                                                                                </select>
+                                                                                                                                                                            </div>
+                                                                                                                                                                            <div>
+                                                                                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">URL</label>
+                                                                                                                                                                                <input type="text" value="${link.url}" placeholder="https://..." onchange="updateSocialLink(${index}, 'url', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20">
+                                                                                                                                                                            </div>
                                                                                                                                                                         </div>
-                                                                                                                                                                        <span class="text-[10px] font-black text-slate-400 uppercase group-hover:text-primary transition-colors">Active</span>
-                                                                                                                                                                    </label>
-                                                                                                                                                                    <button type="button" onclick="removeSocialLink(${index})" class="text-slate-400 hover:text-red-500 transition-colors">
-                                                                                                                                                                        <span class="material-symbols-outlined text-sm">delete</span>
-                                                                                                                                                                    </button                                                                                                                                                                                                             >
-                                                                                                                                                                </div>
-                                                                                                                                                            `;
+                                                                                                                                                                        <div class="flex items-center gap-4">
+                                                                                                                                                                            <label class="flex items-center gap-2 cursor-pointer group">
+                                                                                                                                                                                <div class="relative">
+                                                                                                                                                                                    <input type="checkbox" ${link.active ? 'checked' : ''} onchange="updateSocialLink(${index}, 'active', this.checked)" class="sr-only peer">
+                                                                                                                                                                                    <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                                                                                                                                                                </div>
+                                                                                                                                                                                <span class="text-[10px] font-black text-slate-400 uppercase group-hover:text-primary transition-colors">Active</span>
+                                                                                                                                                                            </label>
+                                                                                                                                                                            <button type="button" onclick="removeSocialLink(${index})" class="text-slate-400 hover:text-red-500 transition-colors">
+                                                                                                                                                                                <span class="material-symbols-outlined text-sm">delete</span>
+                                                                                                                                                                            </button                                                                                                                                                                                                             >
+                                                                                                                                                                        </div>
+                                                                                                                                                                    `;
                     container.appendChild(row);
                 });
                 syncSocialsJson();
