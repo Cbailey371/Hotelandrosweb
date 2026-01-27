@@ -2,6 +2,35 @@
 
 @section('title', $settings['hotel_name'] ?? 'LuxeStay Hotel')
 
+@push('styles')
+    <style>
+        .gallery-main-container {
+            transition: all 0.5s ease-in-out;
+        }
+
+        .gallery-zoom-active {
+            cursor: zoom-out !important;
+            transform: scale(1.5);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .gallery-zoom-normal {
+            cursor: zoom-in;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .fade-out {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .fade-in {
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+@endpush
+
 @section('content')
     <div class="max-w-[1440px] mx-auto px-4 md:px-8">
         <!-- Alertas -->
@@ -35,22 +64,22 @@
 
                 <!-- Layer 1: Background (Show as is - Cover) -->
                 <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                               background-size: cover; 
-                                               background-position: center; 
-                                               background-repeat: no-repeat;
-                                               opacity: {{ ($settings['hero_bg_opacity'] ?? 40) / 100 }};'>
+                                                       background-size: cover; 
+                                                       background-position: center; 
+                                                       background-repeat: no-repeat;
+                                                       opacity: {{ ($settings['hero_bg_opacity'] ?? 40) / 100 }};'>
                 </div>
 
                 <!-- Layer 2: Main Image (Centered and contained) -->
                 <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                               background-size: contain; 
-                                               background-position: center; 
-                                               background-repeat: no-repeat;'>
+                                                       background-size: contain; 
+                                                       background-position: center; 
+                                                       background-repeat: no-repeat;'>
                 </div>
 
                 <!-- Layer 3: Contrast Overlay (Dynamic) -->
                 <div class="absolute inset-0" style="background-color: {{ $settings['hero_overlay_color'] ?? '#000000' }}; 
-                                           opacity: {{ ($settings['hero_overlay_opacity'] ?? 50) / 100 }};">
+                                                   opacity: {{ ($settings['hero_overlay_opacity'] ?? 50) / 100 }};">
                 </div>
 
                 <!-- Layer 4: Additional Bottom Gradient for readability -->
@@ -512,166 +541,252 @@
         <div id="gallery-modal" class="fixed inset-0 z-[110] hidden bg-black/95 backdrop-blur-xl flex flex-col">
             <!-- Toolbar -->
             <div class="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-20 text-white">
-                <span class="text-xs font-bold tracking-widest uppercase opacity-70" id="gallery-counter">1 / 1</span>
-                <button onclick="closeGalleryModal()"
-                    class="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-
-            <!-- Main Image -->
-            <div class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-8 relative">
-                <button onclick="prevImage()"
-                    class="absolute left-4 md:left-8 p-4 rounded-full bg-black/60 hover:bg-white/20 text-white transition-all z-30 shadow-2xl backdrop-blur-md">
-                    <span class="material-symbols-outlined text-3xl font-black">chevron_left</span>
-                </button>
-
-                <div class="w-full h-full flex items-center justify-center overflow-hidden">
-                    <img id="gallery-main-image" src=""
-                        class="max-h-full max-w-full w-auto h-auto object-contain rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-500 border-2 border-white/20">
+                <div class="flex items-center gap-6">
+                        <span class="text-xs font-bold tracking-widest uppercase opacity-70" id="gallery-counter">1 / 1</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="toggleZoom()" id="zoom-btn"
+                                class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 transition-all"
+                                title="Zoom In/Out">
+                                <span class="material-symbols-outlined">zoom_in</span>
+                            </button>
+                            <button onclick="toggleAutoplay()" id="autoplay-btn"
+                                class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 transition-all text-white"
+                                title="Auto Play">
+                                <span class="material-symbols-outlined">play_arrow</span>
+                            </button>
+                        </div>
+                    </div>
+                    <button onclick="closeGalleryModal()"
+                        class="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
                 </div>
 
-                <button onclick="nextImage()"
-                    class="absolute right-4 md:right-8 p-4 rounded-full bg-black/60 hover:bg-white/20 text-white transition-all z-30 shadow-2xl backdrop-blur-md">
-                    <span class="material-symbols-outlined text-3xl font-black">chevron_right</span>
-                </button>
+                <!-- Main Image -->
+                <div class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
+                    <button onclick="manualPrev()"
+                        class="absolute left-4 md:left-8 p-4 rounded-full bg-black/60 hover:bg-white/20 text-white transition-all z-30 shadow-2xl backdrop-blur-md">
+                        <span class="material-symbols-outlined text-3xl font-black">chevron_left</span>
+                    </button>
+
+                    <div class="w-full h-full flex items-center justify-center overflow-hidden" id="img-container">
+                        <img id="gallery-main-image" src=""
+                            class="max-h-[75vh] max-w-[90vw] w-auto h-auto object-contain rounded-2xl shadow-2xl fade-in gallery-zoom-normal border-2 border-white/10">
+                    </div>
+
+                    <button onclick="manualNext()"
+                        class="absolute right-4 md:right-8 p-4 rounded-full bg-black/60 hover:bg-white/20 text-white transition-all z-30 shadow-2xl backdrop-blur-md">
+                        <span class="material-symbols-outlined text-3xl font-black">chevron_right</span>
+                    </button>
+                </div>
+
+                <!-- Thumbnails -->
+                <div class="h-24 md:h-32 bg-black/40 p-4 shrink-0 flex justify-center gap-2 overflow-x-auto border-t border-white/5" id="gallery-thumbnails">
+                    <!-- Thumbnails inserted via JS -->
+                </div>
             </div>
 
-            <!-- Thumbnails -->
-            <div class="h-24 md:h-32 bg-black/40 p-4 flex justify-center gap-2 overflow-x-auto" id="gallery-thumbnails">
-                <!-- Thumbnails inserted via JS -->
-            </div>
-        </div>
+            <script>
+                function processFastBooking() {
+                    const guestCount = parseInt(document.getElementById('search-guests').value);
+                    let roomId, roomName;
 
-        <script>
-            function processFastBooking() {
-                const guestCount = parseInt(document.getElementById('search-guests').value);
-                let roomId, roomName;
+                    if (guestCount <= 2) {
+                        roomId = '2'; // Deluxe con cama extragrande
+                        roomName = '{{ app()->getLocale() == "es" ? "Habitación Deluxe con cama extragrande" : "Deluxe Room with Extra Large Bed" }}';
+                    } else {
+                        roomId = '1'; // Doble Deluxe
+                        roomName = '{{ app()->getLocale() == "es" ? "Habitación Doble Deluxe" : "Double Deluxe Room" }}';
+                    }
 
-                if (guestCount <= 2) {
-                    roomId = '2'; // Deluxe con cama extragrande
-                    roomName = '{{ app()->getLocale() == "es" ? "Habitación Deluxe con cama extragrande" : "Deluxe Room with Extra Large Bed" }}';
-                } else {
-                    roomId = '1'; // Doble Deluxe
-                    roomName = '{{ app()->getLocale() == "es" ? "Habitación Doble Deluxe" : "Double Deluxe Room" }}';
+                    openBookingModal(roomId, roomName);
                 }
 
-                openBookingModal(roomId, roomName);
-            }
+                function scrollToRooms() {
+                    document.getElementById('habitaciones').scrollIntoView({ behavior: 'smooth' });
+                }
 
-            function scrollToRooms() {
-                document.getElementById('habitaciones').scrollIntoView({ behavior: 'smooth' });
-            }
+                function openBookingModal(roomId, roomName) {
+                    // Sincronizar con la barra de búsqueda
+                    const checkIn = document.getElementById('search-check-in').value;
+                    const checkOut = document.getElementById('search-check-out').value;
+                    const guests = document.getElementById('search-guests').value;
 
-            function openBookingModal(roomId, roomName) {
-                // Sincronizar con la barra de búsqueda
-                const checkIn = document.getElementById('search-check-in').value;
-                const checkOut = document.getElementById('search-check-out').value;
-                const guests = document.getElementById('search-guests').value;
+                    document.getElementById('modal-room-id').value = roomId;
+                    document.getElementById('modal-title').innerText = roomName;
+                    document.getElementById('modal-check-in').value = checkIn;
+                    document.getElementById('modal-check-out').value = checkOut;
+                    document.getElementById('modal-guests').value = guests;
 
-                document.getElementById('modal-room-id').value = roomId;
-                document.getElementById('modal-title').innerText = roomName;
-                document.getElementById('modal-check-in').value = checkIn;
-                document.getElementById('modal-check-out').value = checkOut;
-                document.getElementById('modal-guests').value = guests;
+                    document.getElementById('booking-modal').classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                }
 
-                document.getElementById('booking-modal').classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            }
+                function closeBookingModal() {
+                    document.getElementById('booking-modal').classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
 
-            function closeBookingModal() {
-                document.getElementById('booking-modal').classList.add('hidden');
-                document.body.style.overflow = 'auto';
-            }
+                // Gallery Logic
+                let currentGalleryImages = [];
+                let currentImageIndex = 0;
+                let galleryAutoplayInterval = null;
+                let galleryIsZoomed = false;
 
-            // Gallery Logic
-            let currentGalleryImages = [];
-            let currentImageIndex = 0;
+                function openGalleryModal(images) {
+                    currentGalleryImages = images;
+                    currentImageIndex = 0;
+                    galleryIsZoomed = false;
 
-            function openGalleryModal(images) {
-                currentGalleryImages = images;
-                currentImageIndex = 0;
+                    document.getElementById('gallery-modal').classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
 
-                document.getElementById('gallery-modal').classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
+                    updateGalleryUI();
+                    startAutoplay();
+                }
 
-                updateGalleryUI();
-            }
+                function closeGalleryModal() {
+                    stopAutoplay();
+                    document.getElementById('gallery-modal').classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                    resetZoom();
+                }
 
-            function closeGalleryModal() {
-                document.getElementById('gallery-modal').classList.add('hidden');
-                document.body.style.overflow = 'auto';
-            }
+                function toggleZoom() {
+                    const img = document.getElementById('gallery-main-image');
+                    galleryIsZoomed = !galleryIsZoomed;
 
-            function updateGalleryUI() {
-                // Update Main Image
-                const mainImage = document.getElementById('gallery-main-image');
-                mainImage.src = currentGalleryImages[currentImageIndex];
+                    if (galleryIsZoomed) {
+                        img.classList.remove('gallery-zoom-normal');
+                        img.classList.add('gallery-zoom-active');
+                        document.getElementById('zoom-btn').classList.add('bg-primary/40');
+                        document.getElementById('zoom-btn').innerHTML = '<span class="material-symbols-outlined">zoom_out</span>';
+                        stopAutoplay();
+                    } else {
+                        resetZoom();
+                    }
+                }
 
-                // Update Counter
-                document.getElementById('gallery-counter').innerText = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
+                function resetZoom() {
+                    const img = document.getElementById('gallery-main-image');
+                    galleryIsZoomed = false;
+                    img.classList.remove('gallery-zoom-active');
+                    img.classList.add('gallery-zoom-normal');
+                    document.getElementById('zoom-btn').classList.remove('bg-primary/40');
+                    document.getElementById('zoom-btn').innerHTML = '<span class="material-symbols-outlined">zoom_in</span>';
+                }
 
-                // Update Thumbnails
-                const thumbsContainer = document.getElementById('gallery-thumbnails');
-                thumbsContainer.innerHTML = '';
+                function toggleAutoplay() {
+                    if (galleryAutoplayInterval) {
+                        stopAutoplay();
+                    } else {
+                        startAutoplay();
+                    }
+                }
 
-                currentGalleryImages.forEach((img, index) => {
-                    const thumb = document.createElement('img');
-                    thumb.src = img;
-                    thumb.className = `h-full aspect-square object-cover rounded-md cursor-pointer border-2 transition-all ${index === currentImageIndex ? 'border-primary opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`;
-                    thumb.onclick = () => {
-                        currentImageIndex = index;
-                        updateGalleryUI();
-                    };
-                    thumbsContainer.appendChild(thumb);
+                function startAutoplay() {
+                    stopAutoplay();
+                    galleryAutoplayInterval = setInterval(nextImage, 4000);
+                    document.getElementById('autoplay-btn').classList.add('text-primary');
+                    document.getElementById('autoplay-btn').innerHTML = '<span class="material-symbols-outlined">pause</span>';
+                }
+
+                function stopAutoplay() {
+                    if (galleryAutoplayInterval) {
+                        clearInterval(galleryAutoplayInterval);
+                        galleryAutoplayInterval = null;
+                    }
+                    document.getElementById('autoplay-btn').classList.remove('text-primary');
+                    document.getElementById('autoplay-btn').innerHTML = '<span class="material-symbols-outlined">play_arrow</span>';
+                }
+
+                function updateGalleryUI() {
+                    const mainImage = document.getElementById('gallery-main-image');
+
+                    // Fade effect
+                    mainImage.classList.replace('fade-in', 'fade-out');
+
+                    setTimeout(() => {
+                        mainImage.src = currentGalleryImages[currentImageIndex];
+                        document.getElementById('gallery-counter').innerText = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
+
+                        mainImage.onload = () => {
+                            mainImage.classList.replace('fade-out', 'fade-in');
+                        };
+
+                        // Update Thumbnails
+                        const thumbsContainer = document.getElementById('gallery-thumbnails');
+                        thumbsContainer.innerHTML = '';
+
+                        currentGalleryImages.forEach((img, index) => {
+                            const thumb = document.createElement('img');
+                            thumb.src = img;
+                            thumb.className = `h-full aspect-square object-cover rounded-md cursor-pointer border-2 transition-all ${index === currentImageIndex ? 'border-primary opacity-100 scale-105' : 'border-transparent opacity-50 hover:opacity-100'}`;
+                            thumb.onclick = () => {
+                                stopAutoplay();
+                                currentImageIndex = index;
+                                updateGalleryUI();
+                            };
+                            thumbsContainer.appendChild(thumb);
+                        });
+                    }, 250);
+                }
+
+                function manualNext() {
+                    stopAutoplay();
+                    nextImage();
+                }
+
+                function manualPrev() {
+                    stopAutoplay();
+                    prevImage();
+                }
+
+                function nextImage() {
+                    currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length;
+                    updateGalleryUI();
+                }
+
+                function prevImage() {
+                    currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
+                    updateGalleryUI();
+                }
+
+                // Keyboard Support
+                document.addEventListener('keydown', function (event) {
+                    if (document.getElementById('gallery-modal').classList.contains('hidden')) return;
+
+                    if (event.key === 'Escape') closeGalleryModal();
+                    if (event.key === 'ArrowRight') nextImage();
+                    if (event.key === 'ArrowLeft') prevImage();
                 });
-            }
 
-            function nextImage() {
-                currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length;
-                updateGalleryUI();
-            }
-
-            function prevImage() {
-                currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
-                updateGalleryUI();
-            }
-
-            // Keyboard Support
-            document.addEventListener('keydown', function (event) {
-                if (document.getElementById('gallery-modal').classList.contains('hidden')) return;
-
-                if (event.key === 'Escape') closeGalleryModal();
-                if (event.key === 'ArrowRight') nextImage();
-                if (event.key === 'ArrowLeft') prevImage();
-            });
-
-            // Initialize Home Carousel
-            document.addEventListener('DOMContentLoaded', function () {
-                new Swiper('.home-carousel', {
-                    slidesPerView: 'auto',
-                    centeredSlides: true,
-                    spaceBetween: 20,
-                    loop: true,
-                    autoHeight: true,
-                    autoplay: {
-                        delay: 3500,
-                        disableOnInteraction: false,
-                    },
-                    navigation: {
-                        nextEl: '.swiper-next',
-                        prevEl: '.swiper-prev',
-                    },
-                    effect: 'coverflow',
-                    coverflowEffect: {
-                        rotate: 5,
-                        stretch: 0,
-                        depth: 100,
-                        modifier: 1,
-                        slideShadows: false,
-                    },
+                // Initialize Home Carousel
+                document.addEventListener('DOMContentLoaded', function () {
+                    new Swiper('.home-carousel', {
+                        slidesPerView: 'auto',
+                        centeredSlides: true,
+                        spaceBetween: 20,
+                        loop: true,
+                        autoHeight: true,
+                        autoplay: {
+                            delay: 3500,
+                            disableOnInteraction: false,
+                        },
+                        navigation: {
+                            nextEl: '.swiper-next',
+                            prevEl: '.swiper-prev',
+                        },
+                        effect: 'coverflow',
+                        coverflowEffect: {
+                            rotate: 5,
+                            stretch: 0,
+                            depth: 100,
+                            modifier: 1,
+                            slideShadows: false,
+                        },
+                    });
                 });
-            });
-        </script>
-    </div>
+            </script>
+        </div>
 @endsection
