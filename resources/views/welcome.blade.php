@@ -29,16 +29,35 @@
 
         <!-- Hero Section -->
         <div class="relative pt-8 mb-32" id="inicio">
-            <!-- Container with overflow-hidden for the background image -->
-            <div class="relative w-full rounded-3xl overflow-hidden bg-cover bg-center flex flex-col justify-center"
-                style='min-height: 90vh !important; background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 60%), url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}");'>
-                <div class="p-10 md:p-20 text-center">
+            <!-- Container with Layers -->
+            <div class="relative w-full rounded-3xl overflow-hidden flex flex-col justify-center shadow-2xl bg-black"
+                style='min-height: 90vh !important;'>
+
+                <!-- Layer 1: Background (Show as is - Cover) -->
+                <div class="absolute inset-0 opacity-80" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
+                                   background-size: cover; 
+                                   background-position: center; 
+                                   background-repeat: no-repeat;'>
+                </div>
+
+                <!-- Layer 2: Main Image (Centered and contained) -->
+                <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
+                                   background-size: contain; 
+                                   background-position: center; 
+                                   background-repeat: no-repeat;'>
+                </div>
+
+                <!-- Layer 3: Contrast Overlay -->
+                <div class="absolute inset-0 bg-black/30 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+                <!-- Content -->
+                <div class="relative z-10 p-10 md:p-20 text-center">
                     <div
-                        class="text-white text-5xl md:text-7xl font-black mb-6 tracking-tight drop-shadow-lg leading-tight hero-no-filter">
+                        class="text-white text-5xl md:text-7xl font-black mb-6 tracking-tight drop-shadow-2xl leading-tight hero-no-filter">
                         {!! app()->getLocale() == 'es' ? ($settings['hero_title_es'] ?? '') : ($settings['hero_title_en'] ?? '') !!}
                     </div>
                     <div
-                        class="text-white text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed drop-shadow-md hero-no-filter">
+                        class="text-white text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed drop-shadow-xl hero-no-filter">
                         {!! app()->getLocale() == 'es' ? ($settings['hero_subtitle_es'] ?? '') : ($settings['hero_subtitle_en'] ?? '') !!}
                     </div>
                     <div class="mt-12 flex justify-center gap-4">
@@ -519,134 +538,134 @@
         </div>
 
         <script>
-       function processFastBooking() {
-                    const guestCount = parseInt(document.getElementById('search-guests').value);
-                    let roomId, roomName;
+            function processFastBooking() {
+                const guestCount = parseInt(document.getElementById('search-guests').value);
+                let roomId, roomName;
 
-                    if (guestCount <= 2) {
-                        roomId = '2'; // Deluxe con cama extragrande
-                        roomName = '{{ app()->getLocale() == "es" ? "Habitación Deluxe con cama extragrande" : "Deluxe Room with Extra Large Bed" }}';
-                    } else {
-                        roomId = '1'; // Doble Deluxe
-                        roomName = '{{ app()->getLocale() == "es" ? "Habitación Doble Deluxe" : "Double Deluxe Room" }}';
-                    }
-
-                    openBookingModal(roomId, roomName);
+                if (guestCount <= 2) {
+                    roomId = '2'; // Deluxe con cama extragrande
+                    roomName = '{{ app()->getLocale() == "es" ? "Habitación Deluxe con cama extragrande" : "Deluxe Room with Extra Large Bed" }}';
+                } else {
+                    roomId = '1'; // Doble Deluxe
+                    roomName = '{{ app()->getLocale() == "es" ? "Habitación Doble Deluxe" : "Double Deluxe Room" }}';
                 }
 
-                function scrollToRooms() {
-                    document.getElementById('habitaciones').scrollIntoView({ behavior: 'smooth' });
-                }
+                openBookingModal(roomId, roomName);
+            }
 
-                function openBookingModal(roomId, roomName) {
-                    // Sincronizar con la barra de búsqueda
-                    const checkIn = document.getElementById('search-check-in').value;
-                    const checkOut = document.getElementById('search-check-out').value;
-                    const guests = document.getElementById('search-guests').value;
+            function scrollToRooms() {
+                document.getElementById('habitaciones').scrollIntoView({ behavior: 'smooth' });
+            }
 
-                    document.getElementById('modal-room-id').value = roomId;
-                    document.getElementById('modal-title').innerText = roomName;
-                    document.getElementById('modal-check-in').value = checkIn;
-                    document.getElementById('modal-check-out').value = checkOut;
-                    document.getElementById('modal-guests').value = guests;
+            function openBookingModal(roomId, roomName) {
+                // Sincronizar con la barra de búsqueda
+                const checkIn = document.getElementById('search-check-in').value;
+                const checkOut = document.getElementById('search-check-out').value;
+                const guests = document.getElementById('search-guests').value;
 
-                    document.getElementById('booking-modal').classList.remove('hidden');
-                    document.body.style.overflow = 'hidden';
-                }
+                document.getElementById('modal-room-id').value = roomId;
+                document.getElementById('modal-title').innerText = roomName;
+                document.getElementById('modal-check-in').value = checkIn;
+                document.getElementById('modal-check-out').value = checkOut;
+                document.getElementById('modal-guests').value = guests;
 
-                function closeBookingModal() {
-                    document.getElementById('booking-modal').classList.add('hidden');
-                    document.body.style.overflow = 'auto';
-                }
+                document.getElementById('booking-modal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
 
-                // Gallery Logic
-                let currentGalleryImages = [];
-                let currentImageIndex = 0;
+            function closeBookingModal() {
+                document.getElementById('booking-modal').classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
 
-                function openGalleryModal(images) {
-                    currentGalleryImages = images;
-                    currentImageIndex = 0;
+            // Gallery Logic
+            let currentGalleryImages = [];
+            let currentImageIndex = 0;
 
-                    document.getElementById('gallery-modal').classList.remove('hidden');
-                    document.body.style.overflow = 'hidden';
+            function openGalleryModal(images) {
+                currentGalleryImages = images;
+                currentImageIndex = 0;
 
-                    updateGalleryUI();
-                }
+                document.getElementById('gallery-modal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
 
-                function closeGalleryModal() {
-                    document.getElementById('gallery-modal').classList.add('hidden');
-                    document.body.style.overflow = 'auto';
-                }
+                updateGalleryUI();
+            }
 
-                function updateGalleryUI() {
-                    // Update Main Image
-                    const mainImage = document.getElementById('gallery-main-image');
-                    mainImage.src = currentGalleryImages[currentImageIndex];
+            function closeGalleryModal() {
+                document.getElementById('gallery-modal').classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
 
-                    // Update Counter
-                    document.getElementById('gallery-counter').innerText = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
+            function updateGalleryUI() {
+                // Update Main Image
+                const mainImage = document.getElementById('gallery-main-image');
+                mainImage.src = currentGalleryImages[currentImageIndex];
 
-                    // Update Thumbnails
-                    const thumbsContainer = document.getElementById('gallery-thumbnails');
-                    thumbsContainer.innerHTML = '';
+                // Update Counter
+                document.getElementById('gallery-counter').innerText = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
 
-                    currentGalleryImages.forEach((img, index) => {
-                        const thumb = document.createElement('img');
-                        thumb.src = img;
-                        thumb.className = `h-full aspect-square object-cover rounded-md cursor-pointer border-2 transition-all ${index === currentImageIndex ? 'border-primary opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`;
-                        thumb.onclick = () => {
-                            currentImageIndex = index;
-                            updateGalleryUI();
-                        };
-                        thumbsContainer.appendChild(thumb);
-                    });
-                }
+                // Update Thumbnails
+                const thumbsContainer = document.getElementById('gallery-thumbnails');
+                thumbsContainer.innerHTML = '';
 
-                function nextImage() {
-                    currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length;
-                    updateGalleryUI();
-                }
-
-                function prevImage() {
-                    currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
-                    updateGalleryUI();
-                }
-
-                // Keyboard Support
-                document.addEventListener('keydown', function (event) {
-                    if (document.getElementById('gallery-modal').classList.contains('hidden')) return;
-
-                    if (event.key === 'Escape') closeGalleryModal();
-                    if (event.key === 'ArrowRight') nextImage();
-                    if (event.key === 'ArrowLeft') prevImage();
+                currentGalleryImages.forEach((img, index) => {
+                    const thumb = document.createElement('img');
+                    thumb.src = img;
+                    thumb.className = `h-full aspect-square object-cover rounded-md cursor-pointer border-2 transition-all ${index === currentImageIndex ? 'border-primary opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`;
+                    thumb.onclick = () => {
+                        currentImageIndex = index;
+                        updateGalleryUI();
+                    };
+                    thumbsContainer.appendChild(thumb);
                 });
+            }
 
-                // Initialize Home Carousel
-                document.addEventListener('DOMContentLoaded', function () {
-                    new Swiper('.home-carousel', {
-                        slidesPerView: 'auto',
-                        centeredSlides: true,
-                        spaceBetween: 20,
-                        loop: true,
-                        autoHeight: true,
-                        autoplay: {
-                            delay: 3500,
-                            disableOnInteraction: false,
-                        },
-                        navigation: {
-                            nextEl: '.swiper-next',
-                            prevEl: '.swiper-prev',
-                        },
-                        effect: 'coverflow',
-                        coverflowEffect: {
-                            rotate: 5,
-                            stretch: 0,
-                            depth: 100,
-                            modifier: 1,
-                            slideShadows: false,
-                        },
-                    });
+            function nextImage() {
+                currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length;
+                updateGalleryUI();
+            }
+
+            function prevImage() {
+                currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
+                updateGalleryUI();
+            }
+
+            // Keyboard Support
+            document.addEventListener('keydown', function (event) {
+                if (document.getElementById('gallery-modal').classList.contains('hidden')) return;
+
+                if (event.key === 'Escape') closeGalleryModal();
+                if (event.key === 'ArrowRight') nextImage();
+                if (event.key === 'ArrowLeft') prevImage();
+            });
+
+            // Initialize Home Carousel
+            document.addEventListener('DOMContentLoaded', function () {
+                new Swiper('.home-carousel', {
+                    slidesPerView: 'auto',
+                    centeredSlides: true,
+                    spaceBetween: 20,
+                    loop: true,
+                    autoHeight: true,
+                    autoplay: {
+                        delay: 3500,
+                        disableOnInteraction: false,
+                    },
+                    navigation: {
+                        nextEl: '.swiper-next',
+                        prevEl: '.swiper-prev',
+                    },
+                    effect: 'coverflow',
+                    coverflowEffect: {
+                        rotate: 5,
+                        stretch: 0,
+                        depth: 100,
+                        modifier: 1,
+                        slideShadows: false,
+                    },
                 });
-            </script>
-        </div>
+            });
+        </script>
+    </div>
 @endsection

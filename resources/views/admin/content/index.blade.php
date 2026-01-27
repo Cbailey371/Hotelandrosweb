@@ -111,7 +111,7 @@
                 <div class="w-px h-6 bg-slate-200 dark:border-slate-800 mx-2"></div>
                 <button type="button" onclick="location.reload()"
                     class="text-sm font-bold text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors">Discard</button>
-                <button type="submit" form="builder-form"
+                <button type="submit" form="builder-form" id="publish-btn"
                     class="bg-primary text-white px-8 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">Publish
                     Changes</button>
             </div>
@@ -760,13 +760,11 @@
                                         <span class="material-symbols-outlined text-sm">photo_library</span>
                                         Escoger de Galería
                                     </button>
-                                    <label
+                                    <button type="button" onclick="document.getElementById('carousel-upload-input').click()"
                                         class="cursor-pointer bg-primary text-white px-6 py-2 rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2">
                                         <span class="material-symbols-outlined text-sm">upload</span>
                                         Subir Nueva
-                                        <input type="file" name="gallery_images[]" multiple class="hidden"
-                                            onchange="this.form.action='{{ route('admin.gallery.store') }}?show_in_carousel=1'; this.form.submit();">
-                                    </label>
+                                    </button>
                                 </div>
                             </div>
                             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -776,26 +774,16 @@
                                         <img src="{{ $item->image_path }}" class="w-full h-full object-cover">
                                         <div
                                             class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center gap-2">
-                                            <form action="{{ route('admin.gallery.toggle-carousel', $item->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                <button type="submit"
-                                                    class="bg-white/90 text-amber-600 p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
-                                                    title="Quitar del carrusel">
-                                                    <span
-                                                        class="material-symbols-outlined text-sm font-bold">visibility_off</span>
-                                                </button>
-                                            </form>
-                                            <form action="{{ route('admin.gallery.destroy', $item->id) }}" method="POST"
-                                                onsubmit="return confirm('¿Eliminar esta imagen por completo?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="bg-white/90 text-red-600 p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
-                                                    title="Eliminar permanentemente">
-                                                    <span class="material-symbols-outlined text-sm font-bold">delete</span>
-                                                </button>
-                                            </form>
+                                            <button type="button" onclick="submitToggleCarousel({{ $item->id }})"
+                                                class="bg-white/90 text-amber-600 p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
+                                                title="Quitar del carrusel">
+                                                <span class="material-symbols-outlined text-sm font-bold">visibility_off</span>
+                                            </button>
+                                            <button type="button" onclick="submitDeleteGallery({{ $item->id }})"
+                                                class="bg-white/90 text-red-600 p-2.5 rounded-xl hover:bg-white transition-all transform scale-90 group-hover:scale-100"
+                                                title="Eliminar permanentemente">
+                                                <span class="material-symbols-outlined text-sm font-bold">delete</span>
+                                            </button>
                                         </div>
                                     </div>
                                 @empty
@@ -1006,13 +994,13 @@
                                         class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all z-20">
                                         <button type="button"
                                             onclick='editAttraction({
-                                                                                                                                                                                                                                                                                    id: "{{ $attraction->id }}",
-                                                                                                                                                                                                                                                                                    title_es: "{{ addslashes($attraction->title_es) }}",
-                                                                                                                                                                                                                                                                                    title_en: "{{ addslashes($attraction->title_en) }}",
-                                                                                                                                                                                                                                                                                    description_es: "{{ addslashes($attraction->description_es) }}",
-                                                                                                                                                                                                                                                                                    description_en: "{{ addslashes($attraction->description_en) }}",
-                                                                                                                                                                                                                                                                                    image_path: "{{ $attraction->image_path }}"
-                                                                                                                                                                                                                                                                                })'
+                                                                                                                                                                                                                                                                                            id: "{{ $attraction->id }}",
+                                                                                                                                                                                                                                                                                            title_es: "{{ addslashes($attraction->title_es) }}",
+                                                                                                                                                                                                                                                                                            title_en: "{{ addslashes($attraction->title_en) }}",
+                                                                                                                                                                                                                                                                                            description_es: "{{ addslashes($attraction->description_es) }}",
+                                                                                                                                                                                                                                                                                            description_en: "{{ addslashes($attraction->description_en) }}",
+                                                                                                                                                                                                                                                                                            image_path: "{{ $attraction->image_path }}"
+                                                                                                                                                                                                                                                                                        })'
                                             class="text-blue-500 hover:text-blue-700 p-2 bg-white dark:bg-[#0b0c11] rounded-full shadow-sm">
                                             <span class="material-symbols-outlined text-sm font-bold">edit</span>
                                         </button>
@@ -1220,13 +1208,25 @@
 
     <!-- Hidden Forms & Modals -->
     <div id="hidden-forms" class="hidden">
+        {{-- Formulario para subir imágenes al carrusel sin afectar al builder-form --}}
+        <form id="carousel-upload-form" action="{{ route('admin.gallery.store') }}?show_in_carousel=1" method="POST"
+            enctype="multipart/form-data">
+            @csrf
+            <input type="file" name="gallery_images[]" id="carousel-upload-input" multiple onchange="this.form.submit()">
+        </form>
+
+        {{-- Formulario para alternar visibilidad en carrusel --}}
+        <form id="toggle-carousel-form" method="POST">
+            @csrf
+        </form>
+
+        {{-- Formularios de eliminación --}}
         @foreach($gallery as $item)
             <form id="delete-gallery-{{ $item->id }}" action="{{ route('admin.gallery.destroy', $item->id) }}" method="POST">
                 @csrf @method('DELETE')
             </form>
         @endforeach
 
-        {{-- Consolidated Attraction Delete Forms --}}
         @foreach($attractions as $attraction)
             <form id="delete-attraction-{{ $attraction->id }}"
                 action="{{ route('admin.attractions.destroy', $attraction->id) }}" method="POST">
@@ -1367,508 +1367,521 @@
     @push('scripts')
         <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
         <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-              const quillOptions = {
-                            theme: 'snow',
-                            modules: {
-                                toolbar: [
-                                    [{ 'font': [] }],
-                                    [{ 'header': [1, 2, 3, false] }],
-                                    [{ 'size': ['small', false, 'large', 'huge'] }],
-                                    ['bold', 'italic', 'underline'],
-                                    [{ 'color': [] }, { 'background': [] }],
-                                    ['clean']
-                                ]
-                            },
-                            placeholder: 'Escribe aquí...'
-                        };
+            document.addEventListener('DOMContentLoaded', function () {
+                const quillOptions = {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            [{ 'font': [] }],
+                            [{ 'header': [1, 2, 3, false] }],
+                            [{ 'size': ['small', false, 'large', 'huge'] }],
+                            ['bold', 'italic', 'underline'],
+                            [{ 'color': [] }, { 'background': [] }],
+                            ['clean']
+                        ]
+                    },
+                    placeholder: 'Escribe aquí...'
+                };
 
-                        const editorsData = [
-                            'hero_title_es', 'hero_title_en',
-                            'hero_subtitle_es', 'hero_subtitle_en',
-                            'rooms_badge_es', 'rooms_badge_en',
-                            'rooms_title_es', 'rooms_title_en',
-                            'rooms_description_es', 'rooms_description_en',
-                            'cafe_description_es', 'cafe_description_en',
-                            'cafe_feature1_desc_es', 'cafe_feature1_desc_en',
-                            'cafe_feature2_desc_es', 'cafe_feature2_desc_en',
-                            'location_title_es', 'location_title_en',
-                            'location_description_es', 'location_description_en',
-                            'footer_policies_es', 'footer_policies_en'
-                        ];
+                const editorsData = [
+                    'hero_title_es', 'hero_title_en',
+                    'hero_subtitle_es', 'hero_subtitle_en',
+                    'rooms_badge_es', 'rooms_badge_en',
+                    'rooms_title_es', 'rooms_title_en',
+                    'rooms_description_es', 'rooms_description_en',
+                    'cafe_description_es', 'cafe_description_en',
+                    'cafe_feature1_desc_es', 'cafe_feature1_desc_en',
+                    'cafe_feature2_desc_es', 'cafe_feature2_desc_en',
+                    'location_title_es', 'location_title_en',
+                    'location_description_es', 'location_description_en',
+                    'footer_policies_es', 'footer_policies_en'
+                ];
 
-                        const quillInstances = {};
+                const quillInstances = {};
 
+                editorsData.forEach(id => {
+                    const container = document.getElementById(id + '_editor');
+                    if (container) {
+                        quillInstances[id] = new Quill(container, quillOptions);
+                    }
+                });
+
+                // Attraction editors in modal
+                const attrDescEs = new Quill('#attraction_description_es_editor', quillOptions);
+                const attrDescEn = new Quill('#attraction_description_en_editor', quillOptions);
+
+                const builderForm = document.getElementById('builder-form');
+                if (builderForm) {
+                    builderForm.addEventListener('submit', function (e) {
                         editorsData.forEach(id => {
-                            const container = document.getElementById(id + '_editor');
-                            if (container) {
-                                quillInstances[id] = new Quill(container, quillOptions);
+                            const hiddenInput = document.getElementById(id);
+                            if (quillInstances[id] && hiddenInput) {
+                                hiddenInput.value = quillInstances[id].root.innerHTML;
                             }
-                        });
-
-                        // Attraction editors in modal
-                        const attrDescEs = new Quill('#attraction_description_es_editor', quillOptions);
-                        const attrDescEn = new Quill('#attraction_description_en_editor', quillOptions);
-
-                        const builderForm = document.getElementById('builder-form');
-                        if (builderForm) {
-                            builderForm.addEventListener('submit', function (e) {
-                                editorsData.forEach(id => {
-                                    const hiddenInput = document.getElementById(id);
-                                    if (quillInstances[id] && hiddenInput) {
-                                        hiddenInput.value = quillInstances[id].root.innerHTML;
-                                    }
-                                });
-                                syncSocialsJson();
-                            });
-                        }
-
-                        // Handle attraction submit
-                        const attrForm = document.getElementById('attraction-form');
-                        if (attrForm) {
-                            attrForm.onsubmit = function () {
-                                document.getElementById('attraction_description_es').value = attrDescEs.root.innerHTML;
-                                document.getElementById('attraction_description_en').value = attrDescEn.root.innerHTML;
-                            };
-                        }
-
-                        window.editAttraction = function (data) {
-                            const modal = document.getElementById('attraction-form-modal');
-                            const form = document.getElementById('attraction-form');
-                            const title = document.getElementById('attraction-modal-title');
-                            const methodContainer = document.getElementById('attraction-method-container');
-
-                            // Configurar el formulario para actualización
-                            title.innerText = 'Edit Local Attraction';
-                            form.action = `/admin/attractions/${data.id}`;
-                            methodContainer.innerHTML = '<input type="hidden" name="_method" value="PUT">';
-
-                            // Poblar campos
-                            document.getElementById('attraction-id-field').value = data.id;
-                            form.querySelector('[name="title_es"]').value = data.title_es;
-                            form.querySelector('[name="title_en"]').value = data.title_en;
-
-                            // Poblar Quill editors
-                            attrDescEs.root.innerHTML = data.description_es;
-                            attrDescEn.root.innerHTML = data.description_en;
-
-                            // Previsualización de imagen
-                            document.getElementById('attraction-preview').src = data.image_path;
-                            document.getElementById('attraction_image_input').value = data.image_path;
-
-                            // Resetear input de archivo
-                            form.querySelector('[name="image_file"]').value = '';
-
-                            // Mostrar modal
-                            modal.classList.remove('hidden');
-                        };
-
-                        window.openAddAttractionModal = function () {
-                            const modal = document.getElementById('attraction-form-modal');
-                            const form = document.getElementById('attraction-form');
-                            const title = document.getElementById('attraction-modal-title');
-                            const methodContainer = document.getElementById('attraction-method-container');
-
-                            // Resetear el formulario para creación
-                            title.innerText = 'New Local Attraction';
-                            form.action = "{{ route('admin.attractions.store') }}";
-                            methodContainer.innerHTML = '';
-                            form.reset();
-                            document.getElementById('attraction-id-field').value = '';
-
-                            // Resetear Quill
-                            attrDescEs.root.innerHTML = '';
-                            attrDescEn.root.innerHTML = '';
-
-                            // Resetear previsualización
-                            document.getElementById('attraction-preview').src = "/images/branding/placeholder.png";
-                            document.getElementById('attraction_image_input').value = '';
-
-                            modal.classList.remove('hidden');
-                        };
-
-                        // Actualizar el botón de "Añadir Atractivo" para usar la nueva función
-                        const addAttrBtn = document.querySelector('button[onclick*="attraction-form-modal"]');
-                        if (addAttrBtn) {
-                            addAttrBtn.setAttribute('onclick', 'openAddAttractionModal()');
-                        }
-
-                        let attractionIdToDelete = null;
-
-                        window.confirmDeleteAttraction = function (id, event) {
-                            if (event) {
-                                event.preventDefault();
-                                event.stopPropagation();
-                            }
-                            attractionIdToDelete = id;
-                            const modal = document.getElementById('delete-confirmation-modal');
-                            modal.classList.remove('hidden');
-                            modal.classList.add('flex');
-                        };
-
-                        window.closeDeleteConfirmation = function () {
-                            const modal = document.getElementById('delete-confirmation-modal');
-                            modal.classList.add('hidden');
-                            modal.classList.remove('flex');
-                            attractionIdToDelete = null;
-                        };
-
-                        const confirmDelBtn = document.getElementById('confirm-delete-btn');
-                        if (confirmDelBtn) {
-                            confirmDelBtn.onclick = function () {
-                                if (attractionIdToDelete) {
-                                    const form = document.getElementById('delete-attraction-' + attractionIdToDelete);
-                                    if (form) {
-                                        form.submit();
-                                    } else {
-                                        console.error('Delete form not found for ID:', attractionIdToDelete);
-                                    }
-                                }
-                            };
-                        }
-
-                        renderSocialLinks();
-                    });
-
-                    function previewImage(input, previewId) {
-                        if (input.files && input.files[0]) {
-                            var reader = new FileReader();
-                            reader.onload = function (e) {
-                                document.getElementById(previewId).src = e.target.result;
-                            }
-                            reader.readAsDataURL(input.files[0]);
-                        }
-                    }
-
-                    let activeImageInputId = '';
-                    let activePreviewId = '';
-
-                    window.openMediaLibrary = function (inputId, previewId) {
-                        activeImageInputId = inputId;
-                        activePreviewId = previewId;
-                        document.getElementById('media-library-modal').classList.remove('hidden');
-                        document.body.style.overflow = 'hidden';
-                    }
-
-                    window.closeMediaLibrary = function () {
-                        document.getElementById('media-library-modal').classList.add('hidden');
-                        document.body.style.overflow = 'auto';
-                    }
-
-                    window.selectImageFromLibrary = function (path) {
-                        const targetId = activeImageInputId === 'attraction_image' ? 'attraction_image_input' : activeImageInputId + '_input';
-                        const input = document.getElementById(targetId);
-                        const preview = document.getElementById(activePreviewId);
-
-                        if (input) input.value = path;
-                        if (preview) preview.src = path;
-
-                        // Limpiar el input de archivo para evitar que el servidor lo procese
-                        const fileInputName = activeImageInputId === 'attraction_image' ? 'image_file' : activeImageInputId + '_file';
-                        const fileInput = document.querySelector(`input[name="${fileInputName}"]`);
-                        if (fileInput) fileInput.value = '';
-
-                        closeMediaLibrary();
-                    }
-
-                    window.handleNewUpload = function (input, targetInputId, previewId) {
-                        if (input.files && input.files[0]) {
-                            const reader = new FileReader();
-                            reader.onload = function (e) {
-                                document.getElementById(previewId).src = e.target.result;
-                                const targetId = targetInputId === 'attraction_image' ? 'attraction_image_input' : targetInputId + '_input';
-                                const hiddenInput = document.getElementById(targetId);
-                                if (hiddenInput) hiddenInput.value = '';
-                            };
-                            reader.readAsDataURL(input.files[0]);
-                        }
-                    }
-
-                    window.switchSection = function (sectionId) {
-                        // Hide all sections
-                        document.querySelectorAll('.builder-section').forEach(s => {
-                            s.classList.remove('block');
-                            s.classList.add('hidden');
-                        });
-
-                        // Deactivate all nav items
-                        document.querySelectorAll('.section-nav-item').forEach(i => i.classList.remove('active'));
-
-                        const targetSection = document.getElementById('section-' + sectionId);
-                        const targetNav = document.querySelector(`[data-section="${sectionId}"]`);
-
-                        // Show target section
-                        if (targetSection) {
-                            targetSection.classList.remove('hidden');
-                            targetSection.classList.add('block');
-                        }
-                        if (targetNav) targetNav.classList.add('active');
-                    };
-
-                    // Social Links Logic
-                    let socialLinks = {!! $settings['footer_socials_json'] ?? '[]' !!};
-                    if (!Array.isArray(socialLinks) || socialLinks.length === 0) {
-                        if (typeof socialLinks === 'string') {
-                            try { socialLinks = JSON.parse(socialLinks); } catch (e) { socialLinks = []; }
-                        }
-                        if (socialLinks.length === 0) {
-                            socialLinks = [
-                                { platform: 'instagram', url: '{{ $settings["footer_instagram"] ?? "#" }}', active: true },
-                                { platform: 'facebook', url: '#', active: true },
-                                { platform: 'linkedin', url: '{{ $settings["footer_linkedin"] ?? "#" }}', active: true }
-                            ];
-                        }
-                    }
-
-                    function renderSocialLinks() {
-                        const container = document.getElementById('social-links-container');
-                        if (!container) return;
-                        container.innerHTML = '';
-                        socialLinks.forEach((link, index) => {
-                            const row = document.createElement('div');
-                            row.className = 'flex flex-col md:flex-row items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800';
-                            row.innerHTML = `
-                                                                                                                                                        <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                                                                                                                            <div>
-                                                                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Platform</label>
-                                                                                                                                                                <select onchange="updateSocialLink(${index}, 'platform', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm">
-                                                                                                                                                                    <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
-                                                                                                                                                                    <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
-                                                                                                                                                                    <option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
-                                                                                                                                                                    <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option>
-                                                                                                                                                                    <option value="tiktok" ${link.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
-                                                                                                                                                                    <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
-                                                                                                                                                                    <option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
-                                                                                                                                                                </select>
-                                                                                                                                                            </div>
-                                                                                                                                                            <div>
-                                                                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">URL</label>
-                                                                                                                                                                <input type="text" value="${link.url}" placeholder="https://..." onchange="updateSocialLink(${index}, 'url', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20">
-                                                                                                                                                            </div>
-                                                                                                                                                        </div>
-                                                                                                                                                        <div class="flex items-center gap-4">
-                                                                                                                                                            <label class="flex items-center gap-2 cursor-pointer group">
-                                                                                                                                                                <div class="relative">
-                                                                                                                                                                    <input type="checkbox" ${link.active ? 'checked' : ''} onchange="updateSocialLink(${index}, 'active', this.checked)" class="sr-only peer">
-                                                                                                                                                                    <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
-                                                                                                                                                                </div>
-                                                                                                                                                                <span class="text-[10px] font-black text-slate-400 uppercase group-hover:text-primary transition-colors">Active</span>
-                                                                                                                                                            </label>
-                                                                                                                                                            <button type="button" onclick="removeSocialLink(${index})" class="text-slate-400 hover:text-red-500 transition-colors">
-                                                                                                                                                                <span class="material-symbols-outlined text-sm">delete</span>
-                                                                                                                                                            </button                                                                                                                                                                                                             >
-                                                                                                                                                        </div>
-                                                                                                                                                    `;
-                            container.appendChild(row);
                         });
                         syncSocialsJson();
-                    }
-
-                    window.addSocialLink = function () { socialLinks.push({ platform: 'facebook', url: '#', active: true }); renderSocialLinks(); };
-                    window.removeSocialLink = function (index) { socialLinks.splice(index, 1); renderSocialLinks(); };
-                    window.updateSocialLink = function (index, field, value) { socialLinks[index][field] = value; syncSocialsJson(); };
-                    window.syncSocialsJson = function () { const hiddenInput = document.getElementById('footer_socials_json'); if (hiddenInput) { hiddenInput.value = JSON.stringify(socialLinks); } };
-
-                    window.openCarouselGalleryModal = function () {
-                        document.getElementById('carousel-gallery-modal').classList.remove('hidden');
-                        document.getElementById('carousel-gallery-modal').classList.add('flex');
-                        document.body.style.overflow = 'hidden';
-
-                        // Inicializar selección basada en lo que ya está en el carrusel
-                        refreshCarouselSelectionUI();
-                    };
-
-                    function refreshCarouselSelectionUI() {
-                        const modal = document.getElementById('carousel-gallery-modal');
-                        modal.querySelectorAll('.gallery-item-selectable').forEach(item => {
-                            const isSelected = item.getAttribute('data-active') === '1';
-                            if (isSelected) {
-                                item.classList.add('selected', 'border-primary', 'ring-4', 'ring-primary/20');
-                                item.classList.remove('border-slate-100', 'dark:border-slate-800');
-                            } else {
-                                item.classList.remove('selected', 'border-primary', 'ring-4', 'ring-primary/20');
-                                item.classList.add('border-slate-100', 'dark:border-slate-800');
-                            }
-                        });
-                    }
-
-                    window.toggleGallerySelection = function (element) {
-                        const isActive = element.getAttribute('data-active') === '1';
-                        if (isActive) {
-                            element.setAttribute('data-active', '0');
-                            element.classList.remove('selected', 'border-primary', 'ring-4', 'ring-primary/20');
-                            element.classList.add('border-slate-100', 'dark:border-slate-800');
-                        } else {
-                            element.setAttribute('data-active', '1');
-                            element.classList.add('selected', 'border-primary', 'ring-4', 'ring-primary/20');
-                            element.classList.remove('border-slate-100', 'dark:border-slate-800');
-                        }
-                    };
-
-                    window.saveCarouselSelection = function () {
-                        const selectedIds = [];
-                        document.querySelectorAll('.gallery-item-selectable[data-active="1"]').forEach(item => {
-                            selectedIds.push(item.getAttribute('data-id'));
-                        });
-
-                        const btn = document.getElementById('save-carousel-btn');
-                        const originalText = btn.innerHTML;
-                        btn.disabled = true;
-                        btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Guardando...';
-
-                        fetch('{{ route("admin.gallery.bulk-carousel") }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({ image_ids: selectedIds })
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    location.reload(); // Recargamos para ver los cambios en el carrusel
-                                } else {
-                                    alert('Error al guardar: ' + (data.message || 'Error desconocido'));
-                                    btn.disabled = false;
-                                    btn.innerHTML = originalText;
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('Error en la conexión con el servidor');
-                                btn.disabled = false;
-                                btn.innerHTML = originalText;
-                            });
-                    };
-
-                    window.closeCarouselGalleryModal = function () {
-                        document.getElementById('carousel-gallery-modal').classList.add('hidden');
-                        document.getElementById('carousel-gallery-modal').classList.remove('flex');
-                        document.body.style.overflow = 'auto';
-                    };
-
-                    window.syncGalleryManual = function (btn) {
-                        const originalContent = btn.innerHTML;
-                        btn.disabled = true;
-                        btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Sincronizando...';
-
-                        fetch('{{ route("admin.gallery.sync") }}?ajax=1', {
-                            method: 'GET',
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'Accept': 'application/json'
-                            }
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    // Mostrar mensaje de éxito (podemos usar una alerta simple o un toast si existe)
-                                    alert('✅ ' + data.message);
-                                    // Recargar la página pero manteniendo el hash o la sección actual si fuera posible.
-                                    // Dado que el site builder es dinámico, un reload volverá al inicio a menos que guardemos el estado.
-                                    // Guardamos la sección actual en sessionStorage antes de recargar
-                                    const activeSection = document.querySelector('.section-nav-item.active')?.getAttribute('data-section');
-                                    if (activeSection) {
-                                        sessionStorage.setItem('site_builder_active_section', activeSection);
-                                    }
-                                    location.reload();
-                                } else {
-                                    alert('❌ Error: ' + data.message);
-                                    btn.disabled = false;
-                                    btn.innerHTML = originalContent;
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                alert('❌ Error al conectar con el servidor');
-                                btn.disabled = false;
-                                btn.innerHTML = originalContent;
-                            });
-                    };
-
-                    // Al cargar la página, restaurar la sección activa si existe
-                    document.addEventListener('DOMContentLoaded', function () {
-                        const savedSection = sessionStorage.getItem('site_builder_active_section');
-                        if (savedSection) {
-                            switchSection(savedSection);
-                            sessionStorage.removeItem('site_builder_active_section');
-                        }
                     });
-                </script>
+                }
+
+                // Handle attraction submit
+                const attrForm = document.getElementById('attraction-form');
+                if (attrForm) {
+                    attrForm.onsubmit = function () {
+                        document.getElementById('attraction_description_es').value = attrDescEs.root.innerHTML;
+                        document.getElementById('attraction_description_en').value = attrDescEn.root.innerHTML;
+                    };
+                }
+
+                window.editAttraction = function (data) {
+                    const modal = document.getElementById('attraction-form-modal');
+                    const form = document.getElementById('attraction-form');
+                    const title = document.getElementById('attraction-modal-title');
+                    const methodContainer = document.getElementById('attraction-method-container');
+
+                    // Configurar el formulario para actualización
+                    title.innerText = 'Edit Local Attraction';
+                    form.action = `/admin/attractions/${data.id}`;
+                    methodContainer.innerHTML = '<input type="hidden" name="_method" value="PUT">';
+
+                    // Poblar campos
+                    document.getElementById('attraction-id-field').value = data.id;
+                    form.querySelector('[name="title_es"]').value = data.title_es;
+                    form.querySelector('[name="title_en"]').value = data.title_en;
+
+                    // Poblar Quill editors
+                    attrDescEs.root.innerHTML = data.description_es;
+                    attrDescEn.root.innerHTML = data.description_en;
+
+                    // Previsualización de imagen
+                    document.getElementById('attraction-preview').src = data.image_path;
+                    document.getElementById('attraction_image_input').value = data.image_path;
+
+                    // Resetear input de archivo
+                    form.querySelector('[name="image_file"]').value = '';
+
+                    // Mostrar modal
+                    modal.classList.remove('hidden');
+                };
+
+                window.openAddAttractionModal = function () {
+                    const modal = document.getElementById('attraction-form-modal');
+                    const form = document.getElementById('attraction-form');
+                    const title = document.getElementById('attraction-modal-title');
+                    const methodContainer = document.getElementById('attraction-method-container');
+
+                    // Resetear el formulario para creación
+                    title.innerText = 'New Local Attraction';
+                    form.action = "{{ route('admin.attractions.store') }}";
+                    methodContainer.innerHTML = '';
+                    form.reset();
+                    document.getElementById('attraction-id-field').value = '';
+
+                    // Resetear Quill
+                    attrDescEs.root.innerHTML = '';
+                    attrDescEn.root.innerHTML = '';
+
+                    // Resetear previsualización
+                    document.getElementById('attraction-preview').src = "/images/branding/placeholder.png";
+                    document.getElementById('attraction_image_input').value = '';
+
+                    modal.classList.remove('hidden');
+                };
+
+                // Actualizar el botón de "Añadir Atractivo" para usar la nueva función
+                const addAttrBtn = document.querySelector('button[onclick*="attraction-form-modal"]');
+                if (addAttrBtn) {
+                    addAttrBtn.setAttribute('onclick', 'openAddAttractionModal()');
+                }
+
+                let attractionIdToDelete = null;
+
+                window.confirmDeleteAttraction = function (id, event) {
+                    if (event) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    attractionIdToDelete = id;
+                    const modal = document.getElementById('delete-confirmation-modal');
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                };
+
+                window.closeDeleteConfirmation = function () {
+                    const modal = document.getElementById('delete-confirmation-modal');
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    attractionIdToDelete = null;
+                };
+
+                const confirmDelBtn = document.getElementById('confirm-delete-btn');
+                if (confirmDelBtn) {
+                    confirmDelBtn.onclick = function () {
+                        if (attractionIdToDelete) {
+                            const form = document.getElementById('delete-attraction-' + attractionIdToDelete);
+                            if (form) {
+                                form.submit();
+                            } else {
+                                console.error('Delete form not found for ID:', attractionIdToDelete);
+                            }
+                        }
+                    };
+                }
+
+                window.submitToggleCarousel = function (id) {
+                    const form = document.getElementById('toggle-carousel-form');
+                    form.action = `/admin/gallery/${id}/toggle-carousel`;
+                    form.submit();
+                };
+
+                window.submitDeleteGallery = function (id) {
+                    if (confirm('¿Eliminar esta imagen por completo?')) {
+                        const form = document.getElementById('delete-gallery-' + id);
+                        if (form) form.submit();
+                    }
+                };
+
+                renderSocialLinks();
+            });
+
+            function previewImage(input, previewId) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById(previewId).src = e.target.result;
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            let activeImageInputId = '';
+            let activePreviewId = '';
+
+            window.openMediaLibrary = function (inputId, previewId) {
+                activeImageInputId = inputId;
+                activePreviewId = previewId;
+                document.getElementById('media-library-modal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            window.closeMediaLibrary = function () {
+                document.getElementById('media-library-modal').classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+
+            window.selectImageFromLibrary = function (path) {
+                const targetId = activeImageInputId === 'attraction_image' ? 'attraction_image_input' : activeImageInputId + '_input';
+                const input = document.getElementById(targetId);
+                const preview = document.getElementById(activePreviewId);
+
+                if (input) input.value = path;
+                if (preview) preview.src = path;
+
+                // Limpiar el input de archivo para evitar que el servidor lo procese
+                const fileInputName = activeImageInputId === 'attraction_image' ? 'image_file' : activeImageInputId + '_file';
+                const fileInput = document.querySelector(`input[name="${fileInputName}"]`);
+                if (fileInput) fileInput.value = '';
+
+                closeMediaLibrary();
+            }
+
+            window.handleNewUpload = function (input, targetInputId, previewId) {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById(previewId).src = e.target.result;
+                        const targetId = targetInputId === 'attraction_image' ? 'attraction_image_input' : targetInputId + '_input';
+                        const hiddenInput = document.getElementById(targetId);
+                        if (hiddenInput) hiddenInput.value = '';
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            window.switchSection = function (sectionId) {
+                // Hide all sections
+                document.querySelectorAll('.builder-section').forEach(s => {
+                    s.classList.remove('block');
+                    s.classList.add('hidden');
+                });
+
+                // Deactivate all nav items
+                document.querySelectorAll('.section-nav-item').forEach(i => i.classList.remove('active'));
+
+                const targetSection = document.getElementById('section-' + sectionId);
+                const targetNav = document.querySelector(`[data-section="${sectionId}"]`);
+
+                // Show target section
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                    targetSection.classList.add('block');
+                }
+                if (targetNav) targetNav.classList.add('active');
+            };
+
+            // Social Links Logic
+            let socialLinks = {!! $settings['footer_socials_json'] ?? '[]' !!};
+            if (!Array.isArray(socialLinks) || socialLinks.length === 0) {
+                if (typeof socialLinks === 'string') {
+                    try { socialLinks = JSON.parse(socialLinks); } catch (e) { socialLinks = []; }
+                }
+                if (socialLinks.length === 0) {
+                    socialLinks = [
+                        { platform: 'instagram', url: '{{ $settings["footer_instagram"] ?? "#" }}', active: true },
+                        { platform: 'facebook', url: '#', active: true },
+                        { platform: 'linkedin', url: '{{ $settings["footer_linkedin"] ?? "#" }}', active: true }
+                    ];
+                }
+            }
+
+            function renderSocialLinks() {
+                const container = document.getElementById('social-links-container');
+                if (!container) return;
+                container.innerHTML = '';
+                socialLinks.forEach((link, index) => {
+                    const row = document.createElement('div');
+                    row.className = 'flex flex-col md:flex-row items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800';
+                    row.innerHTML = `
+                                                                                                                                                                <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                                                                                                                    <div>
+                                                                                                                                                                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Platform</label>
+                                                                                                                                                                        <select onchange="updateSocialLink(${index}, 'platform', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm">
+                                                                                                                                                                            <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
+                                                                                                                                                                            <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
+                                                                                                                                                                            <option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+                                                                                                                                                                            <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option>
+                                                                                                                                                                            <option value="tiktok" ${link.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
+                                                                                                                                                                            <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
+                                                                                                                                                                            <option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
+                                                                                                                                                                        </select>
+                                                                                                                                                                    </div>
+                                                                                                                                                                    <div>
+                                                                                                                                                                        <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">URL</label>
+                                                                                                                                                                        <input type="text" value="${link.url}" placeholder="https://..." onchange="updateSocialLink(${index}, 'url', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20">
+                                                                                                                                                                    </div>
+                                                                                                                                                                </div>
+                                                                                                                                                                <div class="flex items-center gap-4">
+                                                                                                                                                                    <label class="flex items-center gap-2 cursor-pointer group">
+                                                                                                                                                                        <div class="relative">
+                                                                                                                                                                            <input type="checkbox" ${link.active ? 'checked' : ''} onchange="updateSocialLink(${index}, 'active', this.checked)" class="sr-only peer">
+                                                                                                                                                                            <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                                                                                                                                                        </div>
+                                                                                                                                                                        <span class="text-[10px] font-black text-slate-400 uppercase group-hover:text-primary transition-colors">Active</span>
+                                                                                                                                                                    </label>
+                                                                                                                                                                    <button type="button" onclick="removeSocialLink(${index})" class="text-slate-400 hover:text-red-500 transition-colors">
+                                                                                                                                                                        <span class="material-symbols-outlined text-sm">delete</span>
+                                                                                                                                                                    </button                                                                                                                                                                                                             >
+                                                                                                                                                                </div>
+                                                                                                                                                            `;
+                    container.appendChild(row);
+                });
+                syncSocialsJson();
+            }
+
+            window.addSocialLink = function () { socialLinks.push({ platform: 'facebook', url: '#', active: true }); renderSocialLinks(); };
+            window.removeSocialLink = function (index) { socialLinks.splice(index, 1); renderSocialLinks(); };
+            window.updateSocialLink = function (index, field, value) { socialLinks[index][field] = value; syncSocialsJson(); };
+            window.syncSocialsJson = function () { const hiddenInput = document.getElementById('footer_socials_json'); if (hiddenInput) { hiddenInput.value = JSON.stringify(socialLinks); } };
+
+            window.openCarouselGalleryModal = function () {
+                document.getElementById('carousel-gallery-modal').classList.remove('hidden');
+                document.getElementById('carousel-gallery-modal').classList.add('flex');
+                document.body.style.overflow = 'hidden';
+
+                // Inicializar selección basada en lo que ya está en el carrusel
+                refreshCarouselSelectionUI();
+            };
+
+            function refreshCarouselSelectionUI() {
+                const modal = document.getElementById('carousel-gallery-modal');
+                modal.querySelectorAll('.gallery-item-selectable').forEach(item => {
+                    const isSelected = item.getAttribute('data-active') === '1';
+                    if (isSelected) {
+                        item.classList.add('selected', 'border-primary', 'ring-4', 'ring-primary/20');
+                        item.classList.remove('border-slate-100', 'dark:border-slate-800');
+                    } else {
+                        item.classList.remove('selected', 'border-primary', 'ring-4', 'ring-primary/20');
+                        item.classList.add('border-slate-100', 'dark:border-slate-800');
+                    }
+                });
+            }
+
+            window.toggleGallerySelection = function (element) {
+                const isActive = element.getAttribute('data-active') === '1';
+                if (isActive) {
+                    element.setAttribute('data-active', '0');
+                    element.classList.remove('selected', 'border-primary', 'ring-4', 'ring-primary/20');
+                    element.classList.add('border-slate-100', 'dark:border-slate-800');
+                } else {
+                    element.setAttribute('data-active', '1');
+                    element.classList.add('selected', 'border-primary', 'ring-4', 'ring-primary/20');
+                    element.classList.remove('border-slate-100', 'dark:border-slate-800');
+                }
+            };
+
+            window.saveCarouselSelection = function () {
+                const selectedIds = [];
+                document.querySelectorAll('.gallery-item-selectable[data-active="1"]').forEach(item => {
+                    selectedIds.push(item.getAttribute('data-id'));
+                });
+
+                const btn = document.getElementById('save-carousel-btn');
+                const originalText = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Guardando...';
+
+                fetch('{{ route("admin.gallery.bulk-carousel") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ image_ids: selectedIds })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload(); // Recargamos para ver los cambios en el carrusel
+                        } else {
+                            alert('Error al guardar: ' + (data.message || 'Error desconocido'));
+                            btn.disabled = false;
+                            btn.innerHTML = originalText;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error en la conexión con el servidor');
+                        btn.disabled = false;
+                        btn.innerHTML = originalText;
+                    });
+            };
+
+            window.closeCarouselGalleryModal = function () {
+                document.getElementById('carousel-gallery-modal').classList.add('hidden');
+                document.getElementById('carousel-gallery-modal').classList.remove('flex');
+                document.body.style.overflow = 'auto';
+            };
+
+            window.syncGalleryManual = function (btn) {
+                const originalContent = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Sincronizando...';
+
+                fetch('{{ route("admin.gallery.sync") }}?ajax=1', {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Mostrar mensaje de éxito (podemos usar una alerta simple o un toast si existe)
+                            alert('✅ ' + data.message);
+                            // Recargar la página pero manteniendo el hash o la sección actual si fuera posible.
+                            // Dado que el site builder es dinámico, un reload volverá al inicio a menos que guardemos el estado.
+                            // Guardamos la sección actual en sessionStorage antes de recargar
+                            const activeSection = document.querySelector('.section-nav-item.active')?.getAttribute('data-section');
+                            if (activeSection) {
+                                sessionStorage.setItem('site_builder_active_section', activeSection);
+                            }
+                            location.reload();
+                        } else {
+                            alert('❌ Error: ' + data.message);
+                            btn.disabled = false;
+                            btn.innerHTML = originalContent;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('❌ Error al conectar con el servidor');
+                        btn.disabled = false;
+                        btn.innerHTML = originalContent;
+                    });
+            };
+
+            // Al cargar la página, restaurar la sección activa si existe
+            document.addEventListener('DOMContentLoaded', function () {
+                const savedSection = sessionStorage.getItem('site_builder_active_section');
+                if (savedSection) {
+                    switchSection(savedSection);
+                    sessionStorage.removeItem('site_builder_active_section');
+                }
+            });
+        </script>
     @endpush
 
-        <!-- Modal: Carousel Gallery Picker -->
-        <div id="carousel-gallery-modal"
-            class="fixed inset-0 z-[120] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <!-- Modal: Carousel Gallery Picker -->
+    <div id="carousel-gallery-modal"
+        class="fixed inset-0 z-[120] hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div
+            class="bg-white dark:bg-[#0b0c11] w-full max-w-4xl rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
             <div
-                class="bg-white dark:bg-[#0b0c11] w-full max-w-4xl rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                <div
-                    class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-black">
-                    <div>
-                        <h3 class="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight">Galería Global
-                        </h3>
-                        <p class="text-slate-500 text-xs font-bold mt-1 uppercase tracking-widest">Selecciona las fotos que
-                            quieres mostrar en el carrusel</p>
-                    </div>
-                    <button onclick="closeCarouselGalleryModal()"
-                        class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 transition-all">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
+                class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-black">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight">Galería Global
+                    </h3>
+                    <p class="text-slate-500 text-xs font-bold mt-1 uppercase tracking-widest">Selecciona las fotos que
+                        quieres mostrar en el carrusel</p>
                 </div>
+                <button onclick="closeCarouselGalleryModal()"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 transition-all">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
 
-                <div class="flex-1 overflow-y-auto p-10 custom-scrollbar">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-                        @foreach($gallery as $item)
-                            <div class="gallery-item-selectable relative aspect-square rounded-2xl overflow-hidden border-4 group transition-all cursor-pointer"
-                                data-id="{{ $item->id }}" data-active="{{ $item->show_in_carousel ? '1' : '0' }}"
-                                onclick="toggleGallerySelection(this)">
+            <div class="flex-1 overflow-y-auto p-10 custom-scrollbar">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                    @foreach($gallery as $item)
+                        <div class="gallery-item-selectable relative aspect-square rounded-2xl overflow-hidden border-4 group transition-all cursor-pointer"
+                            data-id="{{ $item->id }}" data-active="{{ $item->show_in_carousel ? '1' : '0' }}"
+                            onclick="toggleGallerySelection(this)">
 
-                                <img src="{{ $item->image_path }}" class="w-full h-full object-cover">
+                            <img src="{{ $item->image_path }}" class="w-full h-full object-cover">
 
-                                <div
-                                    class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
-                                    <span class="material-symbols-outlined text-white text-4xl">check_circle</span>
-                                </div>
-
-                                <!-- Checkbox visual indicator -->
-                                <div
-                                    class="absolute top-3 right-3 w-6 h-6 rounded-full border-2 border-white/50 bg-black/20 flex items-center justify-center transition-all check-indicator">
-                                    <span class="material-symbols-outlined text-white text-xs font-black hidden">check</span>
-                                </div>
+                            <div
+                                class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-4xl">check_circle</span>
                             </div>
-                        @endforeach
-                    </div>
+
+                            <!-- Checkbox visual indicator -->
+                            <div
+                                class="absolute top-3 right-3 w-6 h-6 rounded-full border-2 border-white/50 bg-black/20 flex items-center justify-center transition-all check-indicator">
+                                <span class="material-symbols-outlined text-white text-xs font-black hidden">check</span>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
+            </div>
 
-                <style>
-                    .gallery-item-selectable.selected .check-indicator {
-                        background-color: var(--primary-color);
-                        border-color: var(--primary-color);
-                    }
+            <style>
+                .gallery-item-selectable.selected .check-indicator {
+                    background-color: var(--primary-color);
+                    border-color: var(--primary-color);
+                }
 
-                    .gallery-item-selectable.selected .check-indicator span {
-                        display: block;
-                    }
-                </style>
+                .gallery-item-selectable.selected .check-indicator span {
+                    display: block;
+                }
+            </style>
 
-                <div
-                    class="p-8 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-black flex justify-between items-center">
-                    <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest italic">
-                        Selecciona todas las que desees y presiona "Guardar"
-                    </p>
-                    <div class="flex gap-4">
-                        <button onclick="closeCarouselGalleryModal()"
-                            class="px-8 py-3 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-slate-300 transition-all">
-                            Cancelar
-                        </button>
-                        <button id="save-carousel-btn" onclick="saveCarouselSelection()"
-                            class="bg-primary text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-sm">save</span>
-                            Guardar Selección
-                        </button>
-                    </div>
+            <div
+                class="p-8 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-black flex justify-between items-center">
+                <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest italic">
+                    Selecciona todas las que desees y presiona "Guardar"
+                </p>
+                <div class="flex gap-4">
+                    <button onclick="closeCarouselGalleryModal()"
+                        class="px-8 py-3 bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-slate-300 transition-all">
+                        Cancelar
+                    </button>
+                    <button id="save-carousel-btn" onclick="saveCarouselSelection()"
+                        class="bg-primary text-white px-8 py-3 rounded-xl font-black uppercase tracking-widest text-xs hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">save</span>
+                        Guardar Selección
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
 @endsection

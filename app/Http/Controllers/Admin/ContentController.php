@@ -22,23 +22,30 @@ class ContentController extends Controller
     public function update(Request $request)
     {
         // Guardar configuraciones de texto
-        $data = $request->except(['_token', 'hero_image', 'cafe_image', 'gallery_images']);
+        // Excluimos explícitamente los campos de archivo y el token para no guardarlos como basura en la tabla settings
+        $data = $request->except(['_token', '_method', 'hero_image', 'cafe_image', 'gallery_images', 'hero_image_file', 'cafe_image_file', 'image_file']);
+
         foreach ($data as $key => $value) {
+            // Solo guardamos si no es nulo (o si queremos vaciarlo explícitamente)
             Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         }
 
         // Procesar imágenes (Hero & Cafe)
-        $imageFields = ['hero_image', 'cafe_image'];
-        foreach ($imageFields as $field) {
-            if ($request->hasFile($field)) {
-                $path = \App\Helpers\ImageHelper::storeAsWebp($request->file($field), 'branding');
-                Setting::updateOrCreate(['key' => $field], ['value' => $path]);
-            } elseif ($request->filled($field)) {
-                // Si viene como string (ruta de galería)
-                Setting::updateOrCreate(['key' => $field], ['value' => $request->input($field)]);
+        $imageFields = [
+            'hero_image' => 'hero_image_file',
+            'cafe_image' => 'cafe_image_file'
+        ];
+
+        foreach ($imageFields as $settingKey => $fileKey) {
+            if ($request->hasFile($fileKey)) {
+                $path = \App\Helpers\ImageHelper::storeAsWebp($request->file($fileKey), 'branding');
+                Setting::updateOrCreate(['key' => $settingKey], ['value' => $path]);
+            } elseif ($request->filled($settingKey)) {
+                // Si viene como string (ruta elegida de la librería)
+                Setting::updateOrCreate(['key' => $settingKey], ['value' => $request->input($settingKey)]);
             }
         }
 
-        return redirect()->back()->with('success', 'Contenido actualizado y optimizado con éxito.');
+        return redirect()->back()->with('success', 'Contenido actualizado correctamente.');
     }
 }

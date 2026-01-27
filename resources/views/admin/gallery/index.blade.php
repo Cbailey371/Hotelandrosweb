@@ -11,11 +11,11 @@
                 web.</p>
         </div>
         <div class="flex gap-3">
-            <a href="{{ route('admin.gallery.sync') }}"
+            <button type="button" onclick="syncGalleryManual(this)"
                 class="flex min-w-[140px] cursor-pointer items-center justify-center gap-2 rounded-lg h-11 px-6 bg-slate-100 text-slate-600 text-sm font-bold hover:bg-slate-200 transition-all border border-slate-200">
                 <span class="material-symbols-outlined text-xl">sync</span>
                 <span>Sincronizar Manual</span>
-            </a>
+            </button>
             <button onclick="document.getElementById('uploadModal').classList.remove('hidden')"
                 class="flex min-w-[140px] cursor-pointer items-center justify-center gap-2 rounded-lg h-11 px-6 bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 hover:bg-primary/90 transition-all">
                 <span class="material-symbols-outlined text-xl">upload</span>
@@ -146,3 +146,41 @@
         @endforelse
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+    function syncGalleryManual(button) {
+        const originalContent = button.innerHTML;
+        button.disabled = true;
+        button.innerHTML = '<span class="material-symbols-outlined text-xl animate-spin">sync</span><span>Sincronizando...</span>';
+        button.classList.add('opacity-70', 'cursor-not-allowed');
+
+        fetch("{{ route('admin.gallery.sync') }}?ajax=1", {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                if (data.added_count > 0) {
+                    window.location.reload();
+                }
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ocurrió un error al sincronizar la galería.');
+        })
+        .finally(() => {
+            button.disabled = false;
+            button.innerHTML = originalContent;
+            button.classList.remove('opacity-70', 'cursor-not-allowed');
+        });
+    }
+    </script>
+@endpush
