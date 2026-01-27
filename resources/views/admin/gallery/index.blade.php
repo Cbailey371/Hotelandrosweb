@@ -61,16 +61,20 @@
             <form action="{{ route('admin.gallery.store') }}" method="POST" enctype="multipart/form-data"
                 class="p-8 space-y-6">
                 @csrf
-                <div class="space-y-2">
+                <div class="space-y-4">
                     <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Seleccionar Archivos
                         (Máx 10MB por foto)</label>
-                    <div class="relative group">
-                        <input type="file" name="gallery_images[]" multiple required
-                            class="w-full bg-slate-50 dark:bg-slate-800 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl px-5 py-10 text-sm font-bold focus:ring-2 focus:ring-primary/50 cursor-pointer hover:border-primary/30 transition-all">
+                    <div class="relative group h-48 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl hover:border-primary/50 transition-all flex flex-col items-center justify-center bg-slate-50/50 dark:bg-slate-800/50 overflow-hidden"
+                        id="drop-zone">
+                        <input type="file" name="gallery_images[]" id="gallery_images_input" multiple required
+                            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20">
+
                         <div
-                            class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-slate-400 group-hover:text-primary transition-colors">
-                            <span class="material-symbols-outlined text-4xl mb-2">cloud_upload</span>
-                            <p class="text-xs uppercase font-black tracking-widest">Haz clic o arrastra aquí</p>
+                            class="flex flex-col items-center justify-center text-slate-400 group-hover:text-primary transition-colors z-10 pointer-events-none">
+                            <span class="material-symbols-outlined text-5xl mb-3 animate-pulse">cloud_upload</span>
+                            <p class="text-[10px] uppercase font-black tracking-[0.2em] mb-1">Haz clic o arrastra aquí</p>
+                            <p class="text-[9px] font-bold text-slate-400/60 uppercase" id="file-status">Ningún archivo
+                                seleccionado</p>
                         </div>
                     </div>
                 </div>
@@ -149,38 +153,47 @@
 
 @push('scripts')
     <script>
-    function syncGalleryManual(button) {
-        const originalContent = button.innerHTML;
-        button.disabled = true;
-        button.innerHTML = '<span class="material-symbols-outlined text-xl animate-spin">sync</span><span>Sincronizando...</span>';
-        button.classList.add('opacity-70', 'cursor-not-allowed');
+        function syncGalleryManual(button) {
+            const originalContent = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<span class="material-symbols-outlined text-xl animate-spin">sync</span><span>Sincronizando...</span>';
+            button.classList.add('opacity-70', 'cursor-not-allowed');
 
-        fetch("{{ route('admin.gallery.sync') }}?ajax=1", {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(data.message);
-                if (data.added_count > 0) {
-                    window.location.reload();
+            fetch("{{ route('admin.gallery.sync') }}?ajax=1", {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
                 }
-            } else {
-                alert('Error: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Ocurrió un error al sincronizar la galería.');
-        })
-        .finally(() => {
-            button.disabled = false;
-            button.innerHTML = originalContent;
-            button.classList.remove('opacity-70', 'cursor-not-allowed');
-        });
-    }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        if (data.added_count > 0) {
+                            window.location.reload();
+                        }
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Ocurrió un error al sincronizar la galería.');
+                })
+                .finally(() => {
+                    button.disabled = false;
+                    button.innerHTML = originalContent;
+                    button.classList.remove('opacity-70', 'cursor-not-allowed');
+                });
+        }
+
+        const fileInput = document.getElementById('gallery_images_input');
+        const fileStatus = document.getElementById('file-status');
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                const count = this.files.length;
+                fileStatus.innerText = count > 0 ? (count === 1 ? '1 archivo seleccionado' : `${count} archivos seleccionados`) : 'Ningún archivo seleccionado';
+            });
+        }
     </script>
 @endpush
