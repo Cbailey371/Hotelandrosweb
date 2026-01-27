@@ -30,8 +30,8 @@
         <!-- Hero Section -->
         <div class="relative pt-8 mb-32" id="inicio">
             <!-- Hero Container with fixed height for better control -->
-            <div
-                class="relative w-full h-[80vh] md:h-[85vh] rounded-[2.5rem] overflow-hidden bg-slate-950 shadow-2xl group">
+            <div class="relative w-full rounded-[2.5rem] overflow-hidden bg-slate-950 shadow-2xl group"
+                style="min-height: 85vh !important;">
 
                 <!-- Layer 1: Blurred Backdrop (fills the sides on wide screens) -->
                 <div class="absolute inset-0 bg-cover bg-center blur-3xl opacity-40 scale-110"
