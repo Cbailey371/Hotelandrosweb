@@ -29,38 +29,21 @@
 
         <!-- Hero Section -->
         <div class="relative pt-8 mb-32" id="inicio">
-            <!-- Hero Container with fixed height for better control -->
-            <div class="relative w-full rounded-[2.5rem] overflow-hidden bg-slate-950 shadow-2xl group"
-                style="min-height: 85vh !important;">
-
-                <!-- Layer 1: Blurred Backdrop (fills the sides on wide screens) -->
-                <div class="absolute inset-0 bg-cover bg-center blur-3xl opacity-40 scale-110"
-                    style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}");'>
-                </div>
-
-                <!-- Layer 2: Main Building Image (Ensures 100% visibility of the building portrait) -->
-                <div class="absolute inset-0 bg-cover md:bg-contain bg-center bg-no-repeat transition-all duration-700"
-                    style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}");'>
-                </div>
-
-                <!-- Layer 3: Dark Gradient Overlay (Contrast for text) -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-
-                <!-- Layer 4: Content (Title, Subtitle, Buttons) -->
-                <div class="absolute inset-0 flex flex-col justify-center items-center text-center p-6 md:p-20 z-20">
-                    <h1
-                        class="text-white text-5xl md:text-7xl lg:text-8xl font-black mb-6 tracking-tighter drop-shadow-2xl leading-tight hero-no-filter">
+            <!-- Container with overflow-hidden for the background image -->
+            <div class="relative w-full rounded-3xl overflow-hidden bg-cover bg-center flex flex-col justify-center"
+                style='min-height: 90vh !important; background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 60%), url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}");'>
+                <div class="p-10 md:p-20 text-center">
+                    <div
+                        class="text-white text-5xl md:text-7xl font-black mb-6 tracking-tight drop-shadow-lg leading-tight hero-no-filter">
                         {!! app()->getLocale() == 'es' ? ($settings['hero_title_es'] ?? '') : ($settings['hero_title_en'] ?? '') !!}
-                    </h1>
-                    <p
-                        class="text-white text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed drop-shadow-lg hero-no-filter font-medium opacity-90 mb-10">
+                    </div>
+                    <div
+                        class="text-white text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed drop-shadow-md hero-no-filter">
                         {!! app()->getLocale() == 'es' ? ($settings['hero_subtitle_es'] ?? '') : ($settings['hero_subtitle_en'] ?? '') !!}
-                    </p>
-                    <div class="flex justify-center gap-4">
+                    </div>
+                    <div class="mt-12 flex justify-center gap-4">
                         <a href="#habitaciones"
-                            class="px-8 py-4 md:px-12 md:py-5 bg-primary text-white font-black rounded-2xl shadow-2xl shadow-primary/40 hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest text-xs md:text-sm">
-                            {{ __('Descubrir Habitaciones') }}
-                        </a>
+                            class="px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-xl shadow-primary/30 hover:bg-primary/90 transition-all scale-110 hover:scale-105">{{ __('Descubrir Habitaciones') }}</a>
                     </div>
                 </div>
             </div>
@@ -518,9 +501,9 @@
                     <span class="material-symbols-outlined text-3xl font-black">chevron_left</span>
                 </button>
 
-                <div class="w-full h-full flex items-center justify-center overflow-hidden p-2">
+                <div class="w-full h-full flex items-center justify-center overflow-hidden">
                     <img id="gallery-main-image" src=""
-                        class="max-h-[70vh] md:max-h-[75vh] w-auto max-w-[90vw] object-contain rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-500 border-2 border-white/20">
+                        class="max-h-full max-w-full w-auto h-auto object-contain rounded-2xl shadow-2xl animate-in fade-in zoom-in duration-500 border-2 border-white/20">
                 </div>
 
                 <button onclick="nextImage()"
@@ -536,134 +519,134 @@
         </div>
 
         <script>
-            function processFastBooking() {
-                const guestCount = parseInt(document.getElementById('search-guests').value);
-                let roomId, roomName;
+       function processFastBooking() {
+                    const guestCount = parseInt(document.getElementById('search-guests').value);
+                    let roomId, roomName;
 
-                if (guestCount <= 2) {
-                    roomId = '2'; // Deluxe con cama extragrande
-                    roomName = '{{ app()->getLocale() == "es" ? "Habitación Deluxe con cama extragrande" : "Deluxe Room with Extra Large Bed" }}';
-                } else {
-                    roomId = '1'; // Doble Deluxe
-                    roomName = '{{ app()->getLocale() == "es" ? "Habitación Doble Deluxe" : "Double Deluxe Room" }}';
+                    if (guestCount <= 2) {
+                        roomId = '2'; // Deluxe con cama extragrande
+                        roomName = '{{ app()->getLocale() == "es" ? "Habitación Deluxe con cama extragrande" : "Deluxe Room with Extra Large Bed" }}';
+                    } else {
+                        roomId = '1'; // Doble Deluxe
+                        roomName = '{{ app()->getLocale() == "es" ? "Habitación Doble Deluxe" : "Double Deluxe Room" }}';
+                    }
+
+                    openBookingModal(roomId, roomName);
                 }
 
-                openBookingModal(roomId, roomName);
-            }
+                function scrollToRooms() {
+                    document.getElementById('habitaciones').scrollIntoView({ behavior: 'smooth' });
+                }
 
-            function scrollToRooms() {
-                document.getElementById('habitaciones').scrollIntoView({ behavior: 'smooth' });
-            }
+                function openBookingModal(roomId, roomName) {
+                    // Sincronizar con la barra de búsqueda
+                    const checkIn = document.getElementById('search-check-in').value;
+                    const checkOut = document.getElementById('search-check-out').value;
+                    const guests = document.getElementById('search-guests').value;
 
-            function openBookingModal(roomId, roomName) {
-                // Sincronizar con la barra de búsqueda
-                const checkIn = document.getElementById('search-check-in').value;
-                const checkOut = document.getElementById('search-check-out').value;
-                const guests = document.getElementById('search-guests').value;
+                    document.getElementById('modal-room-id').value = roomId;
+                    document.getElementById('modal-title').innerText = roomName;
+                    document.getElementById('modal-check-in').value = checkIn;
+                    document.getElementById('modal-check-out').value = checkOut;
+                    document.getElementById('modal-guests').value = guests;
 
-                document.getElementById('modal-room-id').value = roomId;
-                document.getElementById('modal-title').innerText = roomName;
-                document.getElementById('modal-check-in').value = checkIn;
-                document.getElementById('modal-check-out').value = checkOut;
-                document.getElementById('modal-guests').value = guests;
+                    document.getElementById('booking-modal').classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                }
 
-                document.getElementById('booking-modal').classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            }
+                function closeBookingModal() {
+                    document.getElementById('booking-modal').classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
 
-            function closeBookingModal() {
-                document.getElementById('booking-modal').classList.add('hidden');
-                document.body.style.overflow = 'auto';
-            }
+                // Gallery Logic
+                let currentGalleryImages = [];
+                let currentImageIndex = 0;
 
-            // Gallery Logic
-            let currentGalleryImages = [];
-            let currentImageIndex = 0;
+                function openGalleryModal(images) {
+                    currentGalleryImages = images;
+                    currentImageIndex = 0;
 
-            function openGalleryModal(images) {
-                currentGalleryImages = images;
-                currentImageIndex = 0;
+                    document.getElementById('gallery-modal').classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
 
-                document.getElementById('gallery-modal').classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
+                    updateGalleryUI();
+                }
 
-                updateGalleryUI();
-            }
+                function closeGalleryModal() {
+                    document.getElementById('gallery-modal').classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
 
-            function closeGalleryModal() {
-                document.getElementById('gallery-modal').classList.add('hidden');
-                document.body.style.overflow = 'auto';
-            }
+                function updateGalleryUI() {
+                    // Update Main Image
+                    const mainImage = document.getElementById('gallery-main-image');
+                    mainImage.src = currentGalleryImages[currentImageIndex];
 
-            function updateGalleryUI() {
-                // Update Main Image
-                const mainImage = document.getElementById('gallery-main-image');
-                mainImage.src = currentGalleryImages[currentImageIndex];
+                    // Update Counter
+                    document.getElementById('gallery-counter').innerText = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
 
-                // Update Counter
-                document.getElementById('gallery-counter').innerText = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
+                    // Update Thumbnails
+                    const thumbsContainer = document.getElementById('gallery-thumbnails');
+                    thumbsContainer.innerHTML = '';
 
-                // Update Thumbnails
-                const thumbsContainer = document.getElementById('gallery-thumbnails');
-                thumbsContainer.innerHTML = '';
+                    currentGalleryImages.forEach((img, index) => {
+                        const thumb = document.createElement('img');
+                        thumb.src = img;
+                        thumb.className = `h-full aspect-square object-cover rounded-md cursor-pointer border-2 transition-all ${index === currentImageIndex ? 'border-primary opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`;
+                        thumb.onclick = () => {
+                            currentImageIndex = index;
+                            updateGalleryUI();
+                        };
+                        thumbsContainer.appendChild(thumb);
+                    });
+                }
 
-                currentGalleryImages.forEach((img, index) => {
-                    const thumb = document.createElement('img');
-                    thumb.src = img;
-                    thumb.className = `h-full aspect-square object-cover rounded-md cursor-pointer border-2 transition-all ${index === currentImageIndex ? 'border-primary opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`;
-                    thumb.onclick = () => {
-                        currentImageIndex = index;
-                        updateGalleryUI();
-                    };
-                    thumbsContainer.appendChild(thumb);
+                function nextImage() {
+                    currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length;
+                    updateGalleryUI();
+                }
+
+                function prevImage() {
+                    currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
+                    updateGalleryUI();
+                }
+
+                // Keyboard Support
+                document.addEventListener('keydown', function (event) {
+                    if (document.getElementById('gallery-modal').classList.contains('hidden')) return;
+
+                    if (event.key === 'Escape') closeGalleryModal();
+                    if (event.key === 'ArrowRight') nextImage();
+                    if (event.key === 'ArrowLeft') prevImage();
                 });
-            }
 
-            function nextImage() {
-                currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length;
-                updateGalleryUI();
-            }
-
-            function prevImage() {
-                currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
-                updateGalleryUI();
-            }
-
-            // Keyboard Support
-            document.addEventListener('keydown', function (event) {
-                if (document.getElementById('gallery-modal').classList.contains('hidden')) return;
-
-                if (event.key === 'Escape') closeGalleryModal();
-                if (event.key === 'ArrowRight') nextImage();
-                if (event.key === 'ArrowLeft') prevImage();
-            });
-
-            // Initialize Home Carousel
-            document.addEventListener('DOMContentLoaded', function () {
-                new Swiper('.home-carousel', {
-                    slidesPerView: 'auto',
-                    centeredSlides: true,
-                    spaceBetween: 20,
-                    loop: true,
-                    autoHeight: true,
-                    autoplay: {
-                        delay: 3500,
-                        disableOnInteraction: false,
-                    },
-                    navigation: {
-                        nextEl: '.swiper-next',
-                        prevEl: '.swiper-prev',
-                    },
-                    effect: 'coverflow',
-                    coverflowEffect: {
-                        rotate: 5,
-                        stretch: 0,
-                        depth: 100,
-                        modifier: 1,
-                        slideShadows: false,
-                    },
+                // Initialize Home Carousel
+                document.addEventListener('DOMContentLoaded', function () {
+                    new Swiper('.home-carousel', {
+                        slidesPerView: 'auto',
+                        centeredSlides: true,
+                        spaceBetween: 20,
+                        loop: true,
+                        autoHeight: true,
+                        autoplay: {
+                            delay: 3500,
+                            disableOnInteraction: false,
+                        },
+                        navigation: {
+                            nextEl: '.swiper-next',
+                            prevEl: '.swiper-prev',
+                        },
+                        effect: 'coverflow',
+                        coverflowEffect: {
+                            rotate: 5,
+                            stretch: 0,
+                            depth: 100,
+                            modifier: 1,
+                            slideShadows: false,
+                        },
+                    });
                 });
-            });
-        </script>
-    </div>
+            </script>
+        </div>
 @endsection
