@@ -102,8 +102,22 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
                     }
                 }
 
+                if (request()->ajax() || request()->wantsJson() || request()->has('ajax')) {
+                    return response()->json([
+                        'success' => true,
+                        'message' => "Se añadieron $added nuevas imágenes encontradas en el servidor.",
+                        'added_count' => $added
+                    ]);
+                }
+
                 return "✅ Sincronización completada. Se añadieron $added nuevas imágenes encontradas en el servidor. <br><br><a href='" . route('admin.gallery.index') . "'>Volver a la Galería</a>";
             } catch (\Exception $e) {
+                if (request()->ajax() || request()->wantsJson() || request()->has('ajax')) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error: ' . $e->getMessage()
+                    ], 500);
+                }
                 return "❌ Error: " . $e->getMessage();
             }
         })->name('gallery.sync');

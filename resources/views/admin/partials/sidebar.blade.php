@@ -51,6 +51,12 @@
                     <p class="text-sm font-medium">Editar Contenido</p>
                 </a>
 
+                <a href="{{ route('admin.gallery.index') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.gallery.*') ? 'bg-primary/10 text-primary' : 'text-[#4c739a] hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                    <span class="material-symbols-outlined">photo_library</span>
+                    <p class="text-sm font-medium">Galería</p>
+                </a>
+
                 <a href="{{ route('admin.settings.index') }}"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.settings.*') ? 'bg-primary/10 text-primary' : 'text-[#4c739a] hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                     <span class="material-symbols-outlined">settings</span>
