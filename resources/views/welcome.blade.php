@@ -39,8 +39,9 @@
                 </div>
 
                 <!-- 2. Main Picture Layer (Contain on desktop to see the whole building) -->
-                <div class="absolute inset-0 bg-cover md:bg-contain bg-center bg-no-repeat transition-all duration-1000"
-                    style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}");'>
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <img src="{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"
+                        class="w-full h-full object-cover md:object-contain" alt="Hotel Andros">
                 </div>
 
                 <!-- 3. Dark Aesthetic Overlay -->
