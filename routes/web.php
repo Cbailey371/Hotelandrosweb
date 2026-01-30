@@ -15,9 +15,9 @@ Route::get('/lang/{locale}', function ($locale) {
     return redirect()->back();
 });
 
-// Ruta de Reservas/Contacto Pública
-Route::post('/bookings', [PublicBookingController::class, 'store'])->name('bookings.store');
-Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->name('contact.store');
+// Ruta de Reservas/Contacto Pública (Protegidas con Rate Limit para evitar Spam)
+Route::post('/bookings', [PublicBookingController::class, 'store'])->middleware('throttle:6,1')->name('bookings.store');
+Route::post('/contact', [\App\Http\Controllers\ContactController::class, 'store'])->middleware('throttle:6,1')->name('contact.store');
 
 // Rutas de Perfil (Usuario Autenticado)
 Route::middleware('auth')->group(function () {
@@ -57,27 +57,43 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('content', [\App\Http\Controllers\Admin\ContentController::class, 'index'])->name('content.index');
         Route::post('content', [\App\Http\Controllers\Admin\ContentController::class, 'update'])->name('content.update');
 
-        // Rutas de Mantenimiento y Caché
-        Route::get('clear-cache', function () {
+        // Rutas de Mantenimiento y Caché (Aseguradas con POST)
+        Route::post('clear-cache', function () {
             try {
                 \Illuminate\Support\Facades\Artisan::call('optimize:clear');
                 \Illuminate\Support\Facades\Artisan::call('view:clear');
                 \Illuminate\Support\Facades\Artisan::call('config:clear');
                 \Illuminate\Support\Facades\Artisan::call('cache:clear');
-                return "✅ [V3] LIMPIEZA PROFUNDA COMPLETADA: Caché de vistas, configuración y optimización eliminada. Por favor, realiza una nueva prueba de reserva ahora.";
+                return back()->with('success', '✅ [V3] LIMPIEZA PROFUNDA COMPLETADA: Caché de vistas, configuración y optimización eliminada.');
             } catch (\Exception $e) {
-                return "❌ Error: " . $e->getMessage();
+                return back()->with('error', "❌ Error: " . $e->getMessage());
             }
-        });
+        })->name('clear-cache');
 
-        Route::get('check-php', function () {
-            return "<h3>Diagnóstico del Servidor</h3>" .
-                "• MEMORY LIMIT: " . ini_get('memory_limit') . "<br>" .
-                "• UPLOAD MAX SIZE: " . ini_get('upload_max_filesize') . "<br>" .
-                "• POST MAX SIZE: " . ini_get('post_max_size') . "<br>" .
-                "• MAX EXECUTION TIME: " . ini_get('max_execution_time') . "s<br><br>" .
-                "<i>Si el UPLOAD o MEMORY son bajos, las fotos pesadas fallarán con un error 503 o 500.</i>";
-        });
+        // Ruta de reparación maestra para SSL y Diseño (Asegurada con POST)
+        Route::post('repair-ssl', function () {
+            try {
+                $hotFile = public_path('hot');
+                if (file_exists($hotFile)) {
+                    unlink($hotFile);
+                }
+                \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+                return back()->with('success', "✅ Reparación completada. Se eliminó el archivo de conflicto y se limpió la caché. Por favor, usa una ventana de INCÓGNITO.");
+            } catch (\Exception $e) {
+                return back()->with('error', "❌ Error durante la reparación: " . $e->getMessage());
+            }
+        })->name('repair-ssl');
+
+        // Diagnóstico restringido a entorno local
+        if (app()->environment('local')) {
+            Route::get('check-php', function () {
+                return "<h3>Diagnóstico del Servidor</h3>" .
+                    "• MEMORY LIMIT: " . ini_get('memory_limit') . "<br>" .
+                    "• UPLOAD MAX SIZE: " . ini_get('upload_max_filesize') . "<br>" .
+                    "• POST MAX SIZE: " . ini_get('post_max_size') . "<br>" .
+                    "• MAX EXECUTION TIME: " . ini_get('max_execution_time') . "s";
+            });
+        }
 
         Route::get('sync-gallery', function () {
             try {
@@ -122,30 +138,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
             }
         })->name('gallery.sync');
 
-        // Ruta de reparación maestra para SSL y Diseño
-        Route::get('repair-ssl', function () {
-            try {
-                $hotFile = public_path('hot');
-                $deletedHot = false;
-                if (file_exists($hotFile)) {
-                    unlink($hotFile);
-                    $deletedHot = true;
-                }
-
-                \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-
-                $msg = "✅ Reparación completada con éxito.<br>";
-                if ($deletedHot) {
-                    $msg .= "• Se eliminó el archivo de conflicto 'hot'.<br>";
-                }
-                $msg .= "• Toda la caché del servidor ha sido limpiada.<br><br>";
-                $msg .= "<b>Por favor, abre el sitio ahora en una VENTANA DE INCÓGNITO.</b>";
-
-                return $msg;
-            } catch (\Exception $e) {
-                return "❌ Error durante la reparación: " . $e->getMessage();
-            }
-        });
 
         // Gestión de Galería
         Route::post('gallery/bulk-carousel', [\App\Http\Controllers\Admin\GalleryController::class, 'bulkUpdateCarousel'])->name('gallery.bulk-carousel');

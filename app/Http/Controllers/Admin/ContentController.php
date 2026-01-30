@@ -21,31 +21,47 @@ class ContentController extends Controller
 
     public function update(Request $request)
     {
-        // Guardar configuraciones de texto
-        // Excluimos explícitamente los campos de archivo y el token para no guardarlos como basura en la tabla settings
-        $data = $request->except(['_token', '_method', 'hero_image', 'cafe_image', 'gallery_images', 'hero_image_file', 'cafe_image_file', 'image_file']);
+        // 1. Definir campos permitidos (Whitelist) para evitar Mass Assignment en settings
+        $allowedKeys = [
+            'hero_title',
+            'hero_subtitle',
+            'hero_overlay_color',
+            'hero_overlay_opacity',
+            'hero_bg_opacity',
+            'cafe_title',
+            'cafe_description',
+            'room_section_title',
+            'room_section_description',
+            'contact_email',
+            'contact_phone',
+            'hotel_address',
+            'hotel_email'
+        ];
+
+        // 2. Validación de archivos (Tipos MIME y Tamaño)
+        $request->validate([
+            'hero_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'cafe_image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+
+        // 3. Procesar solo los datos dentro de la lista blanca
+        $data = $request->only($allowedKeys);
 
         foreach ($data as $key => $value) {
-            // Solo guardamos si no es nulo (o si queremos vaciarlo explícitamente)
             Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         }
 
-        // Procesar imágenes (Hero & Cafe)
-        $imageFields = [
-            'hero_image' => 'hero_image_file',
-            'cafe_image' => 'cafe_image_file'
-        ];
-
-        foreach ($imageFields as $settingKey => $fileKey) {
-            if ($request->hasFile($fileKey)) {
-                $path = \App\Helpers\ImageHelper::storeAsWebp($request->file($fileKey), 'branding');
-                Setting::updateOrCreate(['key' => $settingKey], ['value' => $path]);
-            } elseif ($request->filled($settingKey)) {
-                // Si viene como string (ruta elegida de la librería)
-                Setting::updateOrCreate(['key' => $settingKey], ['value' => $request->input($settingKey)]);
-            }
+        // 4. Procesar imágenes de forma segura
+        if ($request->hasFile('hero_image_file')) {
+            $path = \App\Helpers\ImageHelper::storeAsWebp($request->file('hero_image_file'), 'branding');
+            Setting::updateOrCreate(['key' => 'hero_image'], ['value' => $path]);
         }
 
-        return redirect()->back()->with('success', 'Contenido actualizado correctamente.');
+        if ($request->hasFile('cafe_image_file')) {
+            $path = \App\Helpers\ImageHelper::storeAsWebp($request->file('cafe_image_file'), 'branding');
+            Setting::updateOrCreate(['key' => 'cafe_image'], ['value' => $path]);
+        }
+
+        return redirect()->back()->with('success', 'Contenido actualizado correctamente y verificado.');
     }
 }

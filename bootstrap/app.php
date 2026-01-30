@@ -11,11 +11,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Por seguridad, es mejor no confiar en todos los proxies (*) a menos que sea necesario.
+        // Si usas un balanceador (AWS, Cloudflare), especifica sus IPs en lugar de '*'
+        /*
         $middleware->trustProxies(at: '*', headers: \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR |
             \Illuminate\Http\Request::HEADER_X_FORWARDED_HOST |
             \Illuminate\Http\Request::HEADER_X_FORWARDED_PORT |
             \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO |
             \Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB);
+        */
 
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
