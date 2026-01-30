@@ -142,12 +142,6 @@
                             <span class="material-symbols-outlined text-sm">local_bar</span>
                             <span class="text-sm font-bold">Andros Cafe</span>
                         </button>
-                        <button onclick="switchSection('footer')"
-                            class="section-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
-                            data-section="footer">
-                            <span class="material-symbols-outlined text-sm">bottom_panel_open</span>
-                            <span class="text-sm font-bold">Pie de Página (Footer)</span>
-                        </button>
 
                         <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
                             <button onclick="switchSection('location')"
@@ -157,6 +151,13 @@
                                 <span class="text-sm font-bold">Ubicación & Mapa</span>
                             </button>
 
+                            <button onclick="switchSection('home_carousel')"
+                                class="section-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
+                                data-section="home_carousel">
+                                <span class="material-symbols-outlined text-sm">view_carousel</span>
+                                <span class="text-sm font-bold">Home Carousel</span>
+                            </button>
+
                             <button onclick="switchSection('attractions')"
                                 class="section-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all"
                                 data-section="attractions">
@@ -164,13 +165,12 @@
                                 <span class="text-sm font-bold">Local Attractions</span>
                             </button>
 
-                            <button onclick="switchSection('home_carousel')"
+                            <button onclick="switchSection('footer')"
                                 class="section-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all mt-4"
-                                data-section="home_carousel">
-                                <span class="material-symbols-outlined text-sm">view_carousel</span>
-                                <span class="text-sm font-bold">Home Carousel</span>
+                                data-section="footer">
+                                <span class="material-symbols-outlined text-sm">bottom_panel_open</span>
+                                <span class="text-sm font-bold">Pie de Página (Footer)</span>
                             </button>
-
                         </div>
                     </nav>
                 </div>
@@ -1046,13 +1046,13 @@
                                         class="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all z-20">
                                         <button type="button"
                                             onclick='editAttraction({
-                                                                                                                                                                                                                                                                                                    id: "{{ $attraction->id }}",
-                                                                                                                                                                                                                                                                                                    title_es: "{{ addslashes($attraction->title_es) }}",
-                                                                                                                                                                                                                                                                                                    title_en: "{{ addslashes($attraction->title_en) }}",
-                                                                                                                                                                                                                                                                                                    description_es: "{{ addslashes($attraction->description_es) }}",
-                                                                                                                                                                                                                                                                                                    description_en: "{{ addslashes($attraction->description_en) }}",
-                                                                                                                                                                                                                                                                                                    image_path: "{{ $attraction->image_path }}"
-                                                                                                                                                                                                                                                                                                })'
+                                                                                                                                                                                                                                                                                                                    id: "{{ $attraction->id }}",
+                                                                                                                                                                                                                                                                                                                    title_es: "{{ addslashes($attraction->title_es) }}",
+                                                                                                                                                                                                                                                                                                                    title_en: "{{ addslashes($attraction->title_en) }}",
+                                                                                                                                                                                                                                                                                                                    description_es: "{{ addslashes($attraction->description_es) }}",
+                                                                                                                                                                                                                                                                                                                    description_en: "{{ addslashes($attraction->description_en) }}",
+                                                                                                                                                                                                                                                                                                                    image_path: "{{ $attraction->image_path }}"
+                                                                                                                                                                                                                                                                                                                })'
                                             class="text-blue-500 hover:text-blue-700 p-2 bg-white dark:bg-[#0b0c11] rounded-full shadow-sm">
                                             <span class="material-symbols-outlined text-sm font-bold">edit</span>
                                         </button>
@@ -1693,37 +1693,37 @@
                     const row = document.createElement('div');
                     row.className = 'flex flex-col md:flex-row items-center gap-4 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800';
                     row.innerHTML = `
-                                                                                                                                                                        <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                                                                                                                                            <div>
-                                                                                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Platform</label>
-                                                                                                                                                                                <select onchange="updateSocialLink(${index}, 'platform', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm">
-                                                                                                                                                                                    <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
-                                                                                                                                                                                    <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
-                                                                                                                                                                                    <option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
-                                                                                                                                                                                    <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option>
-                                                                                                                                                                                    <option value="tiktok" ${link.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
-                                                                                                                                                                                    <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
-                                                                                                                                                                                    <option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
-                                                                                                                                                                                </select>
-                                                                                                                                                                            </div>
-                                                                                                                                                                            <div>
-                                                                                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">URL</label>
-                                                                                                                                                                                <input type="text" value="${link.url}" placeholder="https://..." onchange="updateSocialLink(${index}, 'url', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20">
-                                                                                                                                                                            </div>
-                                                                                                                                                                        </div>
-                                                                                                                                                                        <div class="flex items-center gap-4">
-                                                                                                                                                                            <label class="flex items-center gap-2 cursor-pointer group">
-                                                                                                                                                                                <div class="relative">
-                                                                                                                                                                                    <input type="checkbox" ${link.active ? 'checked' : ''} onchange="updateSocialLink(${index}, 'active', this.checked)" class="sr-only peer">
-                                                                                                                                                                                    <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
-                                                                                                                                                                                </div>
-                                                                                                                                                                                <span class="text-[10px] font-black text-slate-400 uppercase group-hover:text-primary transition-colors">Active</span>
-                                                                                                                                                                            </label>
-                                                                                                                                                                            <button type="button" onclick="removeSocialLink(${index})" class="text-slate-400 hover:text-red-500 transition-colors">
-                                                                                                                                                                                <span class="material-symbols-outlined text-sm">delete</span>
-                                                                                                                                                                            </button                                                                                                                                                                                                             >
-                                                                                                                                                                        </div>
-                                                                                                                                                                    `;
+                                                                                                                                                                                        <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                                                                                                                                            <div>
+                                                                                                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">Platform</label>
+                                                                                                                                                                                                <select onchange="updateSocialLink(${index}, 'platform', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm">
+                                                                                                                                                                                                    <option value="instagram" ${link.platform === 'instagram' ? 'selected' : ''}>Instagram</option>
+                                                                                                                                                                                                    <option value="facebook" ${link.platform === 'facebook' ? 'selected' : ''}>Facebook</option>
+                                                                                                                                                                                                    <option value="linkedin" ${link.platform === 'linkedin' ? 'selected' : ''}>LinkedIn</option>
+                                                                                                                                                                                                    <option value="twitter" ${link.platform === 'twitter' ? 'selected' : ''}>Twitter / X</option>
+                                                                                                                                                                                                    <option value="tiktok" ${link.platform === 'tiktok' ? 'selected' : ''}>TikTok</option>
+                                                                                                                                                                                                    <option value="youtube" ${link.platform === 'youtube' ? 'selected' : ''}>YouTube</option>
+                                                                                                                                                                                                    <option value="whatsapp" ${link.platform === 'whatsapp' ? 'selected' : ''}>WhatsApp</option>
+                                                                                                                                                                                                </select>
+                                                                                                                                                                                            </div>
+                                                                                                                                                                                            <div>
+                                                                                                                                                                                                <label class="block text-[10px] font-black text-slate-400 uppercase mb-1">URL</label>
+                                                                                                                                                                                                <input type="text" value="${link.url}" placeholder="https://..." onchange="updateSocialLink(${index}, 'url', this.value)" class="w-full bg-white dark:bg-[#0b0c11] border-none rounded-xl px-4 py-2 text-sm focus:ring-2 focus:ring-primary/20">
+                                                                                                                                                                                            </div>
+                                                                                                                                                                                        </div>
+                                                                                                                                                                                        <div class="flex items-center gap-4">
+                                                                                                                                                                                            <label class="flex items-center gap-2 cursor-pointer group">
+                                                                                                                                                                                                <div class="relative">
+                                                                                                                                                                                                    <input type="checkbox" ${link.active ? 'checked' : ''} onchange="updateSocialLink(${index}, 'active', this.checked)" class="sr-only peer">
+                                                                                                                                                                                                    <div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                                                                                                                                                                                                </div>
+                                                                                                                                                                                                <span class="text-[10px] font-black text-slate-400 uppercase group-hover:text-primary transition-colors">Active</span>
+                                                                                                                                                                                            </label>
+                                                                                                                                                                                            <button type="button" onclick="removeSocialLink(${index})" class="text-slate-400 hover:text-red-500 transition-colors">
+                                                                                                                                                                                                <span class="material-symbols-outlined text-sm">delete</span>
+                                                                                                                                                                                            </button                                                                                                                                                                                                             >
+                                                                                                                                                                                        </div>
+                                                                                                                                                                                    `;
                     container.appendChild(row);
                 });
                 syncSocialsJson();
