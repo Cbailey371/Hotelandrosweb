@@ -16,7 +16,8 @@
 
     <!-- Manifest PWA -->
     <link rel="manifest" href="/manifest.json">
-    <link rel="icon" type="image/x-icon" href="{{ $settings['hotel_favicon'] ?? '/favicon.ico' }}">
+    <link rel="icon" type="image/x-icon"
+        href="{{ $settings['hotel_favicon'] ?? $settings['hotel_logo'] ?? '/favicon.ico' }}">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
