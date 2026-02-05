@@ -28,8 +28,10 @@ class ContentController extends Controller
             'hero_overlay_color',
             'hero_overlay_opacity',
             'hero_bg_opacity',
+            'hero_image', // Permitir path de galería
             'cafe_title',
             'cafe_description',
+            'cafe_image', // Permitir path de galería
             'room_section_title',
             'room_section_description',
             'contact_email',
