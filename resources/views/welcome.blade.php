@@ -32,125 +32,124 @@
 @endpush
 
 @section('content')
-    <div class="max-w-[1440px] mx-auto px-4 md:px-8">
-        <!-- Alertas -->
-        @if(session('success'))
-            <div class="fixed top-24 right-8 z-50 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl animate-bounce">
-                <div class="flex items-center gap-3">
-                    <span class="material-symbols-outlined">check_circle</span>
-                    <span class="font-bold">{{ session('success') }}</span>
-                </div>
+
+    @if(session('success'))
+        <div class="fixed top-24 right-8 z-50 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl animate-bounce">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined">check_circle</span>
+                <span class="font-bold">{{ session('success') }}</span>
             </div>
-        @endif
+        </div>
+    @endif
 
-        @if($errors->any())
-            <div class="fixed top-24 right-8 z-50 bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl animate-pulse">
-                <div class="flex flex-col gap-1">
-                    @foreach($errors->all() as $error)
-                        <div class="flex items-center gap-2">
-                            <span class="material-symbols-outlined text-sm">error</span>
-                            <span class="font-bold text-xs">{{ $error }}</span>
-                        </div>
-                    @endforeach
-                </div>
+    @if($errors->any())
+        <div class="fixed top-24 right-8 z-50 bg-red-500 text-white px-6 py-4 rounded-xl shadow-2xl animate-pulse">
+            <div class="flex flex-col gap-1">
+                @foreach($errors->all() as $error)
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">error</span>
+                        <span class="font-bold text-xs">{{ $error }}</span>
+                    </div>
+                @endforeach
             </div>
-        @endif
+        </div>
+    @endif
 
-        <!-- Hero Section -->
-        <div class="relative pt-8 mb-32" id="inicio">
-            <!-- Container with Layers -->
-            <div class="relative w-full rounded-3xl overflow-hidden flex flex-col justify-center shadow-2xl bg-black"
-                style='min-height: 90vh !important;'>
+    <!-- Hero Section -->
+    <div class="relative mb-32" id="inicio">
+        <!-- Container with Layers -->
+        <div class="relative w-full overflow-hidden flex flex-col justify-center shadow-2xl bg-black"
+            style='min-height: 90vh !important;'>
 
-                <!-- Layer 1: Background (Show as is - Cover) -->
-                <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                                       background-size: cover; 
-                                                       background-position: center; 
-                                                       background-repeat: no-repeat;
-                                                       opacity: {{ ($settings['hero_bg_opacity'] ?? 40) / 100 }};'>
-                </div>
-
-                <!-- Layer 2: Main Image (Centered and contained) -->
-                <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                                       background-size: contain; 
-                                                       background-position: center; 
-                                                       background-repeat: no-repeat;'>
-                </div>
-
-                <!-- Layer 3: Contrast Overlay (Dynamic) -->
-                <div class="absolute inset-0" style="background-color: {{ $settings['hero_overlay_color'] ?? '#000000' }}; 
-                                                   opacity: {{ ($settings['hero_overlay_opacity'] ?? 50) / 100 }};">
-                </div>
-
-                <!-- Layer 4: Additional Bottom Gradient for readability -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-
-                <!-- Content -->
-                <div class="relative z-10 p-10 md:p-20 text-center">
-                    <div
-                        class="text-white text-5xl md:text-7xl font-black mb-6 tracking-tight drop-shadow-2xl leading-tight hero-no-filter">
-                        {!! app()->getLocale() == 'es' ? ($settings['hero_title_es'] ?? '') : ($settings['hero_title_en'] ?? '') !!}
-                    </div>
-                    <div
-                        class="text-white text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed drop-shadow-xl hero-no-filter">
-                        {!! app()->getLocale() == 'es' ? ($settings['hero_subtitle_es'] ?? '') : ($settings['hero_subtitle_en'] ?? '') !!}
-                    </div>
-                    <div class="mt-12 flex justify-center gap-4">
-                        <a href="#habitaciones"
-                            class="px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-xl shadow-primary/30 hover:bg-primary/90 transition-all scale-110 hover:scale-105">{{ __('Descubrir Habitaciones') }}</a>
-                    </div>
-                </div>
+            <!-- Layer 1: Background (Show as is - Cover) -->
+            <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
+                                                           background-size: cover; 
+                                                           background-position: center; 
+                                                           background-repeat: no-repeat;
+                                                           opacity: {{ ($settings['hero_bg_opacity'] ?? 40) / 100 }};'>
             </div>
 
-            <!-- Availability Bar (MOVE OUTSIDE overflow-hidden) -->
-            <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex justify-center translate-y-1/2 z-20">
+            <!-- Layer 2: Main Image (Centered and contained) -->
+            <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
+                                                           background-size: cover; 
+                                                           background-position: center; 
+                                                           background-repeat: no-repeat;'>
+            </div>
+
+            <!-- Layer 3: Contrast Overlay (Dynamic) -->
+            <div class="absolute inset-0" style="background-color: {{ $settings['hero_overlay_color'] ?? '#000000' }}; 
+                                                       opacity: {{ ($settings['hero_overlay_opacity'] ?? 50) / 100 }};">
+            </div>
+
+            <!-- Layer 4: Additional Bottom Gradient for readability -->
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+            <!-- Content -->
+            <div class="relative z-10 p-10 md:p-20 text-center">
                 <div
-                    class="bg-white dark:bg-[#0b0c11] w-full max-w-5xl rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 p-4 md:p-6 grid grid-cols-1 md:grid-cols-4 gap-4 md:divide-x divide-slate-100 dark:divide-slate-800">
-                    <div class="flex flex-col px-4">
-                        <label
-                            class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-sm">calendar_month</span> Check-In
-                        </label>
-                        <input type="date" id="search-check-in"
-                            class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 cursor-pointer"
-                            value="{{ date('Y-m-d') }}">
-                    </div>
-                    <div class="flex flex-col px-4">
-                        <label
-                            class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-sm">event_repeat</span> Check-Out
-                        </label>
-                        <input type="date" id="search-check-out"
-                            class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 cursor-pointer"
-                            value="{{ date('Y-m-d', strtotime('+1 day')) }}">
-                    </div>
-                    <div class="flex flex-col px-4">
-                        <label
-                            class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-sm">group</span> {{ __('Huéspedes') }}
-                        </label>
-                        <select id="search-guests"
-                            class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 cursor-pointer">
-                            <option value="1">{{ __('1 Adulto') }}</option>
-                            <option value="2" selected>{{ __('2 Adultos') }}</option>
-                            <option value="3">{{ __('2 Adultos, 1 Niño') }}</option>
-                            <option value="4">{{ __('2 Adultos, 2 Niños') }}</option>
-                            <option value="5">{{ __('Más de 4') }}</option>
-                        </select>
-                    </div>
-                    <div class="flex items-center justify-center pl-4">
-                        <button onclick="processFastBooking()"
-                            class="w-full h-full bg-primary text-white font-black rounded-xl hover:bg-primary/90 transition-all uppercase tracking-widest text-xs py-4 shadow-lg shadow-primary/20">
-                            {{ __('Reservar Ahora') }}
-                        </button>
-                    </div>
+                    class="text-white text-5xl md:text-7xl font-black mb-6 tracking-tight drop-shadow-2xl leading-tight hero-no-filter">
+                    {!! app()->getLocale() == 'es' ? ($settings['hero_title_es'] ?? '') : ($settings['hero_title_en'] ?? '') !!}
+                </div>
+                <div class="text-white text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed drop-shadow-xl hero-no-filter">
+                    {!! app()->getLocale() == 'es' ? ($settings['hero_subtitle_es'] ?? '') : ($settings['hero_subtitle_en'] ?? '') !!}
+                </div>
+                <div class="mt-12 flex justify-center gap-4">
+                    <a href="#habitaciones"
+                        class="px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-xl shadow-primary/30 hover:bg-primary/90 transition-all scale-110 hover:scale-105">{{ __('Descubrir Habitaciones') }}</a>
                 </div>
             </div>
         </div>
 
-        <!-- Space for the bar overlap -->
-        <div class="h-64 md:h-24"></div>
+        <!-- Availability Bar (MOVE OUTSIDE overflow-hidden) -->
+        <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex justify-center translate-y-1/2 z-20">
+            <div
+                class="bg-white dark:bg-[#0b0c11] w-full max-w-5xl rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 p-4 md:p-6 grid grid-cols-1 md:grid-cols-4 gap-4 md:divide-x divide-slate-100 dark:divide-slate-800">
+                <div class="flex flex-col px-4">
+                    <label
+                        class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">calendar_month</span> Check-In
+                    </label>
+                    <input type="date" id="search-check-in"
+                        class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 cursor-pointer"
+                        value="{{ date('Y-m-d') }}">
+                </div>
+                <div class="flex flex-col px-4">
+                    <label
+                        class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">event_repeat</span> Check-Out
+                    </label>
+                    <input type="date" id="search-check-out"
+                        class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 cursor-pointer"
+                        value="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                </div>
+                <div class="flex flex-col px-4">
+                    <label
+                        class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">group</span> {{ __('Huéspedes') }}
+                    </label>
+                    <select id="search-guests"
+                        class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 cursor-pointer">
+                        <option value="1">{{ __('1 Adulto') }}</option>
+                        <option value="2" selected>{{ __('2 Adultos') }}</option>
+                        <option value="3">{{ __('2 Adultos, 1 Niño') }}</option>
+                        <option value="4">{{ __('2 Adultos, 2 Niños') }}</option>
+                        <option value="5">{{ __('Más de 4') }}</option>
+                    </select>
+                </div>
+                <div class="flex items-center justify-center pl-4">
+                    <button onclick="processFastBooking()"
+                        class="w-full h-full bg-primary text-white font-black rounded-xl hover:bg-primary/90 transition-all uppercase tracking-widest text-xs py-4 shadow-lg shadow-primary/20">
+                        {{ __('Reservar Ahora') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Space for the bar overlap -->
+    <div class="h-64 md:h-24"></div>
+
+    <div class="max-w-[1440px] mx-auto px-4 md:px-8">
         <!-- Habitaciones Section -->
         <section id="habitaciones" class="scroll-mt-32 mb-24">
             <div class="flex flex-col items-center text-center mb-16">
@@ -542,251 +541,252 @@
             <!-- Toolbar -->
             <div class="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-20 text-white">
                 <div class="flex items-center gap-6">
-                        <span class="text-xs font-bold tracking-widest uppercase opacity-70" id="gallery-counter">1 / 1</span>
-                        <div class="flex items-center gap-2">
-                            <button onclick="toggleZoom()" id="zoom-btn"
-                                class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 transition-all"
-                                title="Zoom In/Out">
-                                <span class="material-symbols-outlined">zoom_in</span>
-                            </button>
-                            <button onclick="toggleAutoplay()" id="autoplay-btn"
-                                class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 transition-all text-white"
-                                title="Auto Play">
-                                <span class="material-symbols-outlined">play_arrow</span>
-                            </button>
-                        </div>
+                    <span class="text-xs font-bold tracking-widest uppercase opacity-70" id="gallery-counter">1 / 1</span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="toggleZoom()" id="zoom-btn"
+                            class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 transition-all"
+                            title="Zoom In/Out">
+                            <span class="material-symbols-outlined">zoom_in</span>
+                        </button>
+                        <button onclick="toggleAutoplay()" id="autoplay-btn"
+                            class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-white/20 transition-all text-white"
+                            title="Auto Play">
+                            <span class="material-symbols-outlined">play_arrow</span>
+                        </button>
                     </div>
-                    <button onclick="closeGalleryModal()"
-                        class="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
                 </div>
-
-                <!-- Main Image -->
-                <div class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
-                    <button onclick="manualPrev()"
-                        class="absolute left-4 md:left-8 p-4 rounded-full bg-black/60 hover:bg-white/20 text-white transition-all z-30 shadow-2xl backdrop-blur-md">
-                        <span class="material-symbols-outlined text-3xl font-black">chevron_left</span>
-                    </button>
-
-                    <div class="w-full h-full flex items-center justify-center overflow-hidden" id="img-container">
-                        <img id="gallery-main-image" src=""
-                            class="max-h-[75vh] max-w-[90vw] w-auto h-auto object-contain rounded-2xl shadow-2xl fade-in gallery-zoom-normal border-2 border-white/10">
-                    </div>
-
-                    <button onclick="manualNext()"
-                        class="absolute right-4 md:right-8 p-4 rounded-full bg-black/60 hover:bg-white/20 text-white transition-all z-30 shadow-2xl backdrop-blur-md">
-                        <span class="material-symbols-outlined text-3xl font-black">chevron_right</span>
-                    </button>
-                </div>
-
-                <!-- Thumbnails -->
-                <div class="h-24 md:h-32 bg-black/40 p-4 shrink-0 flex justify-center gap-2 overflow-x-auto border-t border-white/5" id="gallery-thumbnails">
-                    <!-- Thumbnails inserted via JS -->
-                </div>
+                <button onclick="closeGalleryModal()"
+                    class="w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-all">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
             </div>
 
-            <script>
-                function processFastBooking() {
-                    const guestCount = parseInt(document.getElementById('search-guests').value);
-                    let roomId, roomName;
+            <!-- Main Image -->
+            <div class="flex-1 min-h-0 flex items-center justify-center p-4 md:p-8 relative overflow-hidden">
+                <button onclick="manualPrev()"
+                    class="absolute left-4 md:left-8 p-4 rounded-full bg-black/60 hover:bg-white/20 text-white transition-all z-30 shadow-2xl backdrop-blur-md">
+                    <span class="material-symbols-outlined text-3xl font-black">chevron_left</span>
+                </button>
 
-                    if (guestCount <= 2) {
-                        roomId = '2'; // Deluxe con cama extragrande
-                        roomName = '{{ app()->getLocale() == "es" ? "Habitación Deluxe con cama extragrande" : "Deluxe Room with Extra Large Bed" }}';
-                    } else {
-                        roomId = '1'; // Doble Deluxe
-                        roomName = '{{ app()->getLocale() == "es" ? "Habitación Doble Deluxe" : "Double Deluxe Room" }}';
-                    }
+                <div class="w-full h-full flex items-center justify-center overflow-hidden" id="img-container">
+                    <img id="gallery-main-image" src=""
+                        class="max-h-[75vh] max-w-[90vw] w-auto h-auto object-contain rounded-2xl shadow-2xl fade-in gallery-zoom-normal border-2 border-white/10">
+                </div>
 
-                    openBookingModal(roomId, roomName);
+                <button onclick="manualNext()"
+                    class="absolute right-4 md:right-8 p-4 rounded-full bg-black/60 hover:bg-white/20 text-white transition-all z-30 shadow-2xl backdrop-blur-md">
+                    <span class="material-symbols-outlined text-3xl font-black">chevron_right</span>
+                </button>
+            </div>
+
+            <!-- Thumbnails -->
+            <div class="h-24 md:h-32 bg-black/40 p-4 shrink-0 flex justify-center gap-2 overflow-x-auto border-t border-white/5"
+                id="gallery-thumbnails">
+                <!-- Thumbnails inserted via JS -->
+            </div>
+        </div>
+
+        <script>
+            function processFastBooking() {
+                const guestCount = parseInt(document.getElementById('search-guests').value);
+                let roomId, roomName;
+
+                if (guestCount <= 2) {
+                    roomId = '2'; // Deluxe con cama extragrande
+                    roomName = '{{ app()->getLocale() == "es" ? "Habitación Deluxe con cama extragrande" : "Deluxe Room with Extra Large Bed" }}';
+                } else {
+                    roomId = '1'; // Doble Deluxe
+                    roomName = '{{ app()->getLocale() == "es" ? "Habitación Doble Deluxe" : "Double Deluxe Room" }}';
                 }
 
-                function scrollToRooms() {
-                    document.getElementById('habitaciones').scrollIntoView({ behavior: 'smooth' });
-                }
+                openBookingModal(roomId, roomName);
+            }
 
-                function openBookingModal(roomId, roomName) {
-                    // Sincronizar con la barra de búsqueda
-                    const checkIn = document.getElementById('search-check-in').value;
-                    const checkOut = document.getElementById('search-check-out').value;
-                    const guests = document.getElementById('search-guests').value;
+            function scrollToRooms() {
+                document.getElementById('habitaciones').scrollIntoView({ behavior: 'smooth' });
+            }
 
-                    document.getElementById('modal-room-id').value = roomId;
-                    document.getElementById('modal-title').innerText = roomName;
-                    document.getElementById('modal-check-in').value = checkIn;
-                    document.getElementById('modal-check-out').value = checkOut;
-                    document.getElementById('modal-guests').value = guests;
+            function openBookingModal(roomId, roomName) {
+                // Sincronizar con la barra de búsqueda
+                const checkIn = document.getElementById('search-check-in').value;
+                const checkOut = document.getElementById('search-check-out').value;
+                const guests = document.getElementById('search-guests').value;
 
-                    document.getElementById('booking-modal').classList.remove('hidden');
-                    document.body.style.overflow = 'hidden';
-                }
+                document.getElementById('modal-room-id').value = roomId;
+                document.getElementById('modal-title').innerText = roomName;
+                document.getElementById('modal-check-in').value = checkIn;
+                document.getElementById('modal-check-out').value = checkOut;
+                document.getElementById('modal-guests').value = guests;
 
-                function closeBookingModal() {
-                    document.getElementById('booking-modal').classList.add('hidden');
-                    document.body.style.overflow = 'auto';
-                }
+                document.getElementById('booking-modal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
 
-                // Gallery Logic
-                let currentGalleryImages = [];
-                let currentImageIndex = 0;
-                let galleryAutoplayInterval = null;
-                let galleryIsZoomed = false;
+            function closeBookingModal() {
+                document.getElementById('booking-modal').classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
 
-                function openGalleryModal(images) {
-                    currentGalleryImages = images;
-                    currentImageIndex = 0;
-                    galleryIsZoomed = false;
+            // Gallery Logic
+            let currentGalleryImages = [];
+            let currentImageIndex = 0;
+            let galleryAutoplayInterval = null;
+            let galleryIsZoomed = false;
 
-                    document.getElementById('gallery-modal').classList.remove('hidden');
-                    document.body.style.overflow = 'hidden';
+            function openGalleryModal(images) {
+                currentGalleryImages = images;
+                currentImageIndex = 0;
+                galleryIsZoomed = false;
 
-                    updateGalleryUI();
-                    startAutoplay();
-                }
+                document.getElementById('gallery-modal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
 
-                function closeGalleryModal() {
+                updateGalleryUI();
+                startAutoplay();
+            }
+
+            function closeGalleryModal() {
+                stopAutoplay();
+                document.getElementById('gallery-modal').classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                resetZoom();
+            }
+
+            function toggleZoom() {
+                const img = document.getElementById('gallery-main-image');
+                galleryIsZoomed = !galleryIsZoomed;
+
+                if (galleryIsZoomed) {
+                    img.classList.remove('gallery-zoom-normal');
+                    img.classList.add('gallery-zoom-active');
+                    document.getElementById('zoom-btn').classList.add('bg-primary/40');
+                    document.getElementById('zoom-btn').innerHTML = '<span class="material-symbols-outlined">zoom_out</span>';
                     stopAutoplay();
-                    document.getElementById('gallery-modal').classList.add('hidden');
-                    document.body.style.overflow = 'auto';
+                } else {
                     resetZoom();
                 }
+            }
 
-                function toggleZoom() {
-                    const img = document.getElementById('gallery-main-image');
-                    galleryIsZoomed = !galleryIsZoomed;
+            function resetZoom() {
+                const img = document.getElementById('gallery-main-image');
+                galleryIsZoomed = false;
+                img.classList.remove('gallery-zoom-active');
+                img.classList.add('gallery-zoom-normal');
+                document.getElementById('zoom-btn').classList.remove('bg-primary/40');
+                document.getElementById('zoom-btn').innerHTML = '<span class="material-symbols-outlined">zoom_in</span>';
+            }
 
-                    if (galleryIsZoomed) {
-                        img.classList.remove('gallery-zoom-normal');
-                        img.classList.add('gallery-zoom-active');
-                        document.getElementById('zoom-btn').classList.add('bg-primary/40');
-                        document.getElementById('zoom-btn').innerHTML = '<span class="material-symbols-outlined">zoom_out</span>';
-                        stopAutoplay();
-                    } else {
-                        resetZoom();
-                    }
-                }
-
-                function resetZoom() {
-                    const img = document.getElementById('gallery-main-image');
-                    galleryIsZoomed = false;
-                    img.classList.remove('gallery-zoom-active');
-                    img.classList.add('gallery-zoom-normal');
-                    document.getElementById('zoom-btn').classList.remove('bg-primary/40');
-                    document.getElementById('zoom-btn').innerHTML = '<span class="material-symbols-outlined">zoom_in</span>';
-                }
-
-                function toggleAutoplay() {
-                    if (galleryAutoplayInterval) {
-                        stopAutoplay();
-                    } else {
-                        startAutoplay();
-                    }
-                }
-
-                function startAutoplay() {
+            function toggleAutoplay() {
+                if (galleryAutoplayInterval) {
                     stopAutoplay();
-                    galleryAutoplayInterval = setInterval(nextImage, 4000);
-                    document.getElementById('autoplay-btn').classList.add('text-primary');
-                    document.getElementById('autoplay-btn').innerHTML = '<span class="material-symbols-outlined">pause</span>';
+                } else {
+                    startAutoplay();
                 }
+            }
 
-                function stopAutoplay() {
-                    if (galleryAutoplayInterval) {
-                        clearInterval(galleryAutoplayInterval);
-                        galleryAutoplayInterval = null;
-                    }
-                    document.getElementById('autoplay-btn').classList.remove('text-primary');
-                    document.getElementById('autoplay-btn').innerHTML = '<span class="material-symbols-outlined">play_arrow</span>';
+            function startAutoplay() {
+                stopAutoplay();
+                galleryAutoplayInterval = setInterval(nextImage, 4000);
+                document.getElementById('autoplay-btn').classList.add('text-primary');
+                document.getElementById('autoplay-btn').innerHTML = '<span class="material-symbols-outlined">pause</span>';
+            }
+
+            function stopAutoplay() {
+                if (galleryAutoplayInterval) {
+                    clearInterval(galleryAutoplayInterval);
+                    galleryAutoplayInterval = null;
                 }
+                document.getElementById('autoplay-btn').classList.remove('text-primary');
+                document.getElementById('autoplay-btn').innerHTML = '<span class="material-symbols-outlined">play_arrow</span>';
+            }
 
-                function updateGalleryUI() {
-                    const mainImage = document.getElementById('gallery-main-image');
+            function updateGalleryUI() {
+                const mainImage = document.getElementById('gallery-main-image');
 
-                    // Fade effect
-                    mainImage.classList.replace('fade-in', 'fade-out');
+                // Fade effect
+                mainImage.classList.replace('fade-in', 'fade-out');
 
-                    setTimeout(() => {
-                        mainImage.src = currentGalleryImages[currentImageIndex];
-                        document.getElementById('gallery-counter').innerText = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
+                setTimeout(() => {
+                    mainImage.src = currentGalleryImages[currentImageIndex];
+                    document.getElementById('gallery-counter').innerText = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
 
-                        mainImage.onload = () => {
-                            mainImage.classList.replace('fade-out', 'fade-in');
+                    mainImage.onload = () => {
+                        mainImage.classList.replace('fade-out', 'fade-in');
+                    };
+
+                    // Update Thumbnails
+                    const thumbsContainer = document.getElementById('gallery-thumbnails');
+                    thumbsContainer.innerHTML = '';
+
+                    currentGalleryImages.forEach((img, index) => {
+                        const thumb = document.createElement('img');
+                        thumb.src = img;
+                        thumb.className = `h-full aspect-square object-cover rounded-md cursor-pointer border-2 transition-all ${index === currentImageIndex ? 'border-primary opacity-100 scale-105' : 'border-transparent opacity-50 hover:opacity-100'}`;
+                        thumb.onclick = () => {
+                            stopAutoplay();
+                            currentImageIndex = index;
+                            updateGalleryUI();
                         };
-
-                        // Update Thumbnails
-                        const thumbsContainer = document.getElementById('gallery-thumbnails');
-                        thumbsContainer.innerHTML = '';
-
-                        currentGalleryImages.forEach((img, index) => {
-                            const thumb = document.createElement('img');
-                            thumb.src = img;
-                            thumb.className = `h-full aspect-square object-cover rounded-md cursor-pointer border-2 transition-all ${index === currentImageIndex ? 'border-primary opacity-100 scale-105' : 'border-transparent opacity-50 hover:opacity-100'}`;
-                            thumb.onclick = () => {
-                                stopAutoplay();
-                                currentImageIndex = index;
-                                updateGalleryUI();
-                            };
-                            thumbsContainer.appendChild(thumb);
-                        });
-                    }, 250);
-                }
-
-                function manualNext() {
-                    stopAutoplay();
-                    nextImage();
-                }
-
-                function manualPrev() {
-                    stopAutoplay();
-                    prevImage();
-                }
-
-                function nextImage() {
-                    currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length;
-                    updateGalleryUI();
-                }
-
-                function prevImage() {
-                    currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
-                    updateGalleryUI();
-                }
-
-                // Keyboard Support
-                document.addEventListener('keydown', function (event) {
-                    if (document.getElementById('gallery-modal').classList.contains('hidden')) return;
-
-                    if (event.key === 'Escape') closeGalleryModal();
-                    if (event.key === 'ArrowRight') nextImage();
-                    if (event.key === 'ArrowLeft') prevImage();
-                });
-
-                // Initialize Home Carousel
-                document.addEventListener('DOMContentLoaded', function () {
-                    new Swiper('.home-carousel', {
-                        slidesPerView: 'auto',
-                        centeredSlides: true,
-                        spaceBetween: 20,
-                        loop: true,
-                        autoHeight: true,
-                        autoplay: {
-                            delay: 3500,
-                            disableOnInteraction: false,
-                        },
-                        navigation: {
-                            nextEl: '.swiper-next',
-                            prevEl: '.swiper-prev',
-                        },
-                        effect: 'coverflow',
-                        coverflowEffect: {
-                            rotate: 5,
-                            stretch: 0,
-                            depth: 100,
-                            modifier: 1,
-                            slideShadows: false,
-                        },
+                        thumbsContainer.appendChild(thumb);
                     });
+                }, 250);
+            }
+
+            function manualNext() {
+                stopAutoplay();
+                nextImage();
+            }
+
+            function manualPrev() {
+                stopAutoplay();
+                prevImage();
+            }
+
+            function nextImage() {
+                currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length;
+                updateGalleryUI();
+            }
+
+            function prevImage() {
+                currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
+                updateGalleryUI();
+            }
+
+            // Keyboard Support
+            document.addEventListener('keydown', function (event) {
+                if (document.getElementById('gallery-modal').classList.contains('hidden')) return;
+
+                if (event.key === 'Escape') closeGalleryModal();
+                if (event.key === 'ArrowRight') nextImage();
+                if (event.key === 'ArrowLeft') prevImage();
+            });
+
+            // Initialize Home Carousel
+            document.addEventListener('DOMContentLoaded', function () {
+                new Swiper('.home-carousel', {
+                    slidesPerView: 'auto',
+                    centeredSlides: true,
+                    spaceBetween: 20,
+                    loop: true,
+                    autoHeight: true,
+                    autoplay: {
+                        delay: 3500,
+                        disableOnInteraction: false,
+                    },
+                    navigation: {
+                        nextEl: '.swiper-next',
+                        prevEl: '.swiper-prev',
+                    },
+                    effect: 'coverflow',
+                    coverflowEffect: {
+                        rotate: 5,
+                        stretch: 0,
+                        depth: 100,
+                        modifier: 1,
+                        slideShadows: false,
+                    },
                 });
-            </script>
-        </div>
+            });
+        </script>
+    </div>
 @endsection
