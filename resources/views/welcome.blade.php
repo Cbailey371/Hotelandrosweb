@@ -33,6 +33,7 @@
 
 @section('content')
 
+    <!-- Alertas -->
     @if(session('success'))
         <div class="fixed top-24 right-8 z-50 bg-green-500 text-white px-6 py-4 rounded-xl shadow-2xl animate-bounce">
             <div class="flex items-center gap-3">
