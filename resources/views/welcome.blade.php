@@ -3,10 +3,63 @@
 @section('title', $settings['hotel_name'] ?? 'LuxeStay Hotel')
 
 @push('styles')
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
+        /* Quill Override for Frontend */
+        .ql-editor {
+            padding: 0 !important;
+            overflow: visible !important;
+        }
+
+        /* Ensure specific overrides work */
+        .hero-content .ql-size-huge {
+            font-size: 4.5rem !important;
+        }
+
+        .hero-content .ql-size-large {
+            font-size: 2.5rem !important;
+        }
+
+        .hero-content .ql-size-small {
+            font-size: 0.875rem !important;
+        }
+
         .gallery-main-container {
             transition: all 0.5s ease-in-out;
         }
+
+        /* Quill Font Family Overrides */
+        .ql-font-serif {
+            font-family: Georgia, Times New Roman, serif !important;
+        }
+
+        .ql-font-sans-serif {
+            font-family: Helvetica, Arial, sans-serif !important;
+        }
+
+        .ql-font-monospace {
+            font-family: Monaco, Courier New, monospace !important;
+        }
+
+        /* Quill Size Overrides */
+        .ql-size-small { font-size: 0.75em !important; }
+        .ql-size-large { font-size: 1.5em !important; }
+        .ql-size-huge { font-size: 2.5em !important; }
+
+        /* Font Weights */
+        strong, b { font-weight: bold !important; }
+        }
+
+        .ql-size-huge {
+            font-size: 2.5em !important;
+        }
+
+        /* Ensure inline styles from Quill win over Tailwind */
+        .ql-editor span[style] {
+            font-weight: inherit;
+            /* Let inner span dictate unless specific */
+        }
+
 
         .gallery-zoom-active {
             cursor: zoom-out !important;
@@ -63,35 +116,44 @@
             style='min-height: 90vh !important;'>
 
             <!-- Layer 1: Background (Show as is - Cover) -->
-            <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                                           background-size: cover; 
-                                                           background-position: center; 
-                                                           background-repeat: no-repeat;
-                                                           opacity: {{ ($settings['hero_bg_opacity'] ?? 40) / 100 }};'>
+            <div class="absolute inset-0"
+                style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
+                                                                       background-size: cover; 
+                                                                       background-position: center; 
+                                                                       background-repeat: no-repeat;
+                                                                       opacity: {{ ($settings['hero_bg_opacity'] ?? 40) / 100 }};'>
             </div>
 
             <!-- Layer 2: Main Image (Centered and contained) -->
             <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                                           background-size: cover; 
-                                                           background-position: center; 
-                                                           background-repeat: no-repeat;'>
+                                                                       background-size: cover; 
+                                                                       background-position: center; 
+                                                                       background-repeat: no-repeat;'>
             </div>
 
             <!-- Layer 3: Contrast Overlay (Dynamic) -->
-            <div class="absolute inset-0" style="background-color: {{ $settings['hero_overlay_color'] ?? '#000000' }}; 
-                                                       opacity: {{ ($settings['hero_overlay_opacity'] ?? 50) / 100 }};">
-            </div>
+            @if(($settings['hero_overlay_enabled'] ?? '1') == '1')
+                <div class="absolute inset-0"
+                    style="background-color: {{ $settings['hero_overlay_color'] ?? '#000000' }}; 
+                                                                               opacity: {{ ($settings['hero_overlay_opacity'] ?? 50) / 100 }};">
+                </div>
 
-            <!-- Layer 4: Additional Bottom Gradient for readability -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <!-- Layer 4: Additional Bottom Gradient for readability -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+            @endif
 
             <!-- Content -->
             <div class="relative z-10 p-10 md:p-20 text-center">
-                <div
-                    class="text-white text-5xl md:text-7xl font-black mb-6 tracking-tight drop-shadow-2xl leading-tight hero-no-filter">
+
+                <!-- Hero Title -->
+                <div class="ql-editor hero-content mb-6 leading-tight drop-shadow-2xl hero-no-filter text-white text-5xl md:text-7xl"
+                    style="font-family: inherit; font-weight: normal;">
                     {!! app()->getLocale() == 'es' ? ($settings['hero_title_es'] ?? '') : ($settings['hero_title_en'] ?? '') !!}
                 </div>
-                <div class="text-white text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed drop-shadow-xl hero-no-filter">
+
+                <!-- Hero Subtitle -->
+                <div class="ql-editor hero-content max-w-3xl mx-auto leading-relaxed drop-shadow-xl hero-no-filter text-white text-xl md:text-2xl"
+                    style="font-family: inherit;">
                     {!! app()->getLocale() == 'es' ? ($settings['hero_subtitle_es'] ?? '') : ($settings['hero_subtitle_en'] ?? '') !!}
                 </div>
                 <div class="mt-12 flex justify-center gap-4">
@@ -268,9 +330,9 @@
                     <h2 class="text-4xl md:text-5xl font-black mb-8 tracking-tight leading-tight">
                         {{ app()->getLocale() == 'es' ? ($settings['cafe_title_es'] ?? __('Sabores Artesanales & Coctelería')) : ($settings['cafe_title_en'] ?? __('Artisan Flavors & Cocktails')) }}
                     </h2>
-                    <p class="text-lg text-secondary dark:text-slate-400 mb-10 leading-relaxed">
+                    <div class="ql-editor text-lg text-secondary dark:text-slate-400 mb-10 leading-relaxed">
                         {!! app()->getLocale() == 'es' ? ($settings['cafe_description_es'] ?? __('Desde el espresso matutino hasta cócteles de autor, nuestros mixólogos y chefs crean momentos inolvidables en un ambiente sofisticado.')) : ($settings['cafe_description_en'] ?? __('From morning espresso to signature cocktails, our mixologists and chefs create unforgettable moments in a sophisticated atmosphere.')) !!}
-                    </p>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
                         <div
                             class="flex items-start gap-4 p-6 bg-white dark:bg-[#0b0c11] rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800">
