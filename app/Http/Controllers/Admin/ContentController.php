@@ -33,6 +33,7 @@ class ContentController extends Controller
             'hero_overlay_opacity',
             'hero_bg_opacity',
             'hero_image',
+            'hero_gap',
 
             // Rooms
             'rooms_badge_es',

@@ -42,22 +42,66 @@
         }
 
         /* Quill Size Overrides */
-        .ql-size-small { font-size: 0.75em !important; }
-        .ql-size-large { font-size: 1.5em !important; }
-        .ql-size-huge { font-size: 2.5em !important; }
+        .ql-size-small {
+            font-size: 0.75em !important;
+        }
 
-        /* Font Weights */
-        strong, b { font-weight: bold !important; }
+        .ql-size-large {
+            font-size: 1.5em !important;
         }
 
         .ql-size-huge {
             font-size: 2.5em !important;
         }
 
+        /* 4. Alignment defaults (Essential for Centering/Right alignment) */
+        .ql-align-center {
+            text-align: center;
+        }
+
+        .ql-align-right {
+            text-align: right;
+        }
+
+        .ql-align-justify {
+            text-align: justify;
+        }
+
+        /* 5. Custom Fonts (Proxies) */
+        .hero-content .ql-font-gotham-light {
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 300 !important;
+        }
+
+        .hero-content .ql-font-gotham-thin {
+            font-family: 'Montserrat', sans-serif !important;
+            font-weight: 100 !important;
+        }
+
+        .hero-content .ql-font-avenir-light {
+            font-family: 'Nunito', sans-serif !important;
+            font-weight: 300 !important;
+        }
+
+        .hero-content.ql-editor {
+
+            h1,
+            h2,
+            p,
+            div {
+                margin: 0;
+            }
+        }
+
+        /* 3. Font Weights */
+        .hero-content strong,
+        .hero-content b {
+            font-weight: 700 !important;
+        }
+
         /* Ensure inline styles from Quill win over Tailwind */
         .ql-editor span[style] {
             font-weight: inherit;
-            /* Let inner span dictate unless specific */
         }
 
 
@@ -118,24 +162,24 @@
             <!-- Layer 1: Background (Show as is - Cover) -->
             <div class="absolute inset-0"
                 style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                                                       background-size: cover; 
-                                                                       background-position: center; 
-                                                                       background-repeat: no-repeat;
-                                                                       opacity: {{ ($settings['hero_bg_opacity'] ?? 40) / 100 }};'>
+                                                                                   background-size: cover; 
+                                                                                   background-position: center; 
+                                                                                   background-repeat: no-repeat;
+                                                                                   opacity: {{ ($settings['hero_bg_opacity'] ?? 40) / 100 }};'>
             </div>
 
             <!-- Layer 2: Main Image (Centered and contained) -->
             <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                                                       background-size: cover; 
-                                                                       background-position: center; 
-                                                                       background-repeat: no-repeat;'>
+                                                                                   background-size: cover; 
+                                                                                   background-position: center; 
+                                                                                   background-repeat: no-repeat;'>
             </div>
 
             <!-- Layer 3: Contrast Overlay (Dynamic) -->
             @if(($settings['hero_overlay_enabled'] ?? '1') == '1')
                 <div class="absolute inset-0"
                     style="background-color: {{ $settings['hero_overlay_color'] ?? '#000000' }}; 
-                                                                               opacity: {{ ($settings['hero_overlay_opacity'] ?? 50) / 100 }};">
+                                                                                                       opacity: {{ ($settings['hero_overlay_opacity'] ?? 50) / 100 }};">
                 </div>
 
                 <!-- Layer 4: Additional Bottom Gradient for readability -->
@@ -146,8 +190,8 @@
             <div class="relative z-10 p-10 md:p-20 text-center">
 
                 <!-- Hero Title -->
-                <div class="ql-editor hero-content mb-6 leading-tight drop-shadow-2xl hero-no-filter text-white text-5xl md:text-7xl"
-                    style="font-family: inherit; font-weight: normal;">
+                <div class="ql-editor hero-content leading-tight drop-shadow-2xl hero-no-filter text-white text-5xl md:text-7xl"
+                    style="font-family: inherit; font-weight: normal; margin-bottom: {{ $settings['hero_gap'] ?? 24 }}px;">
                     {!! app()->getLocale() == 'es' ? ($settings['hero_title_es'] ?? '') : ($settings['hero_title_en'] ?? '') !!}
                 </div>
 

@@ -20,7 +20,8 @@
         href="{{ $settings['hotel_favicon'] ?? $settings['hotel_logo'] ?? '/favicon.ico' }}">
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Montserrat:wght@100;300;400;700&family=Nunito:wght@300;400;700&display=swap"
         rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet">
@@ -128,6 +129,63 @@
             background-color: var(--dark-bg-color) !important;
         }
 
+        /* Quill Pixel Sizes */
+        .ql-size-12px {
+            font-size: 12px;
+        }
+
+        .ql-size-14px {
+            font-size: 14px;
+        }
+
+        .ql-size-16px {
+            font-size: 16px;
+        }
+
+        .ql-size-18px {
+            font-size: 18px;
+        }
+
+        .ql-size-20px {
+            font-size: 20px;
+        }
+
+        .ql-size-24px {
+            font-size: 24px;
+        }
+
+        .ql-size-30px {
+            font-size: 30px;
+        }
+
+        .ql-size-36px {
+            font-size: 36px;
+        }
+
+        .ql-size-48px {
+            font-size: 48px;
+        }
+
+        .ql-size-60px {
+            font-size: 60px;
+        }
+
+        .ql-size-72px {
+            font-size: 72px;
+        }
+
+        .ql-size-84px {
+            font-size: 84px;
+        }
+
+        .ql-size-96px {
+            font-size: 96px;
+        }
+
+        .ql-size-128px {
+            font-size: 128px;
+        }
+
         .dark header {
             background-color: var(--dark-bg-color) !important;
             opacity: 0.95;
@@ -145,6 +203,7 @@
             border-color: color-mix(in srgb, var(--dark-bg-color), white 10%) !important;
         }
     </style>
+    @stack('styles')
 
     <script>
         // Init Theme to prevent FOUC
