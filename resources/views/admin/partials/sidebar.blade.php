@@ -45,8 +45,8 @@
                     <p class="text-sm font-medium">Usuarios</p>
                 </a>
 
-                <a href="{{ route('admin.content.index') }}"
-                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.content.*') ? 'bg-primary/10 text-primary' : 'text-[#4c739a] hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                <a href="{{ route('admin.editor.edit') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.editor.*') ? 'bg-primary/10 text-primary' : 'text-[#4c739a] hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                     <span class="material-symbols-outlined">article</span>
                     <p class="text-sm font-medium">Editar Contenido</p>
                 </a>

@@ -145,6 +145,12 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('settings', [\App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
         Route::post('settings', [\App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
         Route::post('settings/test-email', [\App\Http\Controllers\Admin\SettingController::class, 'testEmail'])->name('settings.test-email');
+
+        // Editor
+        Route::post('editor/render', [\App\Http\Controllers\Admin\ComponentController::class, 'render'])->name('editor.render');
+        Route::get('editor/{page?}', [\App\Http\Controllers\Admin\PageController::class, 'edit'])->name('editor.edit');
+        Route::post('editor/{page}', [\App\Http\Controllers\Admin\PageController::class, 'update'])->name('editor.update');
+
     });
 });
 
