@@ -32,18 +32,25 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|string|in:' . implode(',', array_keys(\App\Models\User::ROLES)),
-        ]);
+        ];
+
+        // Solo super_admin puede asignar roles. Otros (si llegaran aquí) crearían receptores por defecto.
+        if (auth()->user()->role === 'super_admin') {
+            $rules['role'] = 'required|string|in:' . implode(',', array_keys(\App\Models\User::ROLES));
+        }
+
+        $validated = $request->validate($rules);
+        $role = $validated['role'] ?? 'reception';
 
         $user = \App\Models\User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
-            'role' => $validated['role'],
+            'role' => $role,
         ]);
 
         return redirect()->route('admin.users.index')->with('success', 'Usuario creado correctamente.');
@@ -65,16 +72,33 @@ class UserController extends Controller
     {
         $user = \App\Models\User::findOrFail($id);
 
-        $validated = $request->validate([
+        $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required|string|in:' . implode(',', array_keys(\App\Models\User::ROLES)),
-        ]);
+        ];
+
+        // Solo super_admin puede cambiar roles
+        $canChangeRole = auth()->user()->role === 'super_admin';
+
+        // No permitir que el usuario se cambie su propio rol si es super_admin
+        // (Para evitar quedarse sin administradores o auto-degradarse por error)
+        if ($id == auth()->id() && $user->role === 'super_admin') {
+            $canChangeRole = false;
+        }
+
+        if ($canChangeRole) {
+            $rules['role'] = 'required|string|in:' . implode(',', array_keys(\App\Models\User::ROLES));
+        }
+
+        $validated = $request->validate($rules);
 
         $user->name = $validated['name'];
         $user->email = $validated['email'];
-        $user->role = $validated['role'];
+
+        if (isset($validated['role'])) {
+            $user->role = $validated['role'];
+        }
 
         if ($request->filled('password')) {
             $user->password = \Illuminate\Support\Facades\Hash::make($validated['password']);

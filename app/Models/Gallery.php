@@ -19,4 +19,11 @@ class Gallery extends Model
     {
         return $this->belongsToMany(Room::class, 'gallery_room');
     }
+
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image_path ? asset($this->image_path) : null;
+    }
 }

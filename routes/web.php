@@ -26,6 +26,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/dashboard', function () {
+    return redirect()->route('admin.dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
 // Panel de Administración
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', function () {
@@ -36,13 +40,19 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::middleware('role:super_admin,supervisor,reception')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
         Route::resource('bookings', \App\Http\Controllers\Admin\BookingController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
-        // Add booking processing routes if needed
     });
 
     // Rooms (Accesible para Super Admin y Supervisor)
     Route::middleware('role:super_admin,supervisor')->group(function () {
         Route::resource('rooms', \App\Http\Controllers\Admin\RoomController::class);
 
+        // Promotions (Popups) - Only for super admin and supervisor
+        Route::middleware('role:super_admin,supervisor')->group(function () {
+            Route::resource('promotions', \App\Http\Controllers\Admin\PromotionController::class);
+            Route::post('promotions/{promotion}/toggle', [\App\Http\Controllers\Admin\PromotionController::class, 'toggleActive'])->name('promotions.toggle');
+        });
+
+        Route::get('pages', [\App\Http\Controllers\Admin\PageController::class, 'index'])->name('pages.index');
         Route::get('reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
         Route::get('reports/generate', [\App\Http\Controllers\Admin\ReportController::class, 'generate'])->name('reports.generate');
     });
@@ -57,32 +67,34 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('content', [\App\Http\Controllers\Admin\ContentController::class, 'index'])->name('content.index');
         Route::post('content', [\App\Http\Controllers\Admin\ContentController::class, 'update'])->name('content.update');
 
-        // Rutas de Mantenimiento y Caché (Aseguradas con POST)
-        Route::post('clear-cache', function () {
-            try {
-                \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-                \Illuminate\Support\Facades\Artisan::call('view:clear');
-                \Illuminate\Support\Facades\Artisan::call('config:clear');
-                \Illuminate\Support\Facades\Artisan::call('cache:clear');
-                return back()->with('success', '✅ [V3] LIMPIEZA PROFUNDA COMPLETADA: Caché de vistas, configuración y optimización eliminada.');
-            } catch (\Exception $e) {
-                return back()->with('error', "❌ Error: " . $e->getMessage());
-            }
-        })->name('clear-cache');
-
-        // Ruta de reparación maestra para SSL y Diseño (Asegurada con POST)
-        Route::post('repair-ssl', function () {
-            try {
-                $hotFile = public_path('hot');
-                if (file_exists($hotFile)) {
-                    unlink($hotFile);
+        // Rutas de Mantenimiento y Caché (Aseguradas con POST y Confirmación de Password)
+        Route::middleware(['password.confirm'])->group(function () {
+            Route::post('clear-cache', function () {
+                try {
+                    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+                    \Illuminate\Support\Facades\Artisan::call('view:clear');
+                    \Illuminate\Support\Facades\Artisan::call('config:clear');
+                    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+                    return back()->with('success', '✅ [V3] LIMPIEZA PROFUNDA COMPLETADA: Caché de vistas, configuración y optimización eliminada.');
+                } catch (\Exception $e) {
+                    return back()->with('error', "❌ Error: " . $e->getMessage());
                 }
-                \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-                return back()->with('success', "✅ Reparación completada. Se eliminó el archivo de conflicto y se limpió la caché. Por favor, usa una ventana de INCÓGNITO.");
-            } catch (\Exception $e) {
-                return back()->with('error', "❌ Error durante la reparación: " . $e->getMessage());
-            }
-        })->name('repair-ssl');
+            })->name('clear-cache');
+
+            // Ruta de reparación maestra para SSL y Diseño (Asegurada con POST)
+            Route::post('repair-ssl', function () {
+                try {
+                    $hotFile = public_path('hot');
+                    if (file_exists($hotFile)) {
+                        unlink($hotFile);
+                    }
+                    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+                    return back()->with('success', "✅ Reparación completada. Se eliminó el archivo de conflicto y se limpió la caché. Por favor, usa una ventana de INCÓGNITO.");
+                } catch (\Exception $e) {
+                    return back()->with('error', "❌ Error durante la reparación: " . $e->getMessage());
+                }
+            })->name('repair-ssl');
+        });
 
         // Diagnóstico restringido a entorno local
         if (app()->environment('local')) {
@@ -148,10 +160,31 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
         // Editor
         Route::post('editor/render', [\App\Http\Controllers\Admin\ComponentController::class, 'render'])->name('editor.render');
+        Route::post('editor/upload', [\App\Http\Controllers\Admin\ComponentController::class, 'upload'])->name('editor.upload');
+        Route::get('editor/preview/{page?}', [\App\Http\Controllers\Admin\PageController::class, 'preview'])->name('editor.preview');
         Route::get('editor/{page?}', [\App\Http\Controllers\Admin\PageController::class, 'edit'])->name('editor.edit');
         Route::post('editor/{page}', [\App\Http\Controllers\Admin\PageController::class, 'update'])->name('editor.update');
 
     });
 });
-
 require __DIR__ . '/auth.php';
+
+// Rutas auxiliares para Despliegue en cPanel (Uso único)
+// IMPORTANTE: Elimine o comente estas rutas luego de configurar su servidor en Producción.
+Route::get('/cpanel-setup/storage-link', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return "Symlink creado correctamente.";
+    } catch (\Exception $e) {
+        return "Error creando symlink: " . $e->getMessage();
+    }
+});
+
+Route::get('/cpanel-setup/migrate', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return "Migraciones ejecutadas exitosamente sin borrar datos.";
+    } catch (\Exception $e) {
+        return "Error en migración: " . $e->getMessage();
+    }
+});

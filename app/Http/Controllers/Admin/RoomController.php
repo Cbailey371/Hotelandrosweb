@@ -45,7 +45,7 @@ class RoomController extends Controller
             'image_url' => 'nullable|url',
             'image_file' => 'nullable|image|max:10240',
             'main_image_id' => 'nullable|exists:galleries,id',
-            'amenities' => 'nullable|string',
+            'amenities' => 'nullable|array',
             'gallery_ids' => 'nullable|array',
             'gallery_ids.*' => 'exists:galleries,id',
             'new_gallery_images' => 'nullable|array',
@@ -53,7 +53,7 @@ class RoomController extends Controller
         ]);
 
         if ($request->hasFile('image_file')) {
-            $validated['image'] = \App\Helpers\ImageHelper::storeAsWebp($request->file('image_file'), 'rooms');
+            $validated['image'] = \App\Helpers\ImageHelper::storeAsWebp($request->file('image_file'), 'rooms', $request->name_es);
         } elseif ($request->filled('main_image_id')) {
             $gallery = Gallery::find($request->main_image_id);
             $validated['image'] = $gallery->image_path;
@@ -61,11 +61,7 @@ class RoomController extends Controller
             $validated['image'] = $request->image_url;
         }
 
-        if ($request->filled('amenities')) {
-            $validated['amenities'] = array_map('trim', explode(',', $request->amenities));
-        } else {
-            $validated['amenities'] = [];
-        }
+        $validated['amenities'] = $request->input('amenities', []);
 
         $room = Room::create($validated);
 
@@ -128,7 +124,7 @@ class RoomController extends Controller
             'image_url' => 'nullable|url',
             'image_file' => 'nullable|image|max:5120',
             'main_image_id' => 'nullable|exists:galleries,id',
-            'amenities' => 'nullable|string',
+            'amenities' => 'nullable|array',
             'gallery_ids' => 'nullable|array',
             'gallery_ids.*' => 'exists:galleries,id',
             'new_gallery_images' => 'nullable|array',
@@ -136,7 +132,7 @@ class RoomController extends Controller
         ]);
 
         if ($request->hasFile('image_file')) {
-            $validated['image'] = \App\Helpers\ImageHelper::storeAsWebp($request->file('image_file'), 'rooms');
+            $validated['image'] = \App\Helpers\ImageHelper::storeAsWebp($request->file('image_file'), 'rooms', $request->name_es);
         } elseif ($request->filled('main_image_id')) {
             $gallery = Gallery::find($request->main_image_id);
             $validated['image'] = $gallery->image_path;
@@ -144,11 +140,7 @@ class RoomController extends Controller
             $validated['image'] = $request->image_url;
         }
 
-        if ($request->filled('amenities')) {
-            $validated['amenities'] = array_map('trim', explode(',', $request->amenities));
-        } else {
-            $validated['amenities'] = [];
-        }
+        $validated['amenities'] = $request->input('amenities', []);
 
         $room->update($validated);
 

@@ -28,13 +28,13 @@ class SettingController extends Controller
 
         // Manejo de Logo
         if ($request->hasFile('hotel_logo')) {
-            $path = \App\Helpers\ImageHelper::storeAsWebp($request->file('hotel_logo'), 'branding');
+            $path = \App\Helpers\ImageHelper::storeAsWebp($request->file('hotel_logo'), 'branding', 'hotel-logo');
             Setting::updateOrCreate(['key' => 'hotel_logo'], ['value' => $path]);
         }
 
         // Manejo de Favicon
         if ($request->hasFile('hotel_favicon')) {
-            $path = \App\Helpers\ImageHelper::storeAsWebp($request->file('hotel_favicon'), 'branding', 90, 64);
+            $path = \App\Helpers\ImageHelper::storeAsWebp($request->file('hotel_favicon'), 'branding', 'hotel-favicon', 90, 64);
             Setting::updateOrCreate(['key' => 'hotel_favicon'], ['value' => $path]);
         }
 

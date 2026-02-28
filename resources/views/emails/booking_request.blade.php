@@ -39,6 +39,11 @@
                 <td style="padding: 8px 0; border-bottom: 1px solid #f0f2f5;">{{ $booking->room->name_es }}</td>
             </tr>
             <tr>
+                <td style="padding: 8px 0; font-weight: bold; border-bottom: 1px solid #f0f2f5;">Cant. Habitaciones:
+                </td>
+                <td style="padding: 8px 0; border-bottom: 1px solid #f0f2f5;">{{ $booking->number_of_rooms ?? 1 }}</td>
+            </tr>
+            <tr>
                 <td style="padding: 8px 0; font-weight: bold; border-bottom: 1px solid #f0f2f5;">Entrada:</td>
                 <td style="padding: 8px 0; border-bottom: 1px solid #f0f2f5;">{{ $booking->check_in }}</td>
             </tr>
@@ -66,9 +71,11 @@
                 <tr>
                     <td style="padding: 6px 0; color: #64748b; font-size: 14px;">Tarifa Base
                         (${{ number_format($booking->base_price ?? $booking->room->price, 2) }} x
-                        {{ $booking->nights ?? 1 }} noches):</td>
+                        {{ $booking->nights ?? 1 }} noches x {{ $booking->number_of_rooms ?? 1 }}
+                        {{ Str::plural('hab', $booking->number_of_rooms ?? 1) }}):
+                    </td>
                     <td style="padding: 6px 0; text-align: right; font-weight: bold;">
-                        ${{ number_format(($booking->base_price ?? $booking->room->price) * ($booking->nights ?? 1), 2) }}
+                        ${{ number_format(($booking->base_price ?? $booking->room->price) * ($booking->nights ?? 1) * ($booking->number_of_rooms ?? 1), 2) }}
                     </td>
                 </tr>
                 @if(($booking->extra_person_total ?? 0) > 0)

@@ -83,7 +83,10 @@
                                     @endif
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-sm text-[#4c739a] font-medium">{{ $booking->room->name_es }}</td>
+                            <td class="px-6 py-4 text-sm text-[#4c739a] font-medium">
+                                {{ $booking->room->name_es }} 
+                                <span class="text-xs text-slate-400 font-normal">({{ $booking->number_of_rooms ?? 1 }} {{ Str::plural('Hab', $booking->number_of_rooms ?? 1) }})</span>
+                            </td>
                             <td class="px-6 py-4 text-sm text-[#4c739a]">{{ $booking->check_in }} - {{ $booking->check_out }}
                             </td>
                             <td class="px-6 py-4 text-sm text-[13px] font-bold">

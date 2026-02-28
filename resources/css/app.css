@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Quill Editor Styles needed for public view consistency */
+.ql-editor {
+    box-sizing: border-box;
+    line-height: 1.42;
+    height: 100%;
+    outline: none;
+    overflow-y: visible;
+    padding: 0;
+    tab-size: 4;
+    -moz-tab-size: 4;
+    text-align: inherit; /* Allow parent alignment */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.ql-editor p {
+    margin-bottom: 0;
+}

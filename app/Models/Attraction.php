@@ -14,4 +14,11 @@ class Attraction extends Model
         'image_path',
         'order',
     ];
+
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        return $this->image_path ? asset($this->image_path) : null;
+    }
 }

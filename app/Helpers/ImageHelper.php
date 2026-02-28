@@ -13,17 +13,19 @@ class ImageHelper
      *
      * @param \Illuminate\Http\UploadedFile $file
      * @param string $directory
+     * @param string|null $title
      * @param int $quality
      * @param int|null $width
      * @return string
      */
-    public static function storeAsWebp($file, $directory = 'uploads', $quality = 100, $width = null)
+    public static function storeAsWebp($file, $directory = 'uploads', $title = null, $quality = 90, $width = null)
     {
         // Intentar aumentar recursos para procesar fotos pesadas
         @ini_set('memory_limit', '512M');
         @ini_set('max_execution_time', '300');
 
-        $filename = Str::random(40) . '.webp';
+        $baseName = $title ? Str::slug($title) : Str::random(10);
+        $filename = $baseName . '-' . uniqid() . '.webp';
         $path = $directory . '/' . $filename;
 
         $image = Image::read($file);

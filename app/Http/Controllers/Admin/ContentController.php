@@ -119,12 +119,12 @@ class ContentController extends Controller
 
         // 4. Procesar imágenes de forma segura
         if ($request->hasFile('hero_image_file')) {
-            $path = \App\Helpers\ImageHelper::storeAsWebp($request->file('hero_image_file'), 'branding');
+            $path = \App\Helpers\ImageHelper::storeAsWebp($request->file('hero_image_file'), 'branding', 'hotel-hero-bg');
             Setting::updateOrCreate(['key' => 'hero_image'], ['value' => $path]);
         }
 
         if ($request->hasFile('cafe_image_file')) {
-            $path = \App\Helpers\ImageHelper::storeAsWebp($request->file('cafe_image_file'), 'branding');
+            $path = \App\Helpers\ImageHelper::storeAsWebp($request->file('cafe_image_file'), 'branding', 'hotel-cafe-bg');
             Setting::updateOrCreate(['key' => 'cafe_image'], ['value' => $path]);
         }
 

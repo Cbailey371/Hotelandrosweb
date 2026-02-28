@@ -125,6 +125,89 @@
             opacity: 1;
             transition: opacity 0.5s ease-in-out;
         }
+
+        /* Prevención estricta de barra flotante en celulares para casos con viewport desbordado */
+        @media (max-width: 767px) {
+            #booking-bar-container.fixed {
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                padding-left: 1.5rem !important;
+                padding-right: 1.5rem !important;
+                margin-top: 0 !important;
+            }
+
+            #booking-bar-inner {
+                max-width: 100% !important;
+                background-color: white !important;
+            }
+
+            .dark #booking-bar-inner {
+                background-color: #0b0c11 !important;
+            }
+
+            /* Overrides Forzosos para los Inline Styles de Quill en móviles con altísima especificidad absoluta (ID) */
+            html body #mobile-hero-title,
+            html body #mobile-hero-title * {
+                font-size: clamp(1.8rem, 8vw, 3.5rem) !important;
+                line-height: 1.1 !important;
+                white-space: pre-wrap !important;
+                text-align: center !important;
+                word-wrap: break-word !important;
+                word-break: break-all !important;
+                overflow-wrap: break-word !important;
+                hyphens: auto !important;
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+
+            html body #mobile-hero-subtitle,
+            html body #mobile-hero-subtitle * {
+                font-size: clamp(1.1rem, 6vw, 1.8rem) !important;
+                line-height: 1.4 !important;
+                white-space: pre-wrap !important;
+                text-align: center !important;
+                word-wrap: break-word !important;
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
+                max-width: 100% !important;
+            }
+
+            html body #mobile-cafe-title,
+            html body #mobile-cafe-title * {
+                font-size: clamp(1.8rem, 8vw, 3rem) !important;
+                line-height: 1.1 !important;
+                white-space: pre-wrap !important;
+                text-align: center !important;
+                word-wrap: break-word !important;
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
+                hyphens: auto !important;
+                max-width: 100% !important;
+            }
+
+            html body #mobile-contact-title,
+            html body #mobile-contact-title * {
+                font-size: clamp(2rem, 9vw, 3.5rem) !important;
+                line-height: 1.1 !important;
+                white-space: pre-wrap !important;
+                text-align: center !important;
+                word-wrap: break-word !important;
+                word-break: break-all !important;
+                overflow-wrap: break-word !important;
+                hyphens: auto !important;
+                max-width: 100% !important;
+            }
+
+            /* Override para Habitaciones y Tarifas Header */
+            .rooms-title-container {
+                font-size: clamp(2rem, 8vw, 3rem) !important;
+                line-height: 1.2 !important;
+            }
+        }
     </style>
 @endpush
 
@@ -162,24 +245,25 @@
             <!-- Layer 1: Background (Show as is - Cover) -->
             <div class="absolute inset-0"
                 style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                                                                   background-size: cover; 
-                                                                                   background-position: center; 
-                                                                                   background-repeat: no-repeat;
-                                                                                   opacity: {{ ($settings['hero_bg_opacity'] ?? 40) / 100 }};'>
+                                                                                                                                                                                                   background-size: cover; 
+                                                                                                                                                                                                   background-position: center; 
+                                                                                                                                                                                                   background-repeat: no-repeat;
+                                                                                                                                                                                                   opacity: {{ ($settings['hero_bg_opacity'] ?? 40) / 100 }};'>
             </div>
 
             <!-- Layer 2: Main Image (Centered and contained) -->
-            <div class="absolute inset-0" style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
-                                                                                   background-size: cover; 
-                                                                                   background-position: center; 
-                                                                                   background-repeat: no-repeat;'>
+            <div class="absolute inset-0"
+                style='background-image: url("{{ $settings['hero_image'] ?? '/images/branding/hero.png' }}"); 
+                                                                                                                                                                                                   background-size: cover; 
+                                                                                                                                                                                                   background-position: center; 
+                                                                                                                                                                                                   background-repeat: no-repeat;'>
             </div>
 
             <!-- Layer 3: Contrast Overlay (Dynamic) -->
             @if(($settings['hero_overlay_enabled'] ?? '1') == '1')
                 <div class="absolute inset-0"
                     style="background-color: {{ $settings['hero_overlay_color'] ?? '#000000' }}; 
-                                                                                                       opacity: {{ ($settings['hero_overlay_opacity'] ?? 50) / 100 }};">
+                                                                                                                                                                                                                                                                                                                                       opacity: {{ ($settings['hero_overlay_opacity'] ?? 50) / 100 }};">
                 </div>
 
                 <!-- Layer 4: Additional Bottom Gradient for readability -->
@@ -190,13 +274,15 @@
             <div class="relative z-10 p-10 md:p-20 text-center">
 
                 <!-- Hero Title -->
-                <div class="ql-editor hero-content leading-tight drop-shadow-2xl hero-no-filter text-white text-5xl md:text-7xl"
+                <div id="mobile-hero-title"
+                    class="ql-editor hero-content hero-title-container leading-tight drop-shadow-2xl hero-no-filter text-white break-words text-4xl sm:text-5xl md:text-7xl"
                     style="font-family: inherit; font-weight: normal; margin-bottom: {{ $settings['hero_gap'] ?? 24 }}px;">
                     {!! app()->getLocale() == 'es' ? ($settings['hero_title_es'] ?? '') : ($settings['hero_title_en'] ?? '') !!}
                 </div>
 
                 <!-- Hero Subtitle -->
-                <div class="ql-editor hero-content max-w-3xl mx-auto leading-relaxed drop-shadow-xl hero-no-filter text-white text-xl md:text-2xl"
+                <div id="mobile-hero-subtitle"
+                    class="ql-editor hero-content hero-subtitle-container max-w-3xl mx-auto leading-relaxed drop-shadow-xl hero-no-filter text-white break-words text-lg sm:text-xl md:text-2xl"
                     style="font-family: inherit;">
                     {!! app()->getLocale() == 'es' ? ($settings['hero_subtitle_es'] ?? '') : ($settings['hero_subtitle_en'] ?? '') !!}
                 </div>
@@ -208,49 +294,178 @@
         </div>
 
         <!-- Availability Bar (MOVE OUTSIDE overflow-hidden) -->
-        <div class="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex justify-center translate-y-1/2 z-20">
-            <div
-                class="bg-white dark:bg-[#0b0c11] w-full max-w-5xl rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800 p-4 md:p-6 grid grid-cols-1 md:grid-cols-4 gap-4 md:divide-x divide-slate-100 dark:divide-slate-800">
-                <div class="flex flex-col px-4">
-                    <label
-                        class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-sm">calendar_month</span> Check-In
-                    </label>
-                    <input type="date" id="search-check-in"
-                        class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 cursor-pointer"
-                        value="{{ date('Y-m-d') }}">
-                </div>
-                <div class="flex flex-col px-4">
-                    <label
-                        class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-sm">event_repeat</span> Check-Out
-                    </label>
-                    <input type="date" id="search-check-out"
-                        class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 cursor-pointer"
-                        value="{{ date('Y-m-d', strtotime('+1 day')) }}">
-                </div>
-                <div class="flex flex-col px-4">
-                    <label
-                        class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-sm">group</span> {{ __('Huéspedes') }}
-                    </label>
-                    <select id="search-guests"
-                        class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 cursor-pointer">
-                        <option value="1">{{ __('1 Adulto') }}</option>
-                        <option value="2" selected>{{ __('2 Adultos') }}</option>
-                        <option value="3">{{ __('2 Adultos, 1 Niño') }}</option>
-                        <option value="4">{{ __('2 Adultos, 2 Niños') }}</option>
-                        <option value="5">{{ __('Más de 4') }}</option>
-                    </select>
-                </div>
-                <div class="flex items-center justify-center pl-4">
-                    <button onclick="processFastBooking()"
-                        class="w-full h-full bg-primary text-white font-black rounded-xl hover:bg-primary/90 transition-all uppercase tracking-widest text-xs py-4 shadow-lg shadow-primary/20">
-                        {{ __('Reservar Ahora') }}
-                    </button>
+        <div id="booking-bar-wrapper" class="relative z-[60] flex justify-center w-full pointer-events-none"
+            style="min-height: 100px;">
+            <div id="booking-bar-container"
+                class="w-full px-6 md:px-8 flex justify-center z-[60] transition-all duration-300 pointer-events-auto">
+
+                <div id="booking-bar-inner"
+                    class="max-w-5xl shadow-2xl bg-white dark:bg-[#0b0c11] border-slate-100 dark:border-slate-800 w-full rounded-3xl border p-4 md:p-4 lg:p-6 grid grid-cols-1 md:grid-cols-4 gap-4 lg:gap-6 md:divide-x divide-slate-100 dark:divide-slate-800 transition-all duration-300">
+                    <div class="flex flex-col px-4 relative cursor-pointer"
+                        onclick="document.getElementById('search-check-in').showPicker()">
+                        <label
+                            class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2 pointer-events-none">
+                            <span class="material-symbols-outlined text-sm">calendar_month</span> Check-In
+                        </label>
+                        <input type="date" id="search-check-in"
+                            class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 w-full cursor-pointer"
+                            style="color-scheme: dark;" onclick="this.showPicker()" onfocus="this.showPicker()"
+                            value="{{ date('Y-m-d') }}">
+                    </div>
+                    <div class="flex flex-col px-4 relative cursor-pointer"
+                        onclick="document.getElementById('search-check-out').showPicker()">
+                        <label
+                            class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2 pointer-events-none">
+                            <span class="material-symbols-outlined text-sm">event_repeat</span> Check-Out
+                        </label>
+                        <input type="date" id="search-check-out"
+                            class="bg-transparent border-none p-0 text-sm font-bold focus:ring-0 w-full cursor-pointer"
+                            style="color-scheme: dark;" onclick="this.showPicker()" onfocus="this.showPicker()"
+                            value="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                    </div>
+                    <div class="flex flex-col px-4 relative" x-data="{ 
+                                                                                open: false, 
+                                                                                adults: 2, 
+                                                                                children: 0, 
+                                                                                rooms: 1,
+                                                                                get displayString() {
+                                                                                    let text = this.adults + ' Adulto' + (this.adults > 1 ? 's' : '');
+                                                                                    if (this.children > 0) {
+                                                                                        text += ', ' + this.children + ' Niñ' + (this.children > 1 ? 'os' : 'o');
+                                                                                    }
+                                                                                    return text;
+                                                                                }
+                                                                            }" @click.away="open = false">
+                        <label
+                            class="text-[10px] uppercase tracking-widest font-black text-primary mb-2 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-sm">group</span> {{ __('Huéspedes') }}
+                        </label>
+
+                        <button type="button" @click="open = !open"
+                            class="w-full text-left bg-transparent border-none p-0 text-sm font-bold cursor-pointer flex justify-between items-center focus:outline-none">
+                            <span x-text="displayString"></span>
+                        </button>
+
+                        <input type="hidden" id="search-guests" :value="adults + children">
+                        <input type="hidden" id="search-rooms" :value="rooms">
+
+                        <!-- Popover -->
+                        <div x-show="open" x-transition.opacity.duration.200ms
+                            class="absolute top-full left-0 mt-4 w-72 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-2 z-[70] text-slate-800 dark:text-slate-200"
+                            style="display: none;">
+
+                            <!-- Adultos -->
+                            <div
+                                class="flex items-center justify-between p-3 border-b border-slate-100 dark:border-slate-800">
+                                <div>
+                                    <div class="text-sm font-bold">Adultos</div>
+                                    <div class="text-[10px] text-slate-400">Edad: &gt; 12 años</div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button type="button" @click="if(adults > 1) adults--"
+                                        class="w-8 h-8 flex items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-primary hover:border-primary transition-colors focus:outline-none"><span
+                                            class="material-symbols-outlined text-lg">remove</span></button>
+                                    <span class="w-4 text-center font-bold text-sm" x-text="adults"></span>
+                                    <button type="button" @click="adults++"
+                                        class="w-8 h-8 flex items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-primary hover:border-primary transition-colors focus:outline-none"><span
+                                            class="material-symbols-outlined text-lg">add</span></button>
+                                </div>
+                            </div>
+
+                            <!-- Niños -->
+                            <div
+                                class="flex items-center justify-between p-3 border-b border-slate-100 dark:border-slate-800">
+                                <div>
+                                    <div class="text-sm font-bold">Niños</div>
+                                    <div class="text-[10px] text-slate-400">Edad: 2 - 11 años</div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button type="button" @click="if(children > 0) children--"
+                                        class="w-8 h-8 flex items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-primary hover:border-primary transition-colors focus:outline-none"><span
+                                            class="material-symbols-outlined text-lg">remove</span></button>
+                                    <span class="w-4 text-center font-bold text-sm" x-text="children"></span>
+                                    <button type="button" @click="children++"
+                                        class="w-8 h-8 flex items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-primary hover:border-primary transition-colors focus:outline-none"><span
+                                            class="material-symbols-outlined text-lg">add</span></button>
+                                </div>
+                            </div>
+
+                            <!-- Habitaciones -->
+                            <div class="flex items-center justify-between p-3">
+                                <div>
+                                    <div class="text-sm font-bold">Habitaciones</div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <button type="button" @click="if(rooms > 1) rooms--"
+                                        class="w-8 h-8 flex items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-primary hover:border-primary transition-colors focus:outline-none"><span
+                                            class="material-symbols-outlined text-lg">remove</span></button>
+                                    <span class="w-4 text-center font-bold text-sm" x-text="rooms"></span>
+                                    <button type="button" @click="if(rooms < 10) rooms++"
+                                        class="w-8 h-8 flex items-center justify-center rounded-full border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-primary hover:border-primary transition-colors focus:outline-none"><span
+                                            class="material-symbols-outlined text-lg">add</span></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center px-4 pt-4 pb-2 md:py-0">
+                        <button onclick="processFastBooking()"
+                            class="w-full h-full bg-primary text-white font-black rounded-xl hover:bg-primary/90 transition-all uppercase tracking-widest text-xs py-4 shadow-lg shadow-primary/20">
+                            {{ app()->getLocale() == 'es' ? 'Reservar Ahora' : 'Book Now' }}
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <script>
+            document.addEventLi            stener('DOMContentLoaded', () => {
+                const wrapper = document.getElementById('booking-bar-wrapper');
+                const container = document.getElementById('booking-bar-container');
+                const inner = document.getElementById('booking-bar-inner');
+                let isSticky = false;
+
+                if (!wrapper || !container || !inner) return;
+
+                const checkSticky = () => {
+                    // Desactivar sticky en móviles para no obstruir la lectura
+                    if (window.innerWidth < 768) {
+                        if (isSticky) {
+                            isSticky = false;
+                            container.classList.remove('px-4', 'fixed', 'top-16', 'left-0', 'right-0', 'py-4', 'mt-4');
+                            container.classList.add('px-6');
+                            inner.classList.remove('max-w-[1400px]', 'shadow-lg', 'shadow-black/5', 'bg-white/95', 'backdrop-blur-xl', 'dark:bg-[#0b0c11]/95', 'border-slate-200');
+                            inner.classList.add('max-w-5xl', 'shadow-2xl', 'bg-white', 'dark:bg-[#0b0c11]', 'border-slate-100');
+                        }
+                        return;
+                    }
+
+                    const rect = wrapper.getBoundingClientRect();
+                    // We check if the element has scrolled past distance 80px from top
+                    if (rect.top <= 80 && !isSticky) {
+                        isSticky = true;
+
+                        container.classList.remove('px-6');
+                        container.classList.add('px-4', 'fixed', 'top-16', 'left-0', 'right-0', 'py-4');
+
+                        inner.classList.remove('max-w-5xl', 'shadow-2xl', 'bg-white', 'dark:bg-[#0b0c11]', 'border-slate-100', 'dark:border-slate-800');
+                        inner.classList.add('max-w-[1400px]', 'shadow-lg', 'shadow-black/5', 'bg-white/95', 'backdrop-blur-xl', 'dark:bg-[#0b0c11]/95', 'border-slate-200', 'dark:border-slate-800');
+                    } else if (rect.top > 80 && isSticky) {
+                        isSticky = false;
+
+                        container.classList.remove('px-4', 'fixed', 'top-16', 'left-0', 'right-0', 'py-4');
+                        container.classList.add('px-6');
+
+                        inner.classList.remove('max-w-[1400px]', 'shadow-lg', 'shadow-black/5', 'bg-white/95', 'backdrop-blur-xl', 'dark:bg-[#0b0c11]/95', 'border-slate-200');
+                        inner.classList.add('max-w-5xl', 'shadow-2xl', 'bg-white', 'dark:bg-[#0b0c11]', 'border-slate-100');
+                    }
+                };
+
+                window.addEventListener('scroll', checkSticky, { passive: true });
+                window.addEventListener('resize', checkSticky, { passive: true });
+                // Check on initial load
+                checkSticky();
+            });
+        </script>
     </div>
 
     <!-- Space for the bar overlap -->
@@ -264,7 +479,8 @@
                     class="px-4 py-1.5 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-widest mb-4">
                     {!! app()->getLocale() == 'es' ? ($settings['rooms_badge_es'] ?? '') : ($settings['rooms_badge_en'] ?? '') !!}
                 </div>
-                <div class="text-4xl md:text-5xl font-black tracking-tight mb-4 text-slate-800 dark:text-white">
+                <div
+                    class="rooms-title-container text-3xl sm:text-4xl md:text-5xl font-black tracking-tight mb-4 break-words text-slate-800 dark:text-white px-4">
                     {!! app()->getLocale() == 'es' ? ($settings['rooms_title_es'] ?? '') : ($settings['rooms_title_en'] ?? '') !!}
                 </div>
                 <div class="w-20 h-1.5 bg-primary rounded-full mb-6"></div>
@@ -316,7 +532,7 @@
                                 <button
                                     onclick="openBookingModal('{{ $room->id }}', '{{ app()->getLocale() == 'es' ? $room->name_es : $room->name_en }}')"
                                     class="w-full py-4 bg-green-600 text-white text-sm font-black rounded-2xl hover:bg-green-700 transition-all uppercase tracking-widest shadow-lg shadow-green-900/10">
-                                    {{ __('Reservar Ahora') }}
+                                    {{ app()->getLocale() == 'es' ? 'Reservar Ahora' : 'Book Now' }}
                                 </button>
 
                                 @if($room->galleries && $room->galleries->count() > 0)
@@ -371,8 +587,8 @@
                     <div
                         class="inline-block px-4 py-1.5 bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 text-xs font-bold rounded-full mb-6 uppercase tracking-widest">
                         ANDROS CAFE</div>
-                    <h2 class="text-4xl md:text-5xl font-black mb-8 tracking-tight leading-tight">
-                        {{ app()->getLocale() == 'es' ? ($settings['cafe_title_es'] ?? __('Sabores Artesanales & Coctelería')) : ($settings['cafe_title_en'] ?? __('Artisan Flavors & Cocktails')) }}
+                    <h2 id="mobile-cafe-title" class="text-4xl md:text-5xl font-black mb-8 tracking-tight leading-tight">
+                        {!! app()->getLocale() == 'es' ? ($settings['cafe_title_es'] ?? __('Sabores Artesanales & Coctelería')) : ($settings['cafe_title_en'] ?? __('Artisan Flavors & Cocktails')) !!}
                     </h2>
                     <div class="ql-editor text-lg text-secondary dark:text-slate-400 mb-10 leading-relaxed">
                         {!! app()->getLocale() == 'es' ? ($settings['cafe_description_es'] ?? __('Desde el espresso matutino hasta cócteles de autor, nuestros mixólogos y chefs crean momentos inolvidables en un ambiente sofisticado.')) : ($settings['cafe_description_en'] ?? __('From morning espresso to signature cocktails, our mixologists and chefs create unforgettable moments in a sophisticated atmosphere.')) !!}
@@ -444,11 +660,8 @@
                     </div>
                 </div>
                 <div class="w-full lg:w-1/2">
-                    <span
-                        class="px-4 py-1.5 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-widest mb-4">
-                        {{ app()->getLocale() == 'es' ? ($settings['location_badge_es'] ?? __('Donde estamos ubicados')) : ($settings['location_badge_en'] ?? __('Donde estamos ubicados')) }}
-                    </span>
-                    <h2 class="text-4xl md:text-5xl font-black mb-8 tracking-tight leading-tight">
+
+                    <h2 id="mobile-contact-title" class="text-4xl md:text-5xl font-black mb-8 tracking-tight leading-tight">
                         {!! app()->getLocale() == 'es' ? ($settings['location_title_es'] ?? 'Explore the Gateway of the Americas') : ($settings['location_title_en'] ?? 'Explore the Gateway of the Americas') !!}
                     </h2>
                     <p class="text-lg text-secondary dark:text-slate-400 mb-10 leading-relaxed">
@@ -462,7 +675,7 @@
 
         <!-- Carousel Premium Section (Home Showcase) -->
         @if($carouselImages && $carouselImages->count() > 0)
-            <section class="mb-0 scroll-mt-24 overflow-hidden px-4 md:px-0" id="galeria-destacada">
+            <section class="mb-16 scroll-mt-24 overflow-hidden px-4 md:px-0" id="galeria-destacada">
                 <div class="max-w-6xl mx-auto mb-10 text-center md:text-left">
                     <span
                         class="px-4 py-1.5 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-[0.2em] mb-4">
@@ -474,40 +687,33 @@
                     </h2>
                 </div>
 
-                <div class="swiper home-carousel !overflow-visible">
+                <div class="swiper home-carousel !overflow-visible relative">
+                    <style>
+                        .home-carousel:not(.swiper-initialized) .swiper-wrapper {
+                            display: flex !important;
+                            justify-content: center !important;
+                            flex-wrap: nowrap !important;
+                        }
+                    </style>
                     <div class="swiper-wrapper">
                         @foreach($carouselImages as $item)
                             <div class="swiper-slide !w-[300px] md:!w-[500px]">
                                 <div
                                     class="relative aspect-video rounded-[3rem] overflow-hidden shadow-2xl shadow-primary/5 group cursor-grab active:cursor-grabbing border-4 border-white dark:border-slate-800">
-                                    <img src="{{ $item->image_path }}"
+                                    <img src="{{ $item->image_url }}"
                                         class="w-full h-full object-cover transition-transform duration-[3s] group-hover:scale-110">
                                 </div>
                             </div>
                         @endforeach
-                    </div>
-                    <!-- Navigation -->
-                    <div class="flex justify-center md:justify-end gap-3 mt-4 max-w-6xl mx-auto px-10 relative z-20">
-                        <button
-                            class="swiper-prev w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-primary shadow-xl border border-slate-100 dark:border-slate-700 hover:bg-primary hover:text-white transition-all">
-                            <span class="material-symbols-outlined font-black">chevron_left</span>
-                        </button>
-                        <button
-                            class="swiper-next w-12 h-12 bg-white dark:bg-slate-800 rounded-full flex items-center justify-center text-primary shadow-xl border border-slate-100 dark:border-slate-700 hover:bg-primary hover:text-white transition-all">
-                            <span class="material-symbols-outlined font-black">chevron_right</span>
-                        </button>
                     </div>
                 </div>
             </section>
         @endif
 
         <!-- Atractivos Turísticos Section -->
-        <section class="mb-24 scroll-mt-24" id="atractivos">
-            <div class="text-center mb-16">
-                <span
-                    class="px-4 py-1.5 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase tracking-widest mb-4">
-                    {{ app()->getLocale() == 'es' ? ($settings['attractions_badge_es'] ?? 'EXPLORE PANAMA') : ($settings['attractions_badge_en'] ?? 'EXPLORE PANAMA') }}
-                </span>
+        <section class="mb-12 scroll-mt-24 pt-0" id="atractivos">
+            <div class="text-center mb-8">
+
                 <h2 class="text-4xl md:text-5xl font-black tracking-tight">
                     {{ app()->getLocale() == 'es' ? ($settings['attractions_title_es'] ?? __('Local Attractions')) : ($settings['attractions_title_en'] ?? __('Local Attractions')) }}
                 </h2>
@@ -693,207 +899,52 @@
             </div>
         </div>
 
-        <script>
-            function processFastBooking() {
-                const guestCount = parseInt(document.getElementById('search-guests').value);
-                let roomId, roomName;
-
+        <script>         function processFastBooking() {
+                const guestCount = parseInt(document.getElementById('search-guests').value); let roomId, roomName;
                 if (guestCount <= 2) {
-                    roomId = '2'; // Deluxe con cama extragrande
-                    roomName = '{{ app()->getLocale() == "es" ? "Habitación Deluxe con cama extragrande" : "Deluxe Room with Extra Large Bed" }}';
-                } else {
-                    roomId = '1'; // Doble Deluxe
-                    roomName = '{{ app()->getLocale() == "es" ? "Habitación Doble Deluxe" : "Double Deluxe Room" }}';
+                    roomId = '2'; // Deluxe con cama extragrande                 roomName = '{{ app()->getLocale() == "es" ? "Habitación Deluxe con cama extragrande" : "Deluxe Room with Extra Large Bed" }}';             } else {                 roomId = '1'; // Doble Deluxe                 roomName = '{{ app()->getLocale() == "es" ? "Habitación Doble Deluxe" : "Double Deluxe Room" }}';             }
+                    openBookingModal(roomId, roomName);
                 }
-
-                openBookingModal(roomId, roomName);
-            }
-
-            function scrollToRooms() {
-                document.getElementById('habitaciones').scrollIntoView({ behavior: 'smooth' });
-            }
-
-            function openBookingModal(roomId, roomName) {
-                // Sincronizar con la barra de búsqueda
-                const checkIn = document.getElementById('search-check-in').value;
-                const checkOut = document.getElementById('search-check-out').value;
-                const guests = document.getElementById('search-guests').value;
-
-                document.getElementById('modal-room-id').value = roomId;
-                document.getElementById('modal-title').innerText = roomName;
-                document.getElementById('modal-check-in').value = checkIn;
-                document.getElementById('modal-check-out').value = checkOut;
-                document.getElementById('modal-guests').value = guests;
-
-                document.getElementById('booking-modal').classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeBookingModal() {
-                document.getElementById('booking-modal').classList.add('hidden');
-                document.body.style.overflow = 'auto';
-            }
-
-            // Gallery Logic
-            let currentGalleryImages = [];
-            let currentImageIndex = 0;
-            let galleryAutoplayInterval = null;
-            let galleryIsZoomed = false;
-
-            function openGalleryModal(images) {
-                currentGalleryImages = images;
-                currentImageIndex = 0;
-                galleryIsZoomed = false;
-
-                document.getElementById('gallery-modal').classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-
-                updateGalleryUI();
-                startAutoplay();
-            }
-
-            function closeGalleryModal() {
-                stopAutoplay();
-                document.getElementById('gallery-modal').classList.add('hidden');
-                document.body.style.overflow = 'auto';
-                resetZoom();
-            }
-
-            function toggleZoom() {
-                const img = document.getElementById('gallery-main-image');
-                galleryIsZoomed = !galleryIsZoomed;
-
-                if (galleryIsZoomed) {
-                    img.classList.remove('gallery-zoom-normal');
-                    img.classList.add('gallery-zoom-active');
-                    document.getElementById('zoom-btn').classList.add('bg-primary/40');
-                    document.getElementById('zoom-btn').innerHTML = '<span class="material-symbols-outlined">zoom_out</span>';
-                    stopAutoplay();
-                } else {
-                    resetZoom();
+                function scrollToRooms() { document.getElementById('habitaciones').scrollIntoView({ behavior: 'smooth' }); }
+                function openBookingModal(roomId, roomName) {             // Sincronizar con la barra de búsqueda             const checkIn = document.getElementById('search-check-in')?.value;             const checkOut = document.getElementById('search-check-out')?.value;             const guests = document.getElementById('search-guests')?.value;             const rooms = document.getElementById('search-rooms')?.value || 1;
+                    if (document.getElementById('modal-room-id')) document.getElementById('modal-room-id').value = roomId; if (document.getElementById('modal-title')) document.getElementById('modal-title').innerText = roomName; if (document.getElementById('modal-check-in') && checkIn) document.getElementById('modal-check-in').value = checkIn; if (document.getElementById('modal-check-out') && checkOut) document.getElementById('modal-check-out').value = checkOut; if (document.getElementById('modal-guests') && guests) document.getElementById('modal-guests').value = guests;
+                    const roomsSelect = document.querySelector('select[name="number_of_rooms"]'); if (roomsSelect && rooms) { let val = parseInt(rooms); roomsSelect.value = val >= 5 ? '5' : val.toString(); }
+                    document.getElementById('booking-modal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
                 }
-            }
-
-            function resetZoom() {
-                const img = document.getElementById('gallery-main-image');
-                galleryIsZoomed = false;
-                img.classList.remove('gallery-zoom-active');
-                img.classList.add('gallery-zoom-normal');
-                document.getElementById('zoom-btn').classList.remove('bg-primary/40');
-                document.getElementById('zoom-btn').innerHTML = '<span class="material-symbols-outlined">zoom_in</span>';
-            }
-
-            function toggleAutoplay() {
-                if (galleryAutoplayInterval) {
-                    stopAutoplay();
-                } else {
-                    startAutoplay();
+                function closeBookingModal() { document.getElementById('booking-modal').classList.add('hidden'); document.body.style.overflow = 'auto'; }
+                // Gallery Logic         let currentGalleryImages = [];         let currentImageIndex = 0;         let galleryAutoplayInterval = null;         let galleryIsZoomed = false;
+                function openGalleryModal(images) {
+                    currentGalleryImages = images; currentImageIndex = 0; galleryIsZoomed = false;
+                    document.getElementById('gallery-modal').classList.remove('hidden'); document.body.style.overflow = 'hidden';
+                    updateGalleryUI(); startAutoplay();
                 }
-            }
-
-            function startAutoplay() {
-                stopAutoplay();
-                galleryAutoplayInterval = setInterval(nextImage, 4000);
-                document.getElementById('autoplay-btn').classList.add('text-primary');
-                document.getElementById('autoplay-btn').innerHTML = '<span class="material-symbols-outlined">pause</span>';
-            }
-
-            function stopAutoplay() {
-                if (galleryAutoplayInterval) {
-                    clearInterval(galleryAutoplayInterval);
-                    galleryAutoplayInterval = null;
+                function closeGalleryModal() { stopAutoplay(); document.getElementById('gallery-modal').classList.add('hidden'); document.body.style.overflow = 'auto'; resetZoom(); }
+                function toggleZoom() {
+                    const img = document.getElementById('gallery-main-image'); galleryIsZoomed = !galleryIsZoomed;
+                    if (galleryIsZoomed) { img.classList.remove('gallery-zoom-normal'); img.classList.add('gallery-zoom-active'); document.getElementById('zoom-btn').classList.add('bg-primary/40'); document.getElementById('zoom-btn').innerHTML = '<span class="material-symbols-outlined">zoom_out</span>'; stopAutoplay(); } else { resetZoom(); }
                 }
-                document.getElementById('autoplay-btn').classList.remove('text-primary');
-                document.getElementById('autoplay-btn').innerHTML = '<span class="material-symbols-outlined">play_arrow</span>';
-            }
-
-            function updateGalleryUI() {
-                const mainImage = document.getElementById('gallery-main-image');
-
-                // Fade effect
-                mainImage.classList.replace('fade-in', 'fade-out');
-
-                setTimeout(() => {
-                    mainImage.src = currentGalleryImages[currentImageIndex];
-                    document.getElementById('gallery-counter').innerText = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
-
-                    mainImage.onload = () => {
-                        mainImage.classList.replace('fade-out', 'fade-in');
-                    };
-
-                    // Update Thumbnails
-                    const thumbsContainer = document.getElementById('gallery-thumbnails');
-                    thumbsContainer.innerHTML = '';
-
-                    currentGalleryImages.forEach((img, index) => {
-                        const thumb = document.createElement('img');
-                        thumb.src = img;
-                        thumb.className = `h-full aspect-square object-cover rounded-md cursor-pointer border-2 transition-all ${index === currentImageIndex ? 'border-primary opacity-100 scale-105' : 'border-transparent opacity-50 hover:opacity-100'}`;
-                        thumb.onclick = () => {
-                            stopAutoplay();
-                            currentImageIndex = index;
-                            updateGalleryUI();
-                        };
-                        thumbsContainer.appendChild(thumb);
-                    });
-                }, 250);
-            }
-
-            function manualNext() {
-                stopAutoplay();
-                nextImage();
-            }
-
-            function manualPrev() {
-                stopAutoplay();
-                prevImage();
-            }
-
-            function nextImage() {
-                currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length;
-                updateGalleryUI();
-            }
-
-            function prevImage() {
-                currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length;
-                updateGalleryUI();
-            }
-
-            // Keyboard Support
-            document.addEventListener('keydown', function (event) {
-                if (document.getElementById('gallery-modal').classList.contains('hidden')) return;
-
-                if (event.key === 'Escape') closeGalleryModal();
-                if (event.key === 'ArrowRight') nextImage();
-                if (event.key === 'ArrowLeft') prevImage();
+                function resetZoom() { const img = document.getElementById('gallery-main-image'); galleryIsZoomed = false; img.classList.remove('gallery-zoom-active'); img.classList.add('gallery-zoom-normal'); document.getElementById('zoom-btn').classList.remove('bg-primary/40'); document.getElementById('zoom-btn').innerHTML = '<span class="material-symbols-outlined">zoom_in</span>'; }
+                function toggleAutoplay() { if (galleryAutoplayInterval) { stopAutoplay(); } else { startAutoplay(); } }
+                function startAutoplay() { stopAutoplay(); galleryAutoplayInterval = setInterval(nextImage, 4000); document.getElementById('autoplay-btn').classList.add('text-primary'); document.getElementById('autoplay-btn').innerHTML = '<span class="material-symbols-outlined">pause</span>'; }
+                function stopAutoplay() { if (galleryAutoplayInterval) { clearInterval(galleryAutoplayInterval); galleryAutoplayInterval = null; } document.getElementById('autoplay-btn').classList.remove('text-primary'); document.getElementById('autoplay-btn').innerHTML = '<span class="material-symbols-outlined">play_arrow</span>'; }
+                function updateGalleryUI() {
+                    const mainImage = document.getElementById('gallery-main-image');
+                    // Fade effect             mainImage.classList.replace('fade-in', 'fade-out');
+                    setTimeout(() => {
+                        mainImage.src = currentGalleryImages[currentImageIndex]; document.getElementById('gallery-counter').innerText = `${currentImageIndex + 1} / ${currentGalleryImages.length}`;
+                        mainImage.onload = () => { mainImage.classList.replace('fade-out', 'fade-in'); };
+                        // Update Thumbnails                 const thumbsContainer = document.getElementById('gallery-thumbnails');                 thumbsContainer.innerHTML = '';
+                        currentGalleryImages.forEach((img, index) => { const thumb = document.createElement('img'); thumb.src = img; thumb.className = `h-full aspect-square object-cover rounded-md cursor-pointer border-2 transition-all ${index === currentImageIndex ? 'border-primary opacity-100 scale-105' : 'border-transparent opacity-50 hover:opacity-100'}`; thumb.onclick = () => { stopAutoplay(); currentImageIndex = index; updateGalleryUI(); }; thumbsContainer.appendChild(thumb); });
+                    }, 250);
+                }
+                function manualNext() { stopAutoplay(); nextImage(); }
+                function manualPrev() { stopAutoplay(); prevImage(); }
+                function nextImage() { currentImageIndex = (currentImageIndex + 1) % currentGalleryImages.length; updateGalleryUI(); }
+                function prevImage() { currentImageIndex = (currentImageIndex - 1 + currentGalleryImages.length) % currentGalleryImages.length; updateGalleryUI(); }
+                // Keyboard Support         document.addEventListener('keydown', function (event) {             if (document.getElementById('gallery-modal').classList.contains('hidden')) return;
+                if (event.key === 'Escape') closeGalleryModal(); if (event.key === 'ArrowRight') nextImage(); if (event.key === 'ArrowLeft') prevImage();
             });
-
-            // Initialize Home Carousel
-            document.addEventListener('DOMContentLoaded', function () {
-                new Swiper('.home-carousel', {
-                    slidesPerView: 'auto',
-                    centeredSlides: true,
-                    spaceBetween: 20,
-                    loop: true,
-                    autoHeight: true,
-                    autoplay: {
-                        delay: 3500,
-                        disableOnInteraction: false,
-                    },
-                    navigation: {
-                        nextEl: '.swiper-next',
-                        prevEl: '.swiper-prev',
-                    },
-                    effect: 'coverflow',
-                    coverflowEffect: {
-                        rotate: 5,
-                        stretch: 0,
-                        depth: 100,
-                        modifier: 1,
-                        slideShadows: false,
-                    },
-                });
-            });
+            // Initialize Home Carousel         document.addEventListener('DOMContentLoaded', function () {             const carousels = document.querySelectorAll('.home-carousel');             carousels.forEach(carousel => {                 if (carousel.swiper) return;                 new Swiper(carousel, {                     slidesPerView: 'auto',                     centeredSlides: true,                     spaceBetween: 20,                     loop: true,                     autoHeight: true,                     grabCursor: true,                     observer: true,                     observeParents: true,                     autoplay: {                         delay: 3000,                         disableOnInteraction: false,                     },                     effect: 'coverflow',                     coverflowEffect: {                         rotate: 5,                         stretch: 0,                         depth: 100,                         modifier: 1,                         slideShadows: false,                     },                 });             });         });
         </script>
     </div>
 @endsection

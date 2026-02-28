@@ -12,12 +12,13 @@ class ComponentController extends Controller
     {
         $type = $request->input('type');
         $data = $request->input('data', []);
+        $index = $request->input('index', null);
 
-        // Fetch common data needed for components (e.g. rooms for the 'rooms' section)
-        // ideally we cache or standardize this, but for now we re-fetch
+        // Fetch common data needed for components
         $rooms = Room::all();
-        $carouselImages = \App\Models\Gallery::where('is_carousel', true)->get();
-        $attractions = \App\Models\Attraction::where('active', true)->get();
+        $carouselImages = \App\Models\Gallery::where('show_in_carousel', true)->get();
+        $attractions = \App\Models\Attraction::orderBy('order')->get();
+        $settings = \App\Models\Setting::pluck('value', 'key')->toArray();
 
         // Validate component exists (basic security)
         if (!view()->exists("components.sections.{$type}")) {
@@ -30,8 +31,28 @@ class ComponentController extends Controller
             'rooms' => $rooms,
             'carouselImages' => $carouselImages,
             'attractions' => $attractions,
+            'index' => $index,
+            'settings' => $settings
         ])->render();
 
         return response()->json(['html' => $html]);
+    }
+
+    public function upload(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240'
+        ]);
+
+        if ($request->hasFile('image')) {
+            $path = \App\Helpers\ImageHelper::storeAsWebp($request->file('image'), 'editor_uploads', $request->file('image')->getClientOriginalName());
+
+            return response()->json([
+                'success' => true,
+                'url' => $path
+            ]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'No image uploaded'], 400);
     }
 }

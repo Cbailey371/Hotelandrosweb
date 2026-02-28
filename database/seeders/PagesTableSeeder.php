@@ -59,6 +59,7 @@ class PagesTableSeeder extends Seeder
                             'data' => [
                                 'location_title_es' => 'Explore el Canal de Panamá',
                                 'location_title_en' => 'Explore the Panama Canal',
+                                'google_maps_iframe' => 'https://maps.google.com/maps?q=Hotel%20Andros,%20Col%C3%B3n,%20Panam%C3%A1&t=&z=18&ie=UTF8&iwloc=&output=embed',
                             ],
                             'settings' => ['visible' => true]
                         ],

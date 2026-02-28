@@ -89,6 +89,13 @@
                             class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/50">
                     </div>
                     <div class="space-y-2">
+                        <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Cant.
+                            Habitaciones</label>
+                        <input type="number" name="number_of_rooms"
+                            value="{{ old('number_of_rooms', $booking->number_of_rooms) }}" required min="1" max="20"
+                            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div class="space-y-2">
                         <label class="text-[11px] font-black text-slate-400 uppercase tracking-widest pl-1">Check-In</label>
                         <input type="date" name="check_in" value="{{ old('check_in', $booking->check_in) }}" required
                             class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-5 py-4 text-sm font-bold focus:ring-2 focus:ring-primary/50">
@@ -218,7 +225,8 @@
             <div class="flex items-center gap-3 p-6 bg-primary/5 rounded-[1.5rem] border border-primary/10">
                 <input type="checkbox" name="send_update_email" id="send_update_email" value="1"
                     class="w-5 h-5 rounded-lg border-slate-300 text-primary focus:ring-primary cursor-pointer">
-                <label for="send_update_email" class="text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer select-none">
+                <label for="send_update_email"
+                    class="text-sm font-bold text-slate-700 dark:text-slate-300 cursor-pointer select-none">
                     Enviar actualización de reserva por correo al cliente (con el nuevo desglose)
                 </label>
             </div>

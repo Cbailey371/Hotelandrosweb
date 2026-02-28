@@ -223,11 +223,47 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Amenidades (Separadas por
-                        coma)</label>
-                    <input type="text" name="amenities"
-                        class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary/50"
-                        placeholder="WiFi, TV, Minibar">
+                    <label
+                        class="block text-sm font-bold text-[#0d141b] dark:text-white mb-4 uppercase tracking-widest text-[10px]">Amenidades
+                        Disponibles</label>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        @php
+                            $availableAmenities = [
+                                'wifi' => ['label' => 'WiFi', 'icon' => 'wifi'],
+                                'ac' => ['label' => 'Aire Acond.', 'icon' => 'ac_unit'],
+                                'tv' => ['label' => 'TV', 'icon' => 'tv'],
+                                'safe' => ['label' => 'Caja Fuerte', 'icon' => 'lock'],
+                                'shower' => ['label' => 'Ducha', 'icon' => 'shower'],
+                                'coffee' => ['label' => 'Cafetera', 'icon' => 'coffee_maker'],
+                                'minibar' => ['label' => 'Minibar', 'icon' => 'kitchen'],
+                                'balcony' => ['label' => 'Balcón', 'icon' => 'deck'],
+                                'king' => ['label' => 'Cama King', 'icon' => 'king_bed'],
+                                'bathtub' => ['label' => 'Bañera', 'icon' => 'bathtub'],
+                                'jacuzzi' => ['label' => 'Jacuzzi', 'icon' => 'hot_tub'],
+                                'double_bed' => ['label' => 'Cama Doble', 'icon' => 'bed'],
+                            ];
+                        @endphp
+
+                        @foreach($availableAmenities as $key => $amenity)
+                            <label
+                                class="relative flex flex-col items-center gap-3 p-4 rounded-2xl border-2 border-slate-100 dark:border-slate-800 cursor-pointer transition-all group hover:border-slate-200 dark:hover:border-slate-700 bg-white dark:bg-slate-900">
+                                <input type="checkbox" name="amenities[]" value="{{ $key }}" class="hidden"
+                                    onchange="this.parentElement.classList.toggle('border-primary', this.checked); this.parentElement.classList.toggle('bg-primary/5', this.checked); this.parentElement.classList.toggle('border-slate-100', !this.checked); this.parentElement.classList.toggle('bg-white', !this.checked);">
+
+                                <span class="material-symbols-outlined text-3xl text-slate-400 group-hover:text-slate-500">
+                                    {{ $amenity['icon'] }}
+                                </span>
+                                <span class="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                    {{ $amenity['label'] }}
+                                </span>
+
+                                <div
+                                    class="absolute top-2 right-2 w-5 h-5 rounded-full border-2 border-slate-200 dark:border-slate-700 flex items-center justify-center transition-all">
+                                    <span class="material-symbols-outlined text-white text-[12px] font-bold hidden">check</span>
+                                </div>
+                            </label>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
@@ -293,13 +329,13 @@
             div.className = 'relative group aspect-square rounded-[1.5rem] overflow-hidden border-2 border-slate-100 dark:border-slate-800 shadow-sm animate-in zoom-in duration-300';
             div.id = `gallery-item-${id}`;
             div.innerHTML = `
-                        <input type="checkbox" name="gallery_ids[]" value="${id}" checked class="hidden">
-                        <img src="${path}" class="w-full h-full object-cover">
-                        <button type="button" onclick="removeGalleryItem('${id}')" 
-                            class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
-                            <span class="material-symbols-outlined text-sm">close</span>
-                        </button>
-                    `;
+                                    <input type="checkbox" name="gallery_ids[]" value="${id}" checked class="hidden">
+                                    <img src="${path}" class="w-full h-full object-cover">
+                                    <button type="button" onclick="removeGalleryItem('${id}')" 
+                                        class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg">
+                                        <span class="material-symbols-outlined text-sm">close</span>
+                                    </button>
+                                `;
             container.appendChild(div);
         }
 
@@ -335,9 +371,9 @@
                         const div = document.createElement('div');
                         div.className = 'aspect-square rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 relative';
                         div.innerHTML = `
-                                            <img src="${e.target.result}" class="w-full h-full object-cover">
-                                            <div class="absolute top-1 right-1 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm">Nueva</div>
-                                        `;
+                                                        <img src="${e.target.result}" class="w-full h-full object-cover">
+                                                        <div class="absolute top-1 right-1 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm">Nueva</div>
+                                                    `;
                         container.appendChild(div);
                     }
                     reader.readAsDataURL(file);

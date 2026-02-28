@@ -20,24 +20,36 @@ class GalleryController extends Controller
             'gallery_images.*' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240'
         ]);
 
+        $uploadedImages = [];
+
         if ($request->hasFile('gallery_images')) {
             foreach ($request->file('gallery_images') as $image) {
-                $path = \App\Helpers\ImageHelper::storeAsWebp($image, 'gallery');
+                $path = \App\Helpers\ImageHelper::storeAsWebp($image, 'gallery', $image->getClientOriginalName());
 
-                Gallery::create([
+                $newImage = Gallery::create([
                     'image_path' => $path,
                     'title_es' => $image->getClientOriginalName(),
                     'title_en' => $image->getClientOriginalName(),
                     'order' => Gallery::max('order') + 1,
                     'show_in_carousel' => $request->has('show_in_carousel') ? 1 : 0
                 ]);
+
+                $uploadedImages[] = $newImage;
             }
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Imágenes subidas con éxito.',
+                'images' => $uploadedImages
+            ]);
         }
 
         return redirect()->back()->with('success', 'Imágenes subidas y optimizadas con éxito.');
     }
 
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
         $image = Gallery::findOrFail($id);
 
@@ -48,15 +60,30 @@ class GalleryController extends Controller
 
         $image->delete();
 
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Imagen eliminada con éxito.'
+            ]);
+        }
+
         return redirect()->back()->with('success', 'Imagen eliminada con éxito.');
     }
 
-    public function toggleCarousel(Gallery $gallery)
+    public function toggleCarousel(Gallery $gallery, Request $request)
     {
         $gallery->update([
             'show_in_carousel' => !$gallery->show_in_carousel,
             'carousel_order' => $gallery->show_in_carousel ? 0 : (Gallery::where('show_in_carousel', true)->max('carousel_order') + 1)
         ]);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Visibilidad actualizada.',
+                'image' => $gallery
+            ]);
+        }
 
         return redirect()->back()->with('success', 'Visibilidad en carrusel actualizada.');
     }

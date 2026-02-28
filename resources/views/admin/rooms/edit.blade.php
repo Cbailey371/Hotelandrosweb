@@ -244,12 +244,45 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Amenidades (Separadas por
-                        coma)</label>
-                    <input type="text" name="amenities"
-                        value="{{ old('amenities', is_array($room->amenities) ? implode(', ', $room->amenities) : '') }}"
-                        class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm focus:ring-2 focus:ring-primary/50"
-                        placeholder="WiFi, TV, Minibar">
+                    <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-4 uppercase tracking-widest text-[10px]">Amenidades Disponibles</label>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                        @php
+                            $availableAmenities = [
+                                'wifi' => ['label' => 'WiFi', 'icon' => 'wifi'],
+                                'ac' => ['label' => 'Aire Acond.', 'icon' => 'ac_unit'],
+                                'tv' => ['label' => 'TV', 'icon' => 'tv'],
+                                'safe' => ['label' => 'Caja Fuerte', 'icon' => 'lock'],
+                                'shower' => ['label' => 'Ducha', 'icon' => 'shower'],
+                                'coffee' => ['label' => 'Cafetera', 'icon' => 'coffee_maker'],
+                                'minibar' => ['label' => 'Minibar', 'icon' => 'kitchen'],
+                                'balcony' => ['label' => 'Balcón', 'icon' => 'deck'],
+                                'king' => ['label' => 'Cama King', 'icon' => 'king_bed'],
+                                'bathtub' => ['label' => 'Bañera', 'icon' => 'bathtub'],
+                                'jacuzzi' => ['label' => 'Jacuzzi', 'icon' => 'hot_tub'],
+                                'double_bed' => ['label' => 'Cama Doble', 'icon' => 'bed'],
+                            ];
+                            $roomAmenities = is_array($room->amenities) ? $room->amenities : [];
+                        @endphp
+
+                        @foreach($availableAmenities as $key => $amenity)
+                            <label class="relative flex flex-col items-center gap-3 p-4 rounded-2xl border-2 cursor-pointer transition-all group {{ in_array($key, $roomAmenities) ? 'border-primary bg-primary/5 dark:bg-primary/10' : 'border-slate-100 dark:border-slate-800 hover:border-slate-200 dark:hover:border-slate-700 bg-white dark:bg-slate-900' }}">
+                                <input type="checkbox" name="amenities[]" value="{{ $key }}" class="hidden" 
+                                    {{ in_array($key, $roomAmenities) ? 'checked' : '' }} 
+                                    onchange="this.parentElement.classList.toggle('border-primary', this.checked); this.parentElement.classList.toggle('bg-primary/5', this.checked); this.parentElement.classList.toggle('border-slate-100', !this.checked); this.parentElement.classList.toggle('bg-white', !this.checked);">
+                                
+                                <span class="material-symbols-outlined text-3xl {{ in_array($key, $roomAmenities) ? 'text-primary' : 'text-slate-400 group-hover:text-slate-500' }}">
+                                    {{ $amenity['icon'] }}
+                                </span>
+                                <span class="text-[10px] font-black uppercase tracking-widest {{ in_array($key, $roomAmenities) ? 'text-primary' : 'text-slate-500' }}">
+                                    {{ $amenity['label'] }}
+                                </span>
+
+                                <div class="absolute top-2 right-2 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all {{ in_array($key, $roomAmenities) ? 'bg-primary border-primary' : 'bg-transparent border-slate-200 dark:border-slate-700' }}">
+                                    <span class="material-symbols-outlined text-white text-[12px] font-bold {{ in_array($key, $roomAmenities) ? 'block' : 'hidden' }}">check</span>
+                                </div>
+                            </label>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 

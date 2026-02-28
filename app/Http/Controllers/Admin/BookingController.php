@@ -54,7 +54,7 @@ class BookingController extends Controller
     {
         $oldStatus = $booking->status;
 
-        $validated = $request->validate([
+        $rules = [
             'customer_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'nullable|string|max:50',
@@ -63,13 +63,20 @@ class BookingController extends Controller
             'check_in' => 'required|date',
             'check_out' => 'required|date|after:check_in',
             'guests' => 'required|integer|min:1',
+            'number_of_rooms' => 'required|integer|min:1',
             'status' => 'required|in:pending,confirmed,cancelled',
             'message' => 'nullable|string',
-            'base_price' => 'required|numeric|min:0',
-            'extra_person_total' => 'required|numeric|min:0',
-            'tax_amount' => 'required|numeric|min:0',
-            'total_amount' => 'required|numeric|min:0',
-        ]);
+        ];
+
+        // Solo super_admin puede editar montos financieros directamente
+        if (auth()->user()->role === 'super_admin') {
+            $rules['base_price'] = 'required|numeric|min:0';
+            $rules['extra_person_total'] = 'required|numeric|min:0';
+            $rules['tax_amount'] = 'required|numeric|min:0';
+            $rules['total_amount'] = 'required|numeric|min:0';
+        }
+
+        $validated = $request->validate($rules);
 
         $booking->update($validated);
 

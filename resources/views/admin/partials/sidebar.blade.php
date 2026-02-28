@@ -36,6 +36,12 @@
                     <span class="material-symbols-outlined">bar_chart</span>
                     <p class="text-sm font-medium">Reportes</p>
                 </a>
+
+                <a href="{{ route('admin.promotions.index') }}"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.promotions.*') ? 'bg-primary/10 text-primary' : 'text-[#4c739a] hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                    <span class="material-symbols-outlined">campaign</span>
+                    <p class="text-sm font-medium">Popups / Promos</p>
+                </a>
             @endif
 
             @if(auth()->user()->hasRole('super_admin'))

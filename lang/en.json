@@ -95,5 +95,17 @@
     "Ej. Alergias, hora de llegada, cama extra...": "e.g. Allergies, arrival time, extra bed...",
     "+507 ...": "+507 ...",
     "Error en la validación": "Validation Error",
-    "Hubo un problema de conexión. Inténtalo de nuevo.": "There was a connection problem. Please try again."
+    "Hubo un problema de conexión. Inténtalo de nuevo.": "There was a connection problem. Please try again.",
+    "WiFi": "WiFi",
+    "Aire Acondicionado": "Air Conditioning",
+    "TV": "TV",
+    "Caja Fuerte": "Safe",
+    "Ducha": "Shower",
+    "Cafetera": "Coffee Maker",
+    "Minibar": "Minibar",
+    "Balcón": "Balcony",
+    "Cama King": "King Bed",
+    "Bañera": "Bathtub",
+    "Jacuzzi": "Jacuzzi",
+    "Cama Doble": "Double Bed"
 }

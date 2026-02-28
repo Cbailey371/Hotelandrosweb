@@ -95,5 +95,8 @@ class DatabaseSeeder extends Seeder
         foreach ($settings as $setting) {
             \App\Models\Setting::create($setting);
         }
+
+        // Llamar al seeder de Páginas para inicializar la ruta 'home' requerida por el editor visual.
+        $this->call(PagesTableSeeder::class);
     }
 }

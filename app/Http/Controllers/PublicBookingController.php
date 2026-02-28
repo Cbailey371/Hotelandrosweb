@@ -14,7 +14,7 @@ class PublicBookingController extends Controller
 {
     public function store(Request $request)
     {
-        \Log::info('Intento de reserva recibido:', $request->all());
+        \Log::info('Intento de reserva recibido:', $request->only(['room_id', 'check_in', 'check_out']));
 
         try {
             $validated = $request->validate([
@@ -26,6 +26,7 @@ class PublicBookingController extends Controller
                 'check_in' => 'required|date', // Eliminado after_or_equal:today temporalmente para evitar problemas de zona horaria
                 'check_out' => 'required|date|after:check_in',
                 'guests' => 'required|integer|min:1|max:10',
+                'number_of_rooms' => 'required|integer|min:1|max:20',
                 'message' => 'nullable|string|max:1000',
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -44,10 +45,11 @@ class PublicBookingController extends Controller
                 $nights = 1; // Mínimo 1 noche
 
             // Cálculos de precios
-            $basePriceTotal = $room->price * $nights;
+            $numRooms = $validated['number_of_rooms'];
+            $basePriceTotal = ($room->price * $nights) * $numRooms;
 
             $extraGuests = max(0, $validated['guests'] - $room->capacity);
-            $extraPersonTotal = $extraGuests * $room->extra_person_charge * $nights;
+            $extraPersonTotal = ($extraGuests * $room->extra_person_charge * $nights) * $numRooms;
 
             $taxAmount = ($basePriceTotal + $extraPersonTotal) * ($room->tax_percentage / 100);
             $totalAmount = $basePriceTotal + $extraPersonTotal + $taxAmount;
