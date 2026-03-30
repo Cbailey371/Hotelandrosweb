@@ -107,7 +107,7 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 mt-12">
                 @if($isEditor)
                     <template x-for="feature in (sections[{{ $index }}].data.features || [])" :key="feature.id">
-                        <div class="group relative flex flex-col items-center text-center p-4 rounded-3xl bg-slate-50 dark:bg-slate-800/30 transition-all hover:bg-white dark:hover:bg-slate-700 shadow-sm hover:shadow-xl draggable-offset"
+                        <div class="group relative flex flex-col items-center text-center p-4 rounded-3xl bg-slate-50 dark:bg-slate-800/30 transition-all hover:bg-white dark:hover:bg-slate-700 shadow-sm hover:shadow-xl draggable-offset cafe-feature-item"
                              :data-field="'cafe_feature_' + feature.id" data-label="Icono Café"
                              :style="getFieldStyle({{ $index }}, 'cafe_feature_' + feature.id)">
                             <!-- Delete Button -->
@@ -151,7 +151,7 @@
                             $fY = $data[$featureField . '_translateY'] ?? 0;
                             $fTransform = ($fX || $fY) ? "transform: translate({$fX}px, {$fY}px);" : "";
                         @endphp
-                        <div class="flex flex-col items-center text-center group" style="{{ $fTransform }}">
+                        <div class="flex flex-col items-center text-center group cafe-feature-item" style="{{ $fTransform }}">
                             <div
                                 class="w-16 h-16 {{ $label ? 'mb-4' : '' }} rounded-3xl bg-primary/5 dark:bg-white/5 flex items-center justify-center text-primary transition-all duration-500 group-hover:bg-primary group-hover:text-white group-hover:rotate-6 group-hover:scale-110 shadow-sm border border-primary/10">
                                 <span
@@ -170,6 +170,12 @@
     </div>
 
     <style>
+        @media (max-width: 767px) {
+            .cafe-feature-item {
+                transform: none !important;
+            }
+        }
+
         @keyframes float {
 
             0%,
