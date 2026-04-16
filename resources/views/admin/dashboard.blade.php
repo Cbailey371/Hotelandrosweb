@@ -5,33 +5,49 @@
 @section('content')
     <div class="space-y-8">
         <!-- Stats Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-[#cfdbe7] dark:border-slate-800 shadow-sm">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-2 bg-primary/10 rounded-lg text-primary">
                         <span class="material-symbols-outlined">door_open</span>
                     </div>
                 </div>
-                <p class="text-[#4c739a] text-sm font-medium">Habitaciones Totales</p>
+                <p class="text-[#4c739a] text-sm font-medium">Habitaciones</p>
                 <p class="text-[#0d141b] dark:text-white text-3xl font-bold mt-1">{{ $stats['rooms_count'] }}</p>
             </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-[#cfdbe7] dark:border-slate-800 shadow-sm">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg text-orange-600">
-                        <span class="material-symbols-outlined">calendar_month</span>
-                    </div>
-                </div>
-                <p class="text-[#4c739a] text-sm font-medium">Reservas Totales</p>
-                <p class="text-[#0d141b] dark:text-white text-3xl font-bold mt-1">{{ $stats['bookings_count'] }}</p>
-            </div>
-            <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-[#cfdbe7] dark:border-slate-800 shadow-sm">
+            
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-[#cfdbe7] dark:border-slate-800 shadow-sm border-l-4 border-l-emerald-500">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-2 bg-emerald-100 dark:bg-emerald-900/20 rounded-lg text-emerald-600">
-                        <span class="material-symbols-outlined">pending_actions</span>
+                        <span class="material-symbols-outlined">calendar_today</span>
                     </div>
                 </div>
-                <p class="text-[#4c739a] text-sm font-medium">Reservas Pendientes</p>
-                <p class="text-[#0d141b] dark:text-white text-3xl font-bold mt-1">{{ $stats['pending_bookings'] }}</p>
+                <p class="text-[#4c739a] text-sm font-medium">Reservas Activas</p>
+                <p class="text-[#0d141b] dark:text-white text-3xl font-bold mt-1">{{ $stats['active_bookings'] }}</p>
+                <div class="mt-2 flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    <span class="text-[10px] text-slate-500 font-bold uppercase">{{ $stats['pending_bookings'] }} pendientes</span>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-[#cfdbe7] dark:border-slate-800 shadow-sm">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg text-blue-600">
+                        <span class="material-symbols-outlined">task_alt</span>
+                    </div>
+                </div>
+                <p class="text-[#4c739a] text-sm font-medium">Completadas</p>
+                <p class="text-[#0d141b] dark:text-white text-3xl font-bold mt-1">{{ $stats['completed_bookings'] }}</p>
+            </div>
+
+            <div class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-[#cfdbe7] dark:border-slate-800 shadow-sm">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-2 bg-red-100 dark:bg-red-900/20 rounded-lg text-red-600">
+                        <span class="material-symbols-outlined">cancel</span>
+                    </div>
+                </div>
+                <p class="text-[#4c739a] text-sm font-medium">Canceladas</p>
+                <p class="text-[#0d141b] dark:text-white text-3xl font-bold mt-1">{{ $stats['cancelled_bookings'] }}</p>
             </div>
         </div>
 

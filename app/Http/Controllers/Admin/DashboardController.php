@@ -14,7 +14,9 @@ class DashboardController extends Controller
     {
         $stats = [
             'rooms_count' => Room::count(),
-            'bookings_count' => Booking::count(),
+            'active_bookings' => Booking::active()->count(),
+            'completed_bookings' => Booking::where('status', 'confirmed')->where('check_out', '<', now()->toDateString())->count(),
+            'cancelled_bookings' => Booking::where('status', 'cancelled')->count(),
             'pending_bookings' => Booking::where('status', 'pending')->count(),
         ];
 

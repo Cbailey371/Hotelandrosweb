@@ -1,18 +1,18 @@
 @extends('layouts.admin')
 
-@section('header', 'Bandeja de Reservas')
+@section('header', 'Historial de Reservas')
 
 @section('content')
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
         <div class="flex flex-col gap-1">
-            <h1 class="text-[#0d141b] dark:text-white text-3xl font-black leading-tight tracking-[-0.033em]">Bandeja de Reservas Activas</h1>
-            <p class="text-[#4c739a] dark:text-slate-400 text-base font-normal">Gestiona las solicitudes pendientes y las estadías que están ocurriendo actualmente.</p>
+            <h1 class="text-[#0d141b] dark:text-white text-3xl font-black leading-tight tracking-[-0.033em]">Historial de Reservas</h1>
+            <p class="text-[#4c739a] dark:text-slate-400 text-base font-normal">Consulta las estadías completadas anteriormente (Check-out pasado) y reservaciones canceladas.</p>
         </div>
     </div>
 
     <!-- Barra de Filtros -->
     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 mb-8 shadow-sm">
-        <form action="{{ route('admin.bookings.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <form action="{{ route('admin.bookings.history') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
             <div class="flex flex-col gap-2">
                 <label class="text-[10px] font-black uppercase tracking-widest text-[#4c739a] pl-1">Búsqueda</label>
                 <div class="relative">
@@ -26,10 +26,9 @@
             <div class="flex flex-col gap-2">
                 <label class="text-[10px] font-black uppercase tracking-widest text-[#4c739a] pl-1">Estado</label>
                 <select name="status" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/50 cursor-pointer">
-                    <option value="">Todos los estados</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pendiente</option>
-                    <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>Confirmada</option>
-                    <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelada</option>
+                    <option value="">Confirmadas y Canceladas</option>
+                    <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>Solo Confirmadas</option>
+                    <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Solo Canceladas</option>
                 </select>
             </div>
 
@@ -44,11 +43,11 @@
             </div>
 
             <div class="flex gap-2">
-                <button type="submit" class="flex-1 bg-primary text-white font-black py-3 rounded-xl hover:bg-primary/90 transition-all text-xs uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+                <button type="submit" class="flex-1 bg-slate-800 text-white font-black py-3 rounded-xl hover:bg-slate-900 transition-all text-xs uppercase tracking-widest shadow-lg flex items-center justify-center gap-2">
                     <span class="material-symbols-outlined text-sm">filter_list</span>
                     Filtrar
                 </button>
-                <a href="{{ route('admin.bookings.index') }}" class="px-4 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center" title="Limpiar Filtros">
+                <a href="{{ route('admin.bookings.history') }}" class="px-4 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-all flex items-center justify-center" title="Limpiar Filtros">
                     <span class="material-symbols-outlined">restart_alt</span>
                 </a>
             </div>
@@ -129,7 +128,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-10 text-center text-slate-400">No hay reservas registradas.</td>
+                            <td colspan="5" class="px-6 py-10 text-center text-slate-400">No hay reservas en el historial.</td>
                         </tr>
                     @endforelse
                 </tbody>

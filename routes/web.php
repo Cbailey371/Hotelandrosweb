@@ -39,6 +39,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Dashboard & Bookings (Accesible para todos los roles)
     Route::middleware('role:super_admin,supervisor,reception')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/bookings/history', [\App\Http\Controllers\Admin\BookingController::class, 'history'])->name('bookings.history');
         Route::resource('bookings', \App\Http\Controllers\Admin\BookingController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
     });
 

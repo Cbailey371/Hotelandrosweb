@@ -19,9 +19,19 @@
             </a>
 
             <a href="{{ route('admin.bookings.index') }}"
-                class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.bookings.*') ? 'bg-primary/10 text-primary' : 'text-[#4c739a] hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.bookings.index') ? 'bg-primary/10 text-primary' : 'text-[#4c739a] hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                 <span class="material-symbols-outlined">calendar_today</span>
-                <p class="text-sm font-medium">Reservas</p>
+                <p class="text-sm font-medium">Bandeja de Reservas</p>
+                @php $pendingCount = \App\Models\Booking::where('status', 'pending')->count(); @endphp
+                @if($pendingCount > 0)
+                    <span class="ml-auto bg-amber-500 text-white text-[10px] font-black px-1.5 py-0.5 rounded-full">{{ $pendingCount }}</span>
+                @endif
+            </a>
+
+            <a href="{{ route('admin.bookings.history') }}"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.bookings.history') ? 'bg-primary/10 text-primary' : 'text-[#4c739a] hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                <span class="material-symbols-outlined">history</span>
+                <p class="text-sm font-medium">Historial</p>
             </a>
 
             @if(auth()->user()->hasAnyRole(['super_admin', 'supervisor']))

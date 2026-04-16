@@ -33,4 +33,32 @@ class Booking extends Model
     {
         return $this->belongsTo(Room::class);
     }
+
+    /**
+     * Scope para reservas activas (Pendientes o Confirmadas que aún no han salido)
+     */
+    public function scopeActive($query)
+    {
+        return $query->where(function($q) {
+            $q->where('status', self::STATUS_PENDING)
+              ->orWhere(function($sq) {
+                  $sq->where('status', self::STATUS_CONFIRMED)
+                    ->where('check_out', '>=', now()->toDateString());
+              });
+        });
+    }
+
+    /**
+     * Scope para historial (Canceladas o Confirmadas que ya salieron)
+     */
+    public function scopeHistory($query)
+    {
+        return $query->where(function($q) {
+            $q->where('status', self::STATUS_CANCELLED)
+              ->orWhere(function($sq) {
+                  $sq->where('status', self::STATUS_CONFIRMED)
+                    ->where('check_out', '<', now()->toDateString());
+              });
+        });
+    }
 }

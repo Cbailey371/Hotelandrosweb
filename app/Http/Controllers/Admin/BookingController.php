@@ -11,7 +11,7 @@ class BookingController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Booking::with('room');
+        $query = Booking::with('room')->active();
 
         // Búsqueda por nombre o email
         if ($request->filled('search')) {
@@ -36,6 +36,35 @@ class BookingController extends Controller
         $rooms = \App\Models\Room::all();
 
         return view('admin.bookings.index', compact('bookings', 'rooms'));
+    }
+
+    public function history(Request $request)
+    {
+        $query = Booking::with('room')->history();
+
+        // Búsqueda por nombre o email
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('customer_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // Filtro por estado específico en historial
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // Filtro por habitación
+        if ($request->filled('room_id')) {
+            $query->where('room_id', $request->room_id);
+        }
+
+        $bookings = $query->latest()->get();
+        $rooms = \App\Models\Room::all();
+
+        return view('admin.bookings.history', compact('bookings', 'rooms'));
     }
 
     public function show(Booking $booking)
@@ -98,7 +127,11 @@ class BookingController extends Controller
             }
         }
 
-        return redirect()->route('admin.bookings.index')->with('success', 'Reserva actualizada correctamente.');
+        if ($booking->status === Booking::STATUS_PENDING || ($booking->status === Booking::STATUS_CONFIRMED && $booking->check_out >= now()->toDateString())) {
+            return redirect()->route('admin.bookings.index')->with('success', 'Reserva actualizada correctamente.');
+        }
+
+        return redirect()->route('admin.bookings.history')->with('success', 'Reserva procesada y enviada al historial.');
     }
 
     public function destroy(Booking $booking)
