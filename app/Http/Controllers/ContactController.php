@@ -27,10 +27,13 @@ class ContactController extends Controller
             ?? Setting::where('key', 'mail_from_address')->value('value')
             ?? config('mail.from.address');
 
-        Log::info('Intentando enviar correo de contacto a: ' . $recipientEmail);
+        // Convertir string de correos en array si hay comas para notificar a varios administradores
+        $emails = strpos($recipientEmail, ',') !== false 
+            ? array_map('trim', explode(',', $recipientEmail)) 
+            : $recipientEmail;
 
         try {
-            Mail::to($recipientEmail)->send(new ContactMail($validated));
+            Mail::to($emails)->send(new ContactMail($validated));
 
             if ($request->ajax()) {
                 return response()->json(['success' => true, 'message' => 'Tu mensaje ha sido enviado con éxito.']);

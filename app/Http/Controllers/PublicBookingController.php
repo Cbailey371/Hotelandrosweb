@@ -76,9 +76,14 @@ class PublicBookingController extends Controller
         $adminEmail = Setting::where('key', 'hotel_email')->value('value')
             ?? config('mail.from.address');
 
+        // Convertir string de correos en array si hay comas
+        $emails = strpos($adminEmail, ',') !== false 
+            ? array_map('trim', explode(',', $adminEmail)) 
+            : $adminEmail;
+
         try {
             // Correo para el administrador
-            Mail::to($adminEmail)->send(new BookingRequestMail($booking));
+            Mail::to($emails)->send(new BookingRequestMail($booking));
 
             // Correo para el cliente (Confirmación)
             Mail::to($booking->email)->send(new BookingConfirmationMail($booking));

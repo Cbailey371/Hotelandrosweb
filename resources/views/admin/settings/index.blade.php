@@ -466,9 +466,11 @@
                             class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Email de Reservas</label>
-                        <input type="email" name="hotel_email" value="{{ $settings['hotel_email'] ?? '' }}"
-                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm">
+                        <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Email de Recepción (Notificaciones)</label>
+                        <input type="text" name="hotel_email" value="{{ $settings['hotel_email'] ?? '' }}"
+                            class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-sm"
+                            placeholder="ejemplo@hotel.com, admin@hotel.com">
+                        <p class="text-[10px] text-slate-400 mt-2">Puedes agregar varios correos separados por comas. A estos correos llegarán las reservas y consultas.</p>
                     </div>
                 </div>
             </div>
