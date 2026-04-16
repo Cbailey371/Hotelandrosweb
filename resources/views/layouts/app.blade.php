@@ -8,8 +8,17 @@
     <meta name="theme-color" content="{{ $settings['primary_color'] ?? '#137fec' }}">
 
     <meta name="description"
-        content="{{ $settings['website_description'] ?? 'Hospedaje de calidad en el corazón de Colón.' }}">
-    <meta name="keywords" content="{{ $settings['website_keywords'] ?? 'hotel, colon, panama, andros' }}">
+        content="{{ 
+            app()->getLocale() == 'en' 
+            ? ($settings['website_description_en'] ?? $settings['website_description'] ?? 'High-quality accommodation in the heart of Colón.') 
+            : ($settings['website_description'] ?? 'Hospedaje de calidad en el corazón de Colón.') 
+        }}">
+    <meta name="keywords" 
+        content="{{ 
+            app()->getLocale() == 'en' 
+            ? ($settings['website_keywords_en'] ?? $settings['website_keywords'] ?? 'hotel, colon, panama, andros') 
+            : ($settings['website_keywords'] ?? 'hotel, colon, panama, andros') 
+        }}">
     <meta name="author" content="{{ $settings['hotel_name'] ?? 'Hotel Andros' }}">
 
     <title>@yield('title') - {{ $settings['hotel_name'] ?? config('app.name', 'Laravel') }}</title>

@@ -183,22 +183,48 @@
                 </div>
 
                 <!-- SEO Settings -->
-                <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-6">
+                <div class="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-8">
                     <h4 class="text-xs font-black text-slate-400 uppercase tracking-widest">SEO & Meta Tags</h4>
-                    <div class="grid grid-cols-1 gap-6">
-                        <div>
-                            <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Meta
-                                Descripción</label>
-                            <textarea name="website_description" rows="2"
-                                class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
-                                placeholder="Breve descripción para buscadores...">{{ $settings['website_description'] ?? '' }}</textarea>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Spanish SEO -->
+                        <div class="space-y-6">
+                            <h5 class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2">
+                                <span class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded">ES</span>
+                                Versión Español
+                            </h5>
+                            <div>
+                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Meta Descripción (ES)</label>
+                                <textarea name="website_description" rows="3"
+                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                    placeholder="Descripción en español...">{{ $settings['website_description'] ?? '' }}</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Keywords (ES)</label>
+                                <input type="text" name="website_keywords" value="{{ $settings['website_keywords'] ?? '' }}"
+                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                    placeholder="hotel, colon, panama...">
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Keywords (Separadas
-                                por coma)</label>
-                            <input type="text" name="website_keywords" value="{{ $settings['website_keywords'] ?? '' }}"
-                                class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
-                                placeholder="hotel, colon, panama, hospedaje">
+
+                        <!-- English SEO -->
+                        <div class="space-y-6">
+                            <h5 class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-2">
+                                <span class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded">EN</span>
+                                English Version
+                            </h5>
+                            <div>
+                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Meta Description (EN)</label>
+                                <textarea name="website_description_en" rows="3"
+                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                    placeholder="English description...">{{ $settings['website_description_en'] ?? '' }}</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-[#0d141b] dark:text-white mb-2">Keywords (EN)</label>
+                                <input type="text" name="website_keywords_en" value="{{ $settings['website_keywords_en'] ?? '' }}"
+                                    class="w-full bg-[#f0f2f5] dark:bg-slate-800 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/50"
+                                    placeholder="hotel, luxury, panama...">
+                            </div>
                         </div>
                     </div>
                 </div>
