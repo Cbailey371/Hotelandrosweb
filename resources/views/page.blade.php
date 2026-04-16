@@ -7,7 +7,7 @@
         @foreach($page->content['sections'] as $section)
             @if(isset($section['settings']['visible']) && $section['settings']['visible'])
                 <x-dynamic-component :component="'sections.' . $section['type']" :data="$section['data']" :rooms="$rooms ?? []"
-                    :carouselImages="$carouselImages ?? []" :attractions="$attractions ?? []" mode="public" />
+                    :carouselImages="$carouselImages ?? []" :cafeImages="$cafeImages ?? []" :attractions="$attractions ?? []" mode="public" />
             @endif
         @endforeach
     @endif

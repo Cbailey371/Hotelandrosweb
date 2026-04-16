@@ -13,6 +13,8 @@ class Gallery extends Model
         'order',
         'show_in_carousel',
         'carousel_order',
+        'show_in_cafe',
+        'cafe_order',
     ];
 
     public function rooms()

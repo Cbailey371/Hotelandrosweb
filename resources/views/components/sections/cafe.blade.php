@@ -1,4 +1,4 @@
-@props(['data', 'mode' => 'public', 'index' => null])
+@props(['data', 'cafeImages' => [], 'mode' => 'public', 'index' => null])
 
 @php
     $isEditor = $mode === 'editor';
@@ -166,6 +166,20 @@
                     @endforeach
                 @endif
             </div>
+
+            <!-- View Gallery Button -->
+            @if((isset($cafeImages) && count($cafeImages) > 0) || $isEditor)
+                <div class="mt-12 flex justify-center lg:justify-start" x-data="{ 
+                    cafeGallery: {{ Js::from(isset($cafeImages) ? $cafeImages->pluck('image_url') : []) }},
+                    cafeTitle: '{{ app()->getLocale() == 'es' ? ($data['cafe_title_es'] ?? 'Andros Café') : ($data['cafe_title_en'] ?? 'Andros Café') }}'
+                }">
+                    <button @click="$dispatch('open-cafe-gallery', { images: cafeGallery, title: cafeTitle })"
+                        class="px-8 py-4 bg-primary text-white text-sm font-black rounded-2xl hover:bg-primary/90 hover:scale-105 transition-all uppercase tracking-[0.2em] shadow-xl shadow-primary/20 flex items-center gap-3">
+                        <span class="material-symbols-outlined">photo_library</span>
+                        {{ __('Ver Galería') }}
+                    </button>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -208,6 +222,79 @@
             animation: float-slow 5s ease-in-out infinite;
         }
     </style>
+
+    <!-- Cafe Gallery Lightbox (Reusing Room Lightbox Logic) -->
+    <div x-data="{ 
+            isOpen: false, 
+            images: [], 
+            title: '',
+            currentIndex: 0,
+            openGallery(event) {
+                this.images = event.detail.images;
+                this.title = event.detail.title;
+                this.currentIndex = 0;
+                if(this.images.length > 0) {
+                    this.isOpen = true;
+                    document.body.style.overflow = 'hidden';
+                }
+            },
+            closeGallery() {
+                this.isOpen = false;
+                document.body.style.overflow = '';
+            },
+            next() {
+                this.currentIndex = (this.currentIndex + 1) % this.images.length;
+            },
+            prev() {
+                this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+            }
+        }" @open-cafe-gallery.window="openGallery($event)" @keydown.escape.window="closeGallery()"
+        @keydown.right.window="if(isOpen) next()" @keydown.left.window="if(isOpen) prev()">
+
+        <div x-show="isOpen" x-transition.opacity.duration.300ms
+            class="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center" x-cloak
+            style="display: none;">
+
+            <!-- Toolbar -->
+            <div
+                class="absolute top-0 left-0 right-0 p-4 flex justify-between items-center bg-gradient-to-b from-black/80 to-transparent z-10">
+                <h3 class="text-white text-xl font-bold px-4 drop-shadow-md" x-text="title"></h3>
+                <button @click="closeGallery()"
+                    class="text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors outline-none focus:outline-none">
+                    <span class="material-symbols-outlined text-3xl">close</span>
+                </button>
+            </div>
+
+            <!-- Main Image Area -->
+            <div class="relative w-full h-full flex items-center justify-center p-4 md:p-12">
+                <!-- Navigation Prev -->
+                <button @click="prev()" x-show="images.length > 1"
+                    class="absolute left-2 md:left-8 text-white/50 hover:text-white p-2 md:p-4 rounded-full hover:bg-white/10 transition-colors z-10 outline-none focus:outline-none bg-black/20 hover:bg-black/40 backdrop-blur-sm">
+                    <span class="material-symbols-outlined text-4xl md:text-5xl">chevron_left</span>
+                </button>
+
+                <!-- Image Display -->
+                <img :src="images[currentIndex]"
+                    class="max-w-full max-h-full object-contain shadow-2xl rounded-lg select-none" alt="Cafe Image"
+                    x-transition.opacity.duration.200ms>
+
+                <!-- Navigation Next -->
+                <button @click="next()" x-show="images.length > 1"
+                    class="absolute right-2 md:right-8 text-white/50 hover:text-white p-2 md:p-4 rounded-full hover:bg-white/10 transition-colors z-10 outline-none focus:outline-none bg-black/20 hover:bg-black/40 backdrop-blur-sm">
+                    <span class="material-symbols-outlined text-4xl md:text-5xl">chevron_right</span>
+                </button>
+            </div>
+
+            <!-- Counter -->
+            <div
+                class="absolute bottom-0 left-0 right-0 p-6 flex justify-center bg-gradient-to-t from-black/80 to-transparent pointer-events-none">
+                <div
+                    class="text-white font-bold text-sm px-6 py-2 bg-black/50 rounded-full backdrop-blur-md border border-white/10 shadow-lg tracking-widest">
+                    <span x-text="currentIndex + 1"></span> / <span x-text="images.length"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Render Dynamic Elements (Free-form) -->
     <x-editor.dynamic-elements :data="$data" :mode="$mode" />

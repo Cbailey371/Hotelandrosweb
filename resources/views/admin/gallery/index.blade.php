@@ -79,12 +79,19 @@
                     </div>
                 </div>
 
-                <div class="flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl">
-                    <input type="checkbox" name="show_in_carousel" id="modal_carousel" value="1"
-                        class="w-5 h-5 rounded border-slate-300 text-primary">
-                    <label for="modal_carousel"
-                        class="text-sm font-bold text-slate-600 dark:text-slate-300 cursor-pointer">Mostrar en el carrusel
-                        de inicio</label>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl">
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" name="show_in_carousel" id="modal_carousel" value="1"
+                            class="w-5 h-5 rounded border-slate-300 text-primary">
+                        <label for="modal_carousel"
+                            class="text-sm font-bold text-slate-600 dark:text-slate-300 cursor-pointer">Carrusel Inicio</label>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input type="checkbox" name="show_in_cafe" id="modal_cafe" value="1"
+                            class="w-5 h-5 rounded border-slate-300 text-primary">
+                        <label for="modal_cafe"
+                            class="text-sm font-bold text-slate-600 dark:text-slate-300 cursor-pointer">Galería Café</label>
+                    </div>
                 </div>
 
                 <div class="flex justify-end gap-3 pt-4">
@@ -102,7 +109,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         @forelse($images as $image)
             <div
-                class="relative group aspect-square rounded-[2rem] overflow-hidden border-2 {{ $image->show_in_carousel ? 'border-primary ring-4 ring-primary/10' : 'border-slate-200 dark:border-slate-800' }} transition-all shadow-sm bg-white dark:bg-slate-900">
+                class="relative group aspect-square rounded-[2rem] overflow-hidden border-2 {{ ($image->show_in_carousel || $image->show_in_cafe) ? 'border-primary ring-4 ring-primary/10' : 'border-slate-200 dark:border-slate-800' }} transition-all shadow-sm bg-white dark:bg-slate-900">
                 <img src="{{ $image->image_path }}"
                     class="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500">
 
@@ -119,6 +126,16 @@
                         </button>
                     </form>
 
+                    <form action="{{ route('admin.gallery.toggle-cafe', $image->id) }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="flex items-center gap-2 px-4 py-2 {{ $image->show_in_cafe ? 'bg-orange-500 hover:bg-orange-600' : 'bg-slate-700 hover:bg-slate-800' }} text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg transition-all scale-90 group-hover:scale-100">
+                            <span
+                                class="material-symbols-outlined text-sm">{{ $image->show_in_cafe ? 'coffee_maker' : 'local_cafe' }}</span>
+                            {{ $image->show_in_cafe ? 'Quitar del Café' : 'A Galería Café' }}
+                        </button>
+                    </form>
+
                     <form action="{{ route('admin.gallery.destroy', $image->id) }}" method="POST"
                         onsubmit="return confirm('¿Eliminar esta imagen?')">
                         @csrf
@@ -130,16 +147,23 @@
                     </form>
                 </div>
 
-                <!-- Carousel Badge -->
-                @if($image->show_in_carousel)
-                    <div class="absolute top-4 left-4">
+                <!-- Badges -->
+                <div class="absolute top-4 left-4 flex flex-col gap-2">
+                    @if($image->show_in_carousel)
                         <div
                             class="bg-primary text-white text-[10px] font-black px-3 py-1.5 rounded-full flex items-center gap-1 shadow-xl uppercase tracking-widest animate-in zoom-in">
                             <span class="material-symbols-outlined text-xs">view_carousel</span>
                             <span>Destacada</span>
                         </div>
-                    </div>
-                @endif
+                    @endif
+                    @if($image->show_in_cafe)
+                        <div
+                            class="bg-orange-500 text-white text-[10px] font-black px-3 py-1.5 rounded-full flex items-center gap-1 shadow-xl uppercase tracking-widest animate-in zoom-in">
+                            <span class="material-symbols-outlined text-xs">local_cafe</span>
+                            <span>Café</span>
+                        </div>
+                    @endif
+                </div>
             </div>
         @empty
             <div

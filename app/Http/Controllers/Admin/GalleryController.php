@@ -31,7 +31,9 @@ class GalleryController extends Controller
                     'title_es' => $image->getClientOriginalName(),
                     'title_en' => $image->getClientOriginalName(),
                     'order' => Gallery::max('order') + 1,
-                    'show_in_carousel' => $request->has('show_in_carousel') ? 1 : 0
+                    'show_in_carousel' => $request->has('show_in_carousel') ? 1 : 0,
+                    'show_in_cafe' => $request->has('show_in_cafe') ? 1 : 0,
+                    'cafe_order' => $request->has('show_in_cafe') ? (Gallery::where('show_in_cafe', true)->max('cafe_order') + 1) : 0
                 ]);
 
                 $uploadedImages[] = $newImage;
@@ -86,6 +88,24 @@ class GalleryController extends Controller
         }
 
         return redirect()->back()->with('success', 'Visibilidad en carrusel actualizada.');
+    }
+
+    public function toggleCafe(Gallery $gallery, Request $request)
+    {
+        $gallery->update([
+            'show_in_cafe' => !$gallery->show_in_cafe,
+            'cafe_order' => $gallery->show_in_cafe ? 0 : (Gallery::where('show_in_cafe', true)->max('cafe_order') + 1)
+        ]);
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Visibilidad en café actualizada.',
+                'image' => $gallery
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Visibilidad en café actualizada.');
     }
 
     public function bulkUpdateCarousel(Request $request)
