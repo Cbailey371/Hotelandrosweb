@@ -48,6 +48,8 @@ class GalleryController extends Controller
             ]);
         }
 
+        \Illuminate\Support\Facades\Cache::forget('home_page_data');
+
         return redirect()->back()->with('success', 'Imágenes subidas y optimizadas con éxito.');
     }
 
@@ -69,6 +71,8 @@ class GalleryController extends Controller
             ]);
         }
 
+        \Illuminate\Support\Facades\Cache::forget('home_page_data');
+
         return redirect()->back()->with('success', 'Imagen eliminada con éxito.');
     }
 
@@ -87,6 +91,8 @@ class GalleryController extends Controller
             ]);
         }
 
+        \Illuminate\Support\Facades\Cache::forget('home_page_data');
+
         return redirect()->back()->with('success', 'Visibilidad en carrusel actualizada.');
     }
 
@@ -104,6 +110,8 @@ class GalleryController extends Controller
                 'image' => $gallery
             ]);
         }
+
+        \Illuminate\Support\Facades\Cache::forget('home_page_data');
 
         return redirect()->back()->with('success', 'Visibilidad en café actualizada.');
     }
@@ -131,6 +139,8 @@ class GalleryController extends Controller
                 'carousel_order' => $index + 1
             ]);
         }
+
+        \Illuminate\Support\Facades\Cache::forget('home_page_data');
 
         return response()->json(['success' => true, 'message' => 'Carrusel actualizado con éxito.']);
     }

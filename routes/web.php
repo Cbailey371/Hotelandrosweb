@@ -90,8 +90,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
                     if (file_exists($hotFile)) {
                         unlink($hotFile);
                     }
-                    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
-                    return back()->with('success', "✅ Reparación completada. Se eliminó el archivo de conflicto y se limpió la caché. Por favor, usa una ventana de INCÓGNITO.");
+                    \Illuminate\Support\Facades\Artisan::call('optimize');
+                    return back()->with('success', "✅ Optimización y Reparación completadas. El sitio ahora cargará más rápido. Por favor, usa una ventana de INCÓGNITO para verificar.");
                 } catch (\Exception $e) {
                     return back()->with('error', "❌ Error durante la reparación: " . $e->getMessage());
                 }
@@ -171,22 +171,53 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 });
 require __DIR__ . '/auth.php';
 
-// Rutas auxiliares para Despliegue en cPanel (Uso único)
-// IMPORTANTE: Elimine o comente estas rutas luego de configurar su servidor en Producción.
-Route::get('/cpanel-setup/storage-link', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('storage:link');
-        return "Symlink creado correctamente.";
-    } catch (\Exception $e) {
-        return "Error creando symlink: " . $e->getMessage();
-    }
-});
+// Rutas auxiliares para Despliegue en cPanel (Uso sin SSH)
+// IMPORTANTE: Use estas rutas solo cuando suba cambios nuevos al servidor.
+Route::prefix('cpanel-setup')->group(function() {
+    
+    Route::get('/storage-link', function () {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('storage:link');
+            return "✅ [V3] Symlink creado correctamente.";
+        } catch (\Exception $e) {
+            return "❌ Error creando symlink: " . $e->getMessage();
+        }
+    });
 
-Route::get('/cpanel-setup/migrate', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return "Migraciones ejecutadas exitosamente sin borrar datos.";
-    } catch (\Exception $e) {
-        return "Error en migración: " . $e->getMessage();
-    }
+    Route::get('/migrate', function () {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            return "✅ [V3] Migraciones ejecutadas exitosamente.";
+        } catch (\Exception $e) {
+            return "❌ Error en migración: " . $e->getMessage();
+        }
+    });
+
+    Route::get('/optimize', function () {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('optimize');
+            return "✅ [V3] Optimización completada (Cache generado).";
+        } catch (\Exception $e) {
+            return "❌ Error en optimización: " . $e->getMessage();
+        }
+    });
+
+    // RUTA MAESTRA: Ejecuta todo lo anterior de una sola vez
+    Route::get('/full-setup', function () {
+        try {
+            $output = "";
+            \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+            $output .= "• Migraciones: OK<br>";
+            
+            \Illuminate\Support\Facades\Artisan::call('storage:link');
+            $output .= "• Storage Link: OK<br>";
+            
+            \Illuminate\Support\Facades\Artisan::call('optimize');
+            $output .= "• Optimización: OK<br>";
+            
+            return "<h2>🚀 PROCESO DE CARGA COMPLETADO</h2>" . $output . "<br>El sitio ya está listo con los últimos cambios.";
+        } catch (\Exception $e) {
+            return "❌ Error durante el setup completo: " . $e->getMessage();
+        }
+    });
 });

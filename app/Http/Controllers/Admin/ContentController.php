@@ -128,6 +128,8 @@ class ContentController extends Controller
             Setting::updateOrCreate(['key' => 'cafe_image'], ['value' => $path]);
         }
 
+        \Illuminate\Support\Facades\Cache::forget('home_page_data');
+
         return redirect()->back()
             ->with('success', 'Contenido actualizado correctamente y verificado.')
             ->with('active_section', $request->input('active_section'));

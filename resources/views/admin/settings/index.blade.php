@@ -537,6 +537,24 @@
                         </button>
                     </div>
                 </div>
+
+                <!-- Info cPanel sin SSH -->
+                <div class="mt-8 p-6 rounded-2xl bg-blue-50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/50">
+                    <h4 class="text-sm font-bold text-blue-800 dark:text-blue-300 mb-3 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-sm">info</span>
+                        Guía para Carga de Cambios (cPanel sin SSH)
+                    </h4>
+                    <p class="text-[11px] text-blue-700 dark:text-blue-400 mb-4">
+                        Si has subido archivos nuevos y necesitas que el sitio se actualice, usa esta ruta especial en tu navegador:
+                    </p>
+                    <div class="bg-white dark:bg-slate-800 p-3 rounded-xl border border-blue-100 dark:border-blue-900 flex items-center justify-between">
+                        <code class="text-[10px] font-mono text-primary">{{ url('/cpanel-setup/full-setup') }}</code>
+                        <a href="{{ url('/cpanel-setup/full-setup') }}" target="_blank" class="text-[10px] font-black uppercase tracking-widest text-primary hover:underline">Ejecutar Ahora</a>
+                    </div>
+                    <p class="text-[9px] text-slate-400 mt-3 italic">
+                        * Esta ruta ejecutará migraciones, actualizará los enlaces de fotos y optimizará el servidor en un solo paso.
+                    </p>
+                </div>
             </div>
 
             <div class="flex justify-end gap-4">
